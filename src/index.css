@@ -1,5 +1,6 @@
-body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
-}
+/**
+* This css is to import all the css files
+* align alphabetically
+*/
+@import "css/App.css";
+@import "css/LoginPage.css";
