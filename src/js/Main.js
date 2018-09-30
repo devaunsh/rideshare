@@ -27,20 +27,21 @@ export class Main extends Component {
       gapi.load('auth2', () => {
         gapi.auth2.init(gapiConfig).then(auth => {
           firebase.initializeApp(firebaseConfig);
-
           if (auth.isSignedIn.get()) {
-            firebase.auth().signInWithCredential(
-              firebase.auth.GoogleAuthProvider.credential(auth.currentUser.get().getAuthResponse().id_token)
+            firebase.auth().signInAndRetrieveDataWithCredential(
+              firebase.auth.GoogleAuthProvider.credential(auth.currentUser.get().getAuthResponse().id_token, null)
             ).then(firebaseUser => {
 
               this.props.setGAPI(gapi);
               this.props.setFirebase(firebase);
-
-              let ref = firebase.database().ref('/users/' + firebaseUser.uid + '/haha');
+              console.log(firebaseUser);
+               let ref = firebase.database().ref('/users/' + firebaseUser.user.uid);
+              console.log(ref);
 
               // Reroute user if user is at '/' or user does not have any playlists
 
               ref.once('value').then(snapshot => {
+                console.log(snapshot);
                 if (this.props.history.location.pathname === '/' || !snapshot.val()) {
                   this.props.history.push('/test');
                 }
@@ -58,7 +59,7 @@ export class Main extends Component {
           }
         }, error => {
           console.log(error);
-        })
+         })
 
       })
     });

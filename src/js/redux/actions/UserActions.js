@@ -12,7 +12,6 @@ export const userLogin = user => {
   return dispatch => dispatch({
     type: USER_LOGIN,
     name: user.getName(),
-    profilePicURL: user.getImageUrl()
   });
 };
 
@@ -27,8 +26,7 @@ export const userLogout = () => {
       firebase.auth().signOut().then(() => {
         return dispatch({
           type: USER_LOGOUT,
-          name: null,
-          profilePicURL: null
+          name: null
         });
       });
     })
