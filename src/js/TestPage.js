@@ -14,7 +14,6 @@ class TestPage extends Component {
     return (
       <div className="test-page">
         <div className="test-page-title-wrapper">
-          //<h1>RideShare</h1>
             <NavigationBar />
             <ToastContainer
                position="top-right"
