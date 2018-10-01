@@ -10,6 +10,7 @@ import rootReducer from './js/redux/reducers/index';
 import Main from './js/Main';
 
 import './index.css';
+import './css/bootstrap/bootstrap.min.css';
 
 const middlewares = [];
 

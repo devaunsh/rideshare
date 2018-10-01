@@ -28,7 +28,7 @@ class LoginPage extends Component {
 
           ref.once('value').then(snapshot => {
             if (this.props.history.location.pathname === '/' || !snapshot.val()) {
-              this.props.history.push('/test');
+              this.props.history.push('/home');
             }
           })
 
