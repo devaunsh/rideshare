@@ -14,7 +14,7 @@ export class NavBar extends Component {
     this.props.userLogout();
 //    this.props.setPlayingMusicId('');
 //    this.props.setPlaylists({});
-//    this.props.history.push('/');
+    this.props.history.push('/');
   }
 
   handleToggleClick() {

@@ -83,7 +83,7 @@ const mapDispatchToProps = dispatch => {
     userLogin: user => dispatch(userLogin(user)),
     setFirebase: firebase => dispatch(setFirebase(firebase)),
     setGAPI: gapi => dispatch(setGAPI(gapi)),
-
+    
   }
 }
 
