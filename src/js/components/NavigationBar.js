@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Navbar, Nav, NavDropdown, MenuItem } from 'react-bootstrap';
+import { Navbar, NavItem, Nav, NavDropdown, MenuItem } from 'react-bootstrap';
 
 
 import { userLogout } from '../redux/actions';
@@ -26,21 +26,26 @@ export class NavBar extends Component {
 
     return (
       <Navbar collapseOnSelect style={{display: user.name ? 'block' : 'none'}}>
-        <Navbar.Toggle onClick={this.handleToggleClick.bind(this)} />
         <Navbar.Header>
           <Navbar.Brand>
-            <a><img alt="logo" src={logo} />RideShare</a>
+            <a><img alt="logo" src={logo} /></a>
           </Navbar.Brand>
         </Navbar.Header>
-        <Nav pullRight>
-          <NavDropdown
-            eventKey={1}
-            title={user ?
-              <div><img className="navbar-user-icon" src={user.profilePicURL} alt="User logo" />{user.name}</div>
-              : ''}
-            id="basic-nav-dropdown">
-            <MenuItem eventKey={1.1} onClick={this.signOut.bind(this)} >Sign out</MenuItem>
-          </NavDropdown>
+        <Nav>
+          <NavItem eventKey={1} href="#">
+          Home
+          </NavItem>
+          <NavItem eventKey={2} href="#">
+          Find a Ride
+          </NavItem>
+          <NavItem eventKey={2} href="#">
+          Create a Ride
+          </NavItem>
+          <NavItem eventKey={3} href="#">
+          Account
+          </NavItem>
+          <MenuItem eventKey={1.1} onClick={this.signOut.bind(this)} >Log out</MenuItem>
+          <div>Welcome, {user.name}!</div>
         </Nav>
       </Navbar>
     );
