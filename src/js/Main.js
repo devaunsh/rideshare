@@ -36,14 +36,25 @@ export class Main extends Component {
 
               this.props.setGAPI(gapi);
               this.props.setFirebase(firebase);
-              // let ref = firebase.database().ref('/users/' + firebaseUser.user.uid);
-              //
-              // ref.once('value').then(snapshot => {
-              //   console.log(snapshot);
-              //   if (this.props.history.location.pathname === '/' || !snapshot.val()) {
-              //     this.props.history.push('/home');
-              //   }
-              // })
+              let ref = firebase.database().ref('/users/' + firebaseUser.user.uid);
+
+              ref.once('value').then(snapshot => {
+                if (!snapshot) {
+                  this.props.history.push('/');
+                }
+                // if (this.props.history.location.pathname === '/') {
+                //   console.log(auth.currentUser.get().getBasicProfile());
+                //
+                //   console.log(this.props.user);
+                //   if (!snapshot.val()) {
+                //
+                //     ref.set(firebaseUser.user.uid, () => {
+                //       ref.set({name: this.props.user.name, email: this.props.user.email});
+                //     });
+                //   }
+                //   this.props.history.push('/ride');
+                // }
+              })
 
 
             }).catch(error => {
