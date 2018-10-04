@@ -8,6 +8,8 @@
     "firebase": "^5.5.2",
     "google-client-api": "^1.0.4",
     "history": "^4.7.2",
+    "jquery": "^3.3.1",
+    "popper.js": "^1.14.4",
     "react": "^16.5.2",
     "react-bootstrap": "^0.32.4",
     "react-dom": "^16.5.2",
