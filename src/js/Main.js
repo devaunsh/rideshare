@@ -45,7 +45,7 @@ export class Main extends Component {
                 }
                 else {
                   console.log(!snapshot.val());
-                  this.props.history.push('/ride');
+                  //this.props.history.push('/ride');
                 }
                 // if (this.props.history.location.pathname === '/') {
                 //   console.log(auth.currentUser.get().getBasicProfile());
