@@ -118,7 +118,8 @@ constructor(props, context) {
     const { gapi, firebase } = this.props.packages;
     let date = new Date();
     let timestamp = date.toGMTString();
-    let ref = firebase.database().ref('/trips/' + firebase.auth().currentUser.uid + timestamp);
+    let unique = firebase.auth().currentUser.uid + timestamp
+    let ref = firebase.database().ref('/trips/' + unique);
     ref.once('value').then(snapshot => {
       if (!snapshot.val()) {
         ref.set({
@@ -136,21 +137,27 @@ constructor(props, context) {
           ImageURL: this.state.Image,
           UsersArray: [firebase.auth().currentUser.uid],
         } , () => {
-          this.setState({
-            show: false,
-            start: null,
-            dest: null,
-            date: null,
-            time: null,
-            seats: 0,
-            description: null,
-            costs: 0,
-            total_or_perperson: 0,
-            PayPal: false,
-            Venmo: false,
-            Cash: false,
-            ImageURL: null,
+          let ref2 = firebase.database().ref('/users/' + firebase.auth().currentUser.uid);
+          ref2.once('value').then(snapshot => {
+            ref2.child('TripsArray').set([unique], () => {
+              this.setState({
+                show: false,
+                start: null,
+                dest: null,
+                date: null,
+                time: null,
+                seats: 0,
+                description: null,
+                costs: 0,
+                total_or_perperson: 0,
+                PayPal: false,
+                Venmo: false,
+                Cash: false,
+                ImageURL: null,
+              })
+            });
           })
+
         });
       }
     });
