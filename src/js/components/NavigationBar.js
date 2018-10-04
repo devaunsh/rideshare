@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Navbar, NavItem, Nav, NavDropdown, MenuItem } from 'react-bootstrap';
+import { Row, Navbar, NavItem, Nav, NavDropdown, MenuItem } from 'react-bootstrap';
 
 
 import { userLogout } from '../redux/actions';
@@ -19,20 +19,20 @@ export class NavBar extends Component {
   render() {
     const { user } = this.props;
     return (
-      <Navbar collapseOnSelect style={{display: user.name ? 'block' : 'none'}}>
+      <Navbar>
         <Navbar.Header>
           <Navbar.Brand>
             <a><img alt="logo" src={logo} /></a>
           </Navbar.Brand>
         </Navbar.Header>
         <Nav>
-          <NavItem eventKey={1} href="#">
+          <NavItem eventKey={1} href="/home">
           Home
           </NavItem>
           <NavItem eventKey={2} href="#">
           Find a Ride
           </NavItem>
-          <NavItem eventKey={2} href="#">
+          <NavItem eventKey={2} href="/ride">
           Create a Ride
           </NavItem>
           <NavItem eventKey={3} href="#">
