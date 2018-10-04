@@ -56,7 +56,7 @@ constructor(props, context) {
       Cash: false,
       Venmo: false,
       PayPal: false,
-      Image: "haha",
+      ImageURL: null,
     };
   }
 
@@ -110,9 +110,13 @@ constructor(props, context) {
     // reader.readAsDataURL(blob);
     // reader.onloadend = function() {
     //       base64data = reader.result;
-    //       console.log(base64data);
     //     }
-    this.setState({ImageURL: null});
+    const localImageURL = window.URL.createObjectURL(this.input2.files[0]);
+
+    this.setState({ImageURL: localImageURL}, () => {
+
+    });
+
   }
   handleSubmit(){
     const { gapi, firebase } = this.props.packages;
@@ -134,9 +138,23 @@ constructor(props, context) {
           Paypal: this.state.PayPal,
           Venmo: this.state.Venmo,
           Cash: this.state.Cash,
-          ImageURL: this.state.Image,
           UsersArray: [firebase.auth().currentUser.uid],
         } , () => {
+          if (this.state.ImageURL !== null) {
+            let ref_storage = firebase.storage().ref('/'+ unique + '/Image');
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', this.state.ImageURL, true);
+            xhr.responseType = 'blob';
+            xhr.onload = function(e) {
+              if (this.status == 200) {
+                var myImage = this.response;
+                ref_storage.put(myImage);
+              }
+            };
+            xhr.send();
+
+          }
+          //Possible Concurrency Problem
           let ref2 = firebase.database().ref('/users/' + firebase.auth().currentUser.uid);
           ref2.once('value').then(snapshot => {
             ref2.child('TripsArray').set([unique], () => {
