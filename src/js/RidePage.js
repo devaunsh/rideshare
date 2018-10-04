@@ -18,6 +18,7 @@ import { ControlLabel } from 'react-bootstrap';
 import { Checkbox } from 'react-bootstrap';
 import { withRouter } from 'react-router';
 
+import ReactDOM from 'react-dom';
 
 import { userLogin } from './redux/actions'
 import logo from '../img/logo.svg';
@@ -30,9 +31,32 @@ constructor(props, context) {
 
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
-
+    this.handleStartChange = this.handleStartChange.bind(this);
+    this.handleDestChange = this.handleDestChange.bind(this);
+    this.handleDateChange = this.handleDateChange.bind(this);
+    this.handleTimeChange = this.handleTimeChange.bind(this);
+    this.handleSeatsChange = this.handleSeatsChange.bind(this);
+    this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
+    this.handleTypeChange = this.handleTypeChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleCash = this.handleCash.bind(this);
+    this.handleVenmo = this.handleVenmo.bind(this);
+    this.handlePaypal = this.handlePaypal.bind(this);
+    this.handleImageChange = this.handleImageChange.bind(this);
     this.state = {
-      show: false
+      show: false,
+      start: null,
+      dest: null,
+      date: null,
+      time: null,
+      seats: 0,
+      description: null,
+      costs: 0,
+      total_or_perperson: 1,
+      Cash: false,
+      Venmo: false,
+      PayPal: false,
+      Image: "haha",
     };
   }
 
@@ -44,14 +68,97 @@ constructor(props, context) {
     this.setState({ show: true });
   }
 
-  handleChange (event) {
-  	this.setState( [event.target.name]: event.target.value )
+  handleStartChange (event) {
+  	this.setState( {start: event.target.value} );
+  }
+  handleDestChange (event) {
+    this.setState( {dest: event.target.value} );
+  }
+  handleDateChange (event) {
+    this.setState( {date: event.target.value} );
+  }
+  handleTimeChange (event) {
+    this.setState( {time: event.target.value} );
+  }
+  handleSeatsChange () {
+  //  console.log(ReactDOM.findDOMNode(this.select).value);
+    this.setState( {seats: this.input.value} );
+  }
+  handleDescriptionChange (event) {
+    this.setState( {description: event.target.value} );
+  }
+  handleCostsChange (event) {
+    this.setState( {costs: event.target.value} );
+  }
+  handleTypeChange (event) {
+    this.setState( {total_or_perperson: this.input1.value} );
+  }
+  handleCash(event) {
+    this.setState( {Cash: event.target.checked} );
+  }
+  handleVenmo(event) {
+    this.setState( {Venmo: event.target.checked} );
+  }
+  handlePaypal(event) {
+    this.setState( {PayPal: event.target.checked} );
   }
 
+  handleImageChange(event) {
+    // var blob = this.input2.files[0].slice(0, );
+    // var base64data;
+    // var reader = new FileReader();
+    // reader.readAsDataURL(blob);
+    // reader.onloadend = function() {
+    //       base64data = reader.result;
+    //       console.log(base64data);
+    //     }
+    this.setState({ImageURL: null});
+  }
   handleSubmit(){
+    const { gapi, firebase } = this.props.packages;
+    let date = new Date();
+    let timestamp = date.toGMTString();
+    let ref = firebase.database().ref('/trips/' + firebase.auth().currentUser.uid + timestamp);
+    ref.once('value').then(snapshot => {
+      if (!snapshot.val()) {
+        ref.set({
+          start: this.state.start,
+          dest: this.state.dest,
+          date: this.state.date,
+          time: this.state.time,
+          seats: this.state.seats,
+          costs: this.state.costs,
+          description: this.state.description,
+          total_or_perperson: this.state.total_or_perperson,
+          Paypal: this.state.PayPal,
+          Venmo: this.state.Venmo,
+          Cash: this.state.Cash,
+          ImageURL: this.state.Image,
+          UsersArray: [firebase.auth().currentUser.uid],
+        } , () => {
+          this.setState({
+            show: false,
+            start: null,
+            dest: null,
+            date: null,
+            time: null,
+            seats: 0,
+            description: null,
+            costs: 0,
+            total_or_perperson: 0,
+            PayPal: false,
+            Venmo: false,
+            Cash: false,
+            ImageURL: null,
+          })
+        });
+      }
+    });
 
-  	
   }
+
+
+
 
   render() {
   	const popover = (
@@ -68,8 +175,8 @@ constructor(props, context) {
         <div className="ride-page-title-wrapper">
           <h1>RidePage</h1>
         </div>
-       
-      	
+
+
 
 
 <div>
@@ -96,7 +203,7 @@ constructor(props, context) {
       Leaving from
     </Col>
     <Col sm={9}>
-      <FormControl name = 'start' type="text" placeholder="Enter the start location" onChange={event => this.handleChange(event)} />
+      <FormControl name = 'start' type="text" placeholder="Enter the start location" onChange={event => this.handleStartChange(event)} />
     </Col>
   </FormGroup>
 
@@ -105,7 +212,7 @@ constructor(props, context) {
       Going to
     </Col>
     <Col sm={9}>
-      <FormControl name = 'dest' type="text" placeholder="Enter the destination" onChange={event => this.handleChange(event)} />
+      <FormControl name = 'dest' type="text" placeholder="Enter the destination" onChange={event => this.handleDestChange(event)} />
     </Col>
   </FormGroup>
 
@@ -114,7 +221,7 @@ constructor(props, context) {
       Date
     </Col>
     <Col sm={9}>
-      <FormControl type="text" placeholder="mm/dd/yyyy"/>
+      <FormControl type="text" placeholder="mm/dd/yyyy" onChange={event => this.handleDateChange(event)} />
     </Col>
   </FormGroup>
 
@@ -123,7 +230,7 @@ constructor(props, context) {
       Time
     </Col>
     <Col sm={9}>
-      <FormControl type="text" placeholder="hh:mm" />
+      <FormControl type="text" placeholder="hh:mm" onChange={event => this.handleTimeChange(event)} />
     </Col>
   </FormGroup>
 
@@ -132,7 +239,7 @@ constructor(props, context) {
       Available Seats
       </Col>
       <Col sm={9}>
-      <FormControl componentClass="select" placeholder="select">
+      <FormControl componentClass="select" placeholder="select"  inputRef={ref => { this.input = ref; }} onChange={event => this.handleSeatsChange(event)}>
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -147,7 +254,7 @@ constructor(props, context) {
       Trip Description
       </Col>
       <Col sm={9}>
-      <FormControl componentClass="textarea" placeholder="Enter trip details" />
+      <FormControl componentClass="textarea" placeholder="Enter trip details" onChange={event => this.handleDescriptionChange(event)}/>
       </Col>
     </FormGroup>
   </Form>
@@ -165,7 +272,7 @@ constructor(props, context) {
       Cost
     </Col>
     <Col sm={9}>
-      <FormControl type="text" placeholder="Enter the amount to be charged" />
+      <FormControl type="text" placeholder="Enter the amount to be charged" onChange={event => this.handleCostsChange(event)}/>
     </Col>
   </FormGroup>
 
@@ -176,7 +283,7 @@ constructor(props, context) {
               </OverlayTrigger>
       </Col>
       <Col sm={9}>
-      <FormControl componentClass="select" placeholder="select">
+      <FormControl componentClass="select" placeholder="select" inputRef = {ref => { this.input1 = ref; }} onChange={event => this.handleTypeChange(event)}>
         <option value="1">Cost Per Person</option>
         <option value="2">Total Cost</option>
       </FormControl>
@@ -188,8 +295,11 @@ constructor(props, context) {
       Payment Methods
     </Col>
     <Col sm={9}>
-      <Checkbox inline>Cash</Checkbox> <Checkbox inline>Venmo</Checkbox>{' '}
-      <Checkbox inline>PayPal</Checkbox>
+      <Checkbox inline checked={this.state.CashChecked}
+          onChange={event => this.handleCash(event)}>Cash</Checkbox> <Checkbox inline checked={this.state.VenmoChecked}
+              onChange={event => this.handleVenmo(event)}>Venmo</Checkbox>{' '}
+      <Checkbox checked={this.state.PayPalChecked}
+          onChange={event => this.handlePaypal(event)}>PayPal</Checkbox>
       </Col>
     </FormGroup>
 
@@ -198,30 +308,30 @@ constructor(props, context) {
 
 
   <Tab eventKey={3} title="Picture">
-    
+
     <Form horizontal>
-    
+
   	<p></p>
     <FormGroup controlId="formHorizontalCost">
-  	
+
     <Col componentClass={ControlLabel} sm={3}>
       Upload
     </Col>
     <p></p>
     <Col sm={6}>
-      <FormControl type="file" accept="image/*" />
+      <FormControl type="file" accept="image/*" inputRef={ref => this.input2=ref} onChange={event => this.handleImageChange(event)}/>
     </Col>
   </FormGroup>
   </Form>
 
 
-            
+
 
 
   </Tab>
 </Tabs>
-            
-            
+
+
           </Modal.Body>
           <Modal.Footer>
             <Button bsStyle="primary" onClick = {this.handleSubmit}>Submit</Button>
@@ -231,7 +341,7 @@ constructor(props, context) {
         </Modal>
       </div>
 
-      
+
 
       </div>
 

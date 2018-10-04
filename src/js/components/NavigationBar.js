@@ -12,18 +12,12 @@ export class NavBar extends Component {
 
   signOut() {
     this.props.userLogout();
-//    this.props.setPlayingMusicId('');
-//    this.props.setPlaylists({});
     this.props.history.push('/');
   }
 
-  handleToggleClick() {
-//    this.props.setSidebarOpenState(true);
-  }
 
   render() {
     const { user } = this.props;
-
     return (
       <Navbar collapseOnSelect style={{display: user.name ? 'block' : 'none'}}>
         <Navbar.Header>
@@ -62,9 +56,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     userLogout: () => dispatch(userLogout()),
-  //  setSidebarOpenState: isSidebarOpen => dispatch(setSidebarOpenState(isSidebarOpen)),
-//    setPlaylists: playlists => dispatch(setPlaylists(playlists)),
-//    setPlayingMusicId: id => dispatch(setPlayingMusicId(id))
+
   }
 }
 
