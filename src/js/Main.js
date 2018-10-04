@@ -39,8 +39,13 @@ export class Main extends Component {
               let ref = firebase.database().ref('/users/' + firebaseUser.user.uid);
 
               ref.once('value').then(snapshot => {
-                if (!snapshot) {
+                if (!snapshot.val()) {
+
                   this.props.history.push('/');
+                }
+                else {
+                  console.log(!snapshot.val());
+                  this.props.history.push('/ride');
                 }
                 // if (this.props.history.location.pathname === '/') {
                 //   console.log(auth.currentUser.get().getBasicProfile());
