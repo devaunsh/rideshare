@@ -44,8 +44,8 @@ export class Main extends Component {
                   this.props.history.push('/');
                 }
                 else {
-                  console.log(!snapshot.val());
-                  //this.props.history.push('/home');
+              
+                  this.props.history.push('/ride');
                 }
                 // if (this.props.history.location.pathname === '/') {
                 //   console.log(auth.currentUser.get().getBasicProfile());
@@ -82,11 +82,12 @@ export class Main extends Component {
   render() {
     return (
       <div className="App">
-          <Switch key={this.props.location.pathname} location={this.props.location}>
-            <Route exact path="/" component={LoginPage} />
-            <Route path="/home" component={HomePage} />
-            <Route path="/ride" component={RidePage} />
-          </Switch>
+        <NavigationBar />
+        <Switch key={this.props.location.pathname} location={this.props.location}>
+          <Route exact path="/" component={LoginPage} />
+          <Route path="/home" component={HomePage} />
+          <Route path="/ride" component={RidePage} />
+        </Switch>
       </div>
     );
   }

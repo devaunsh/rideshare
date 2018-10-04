@@ -25,13 +25,12 @@ class LoginPage extends Component {
           // Reroute user if user is at '/'
 
           ref.once('value').then(snapshot => {
-            if (!snapshot.val()) {
+            if (this.props.history.location.pathname === '/' || !snapshot.val()) {
+              ref.set(firebaseUser.user.uid, () => {
+                ref.set({name: this.props.user.name, email: this.props.user.email});
+              });
 
-              this.props.history.push('/');
-            }
-            else {
-              console.log(!snapshot.val());
-              this.props.history.push('/home');
+              this.props.history.push('/ride');
             }
           })
 

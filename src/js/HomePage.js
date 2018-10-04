@@ -5,17 +5,15 @@ import { withRouter } from 'react-router';
 import { ToastContainer } from 'react-toastify';
 import logo from '../img/logo.svg';
 import { userLogin } from './redux/actions';
-import NavigationBar from './components/NavigationBar';
 class HomePage extends Component {
 
 
   render() {
     return (
       <div className="home-page">
-      <NavigationBar/>
         <div className="home-page-title-wrapper">
 
-
+      
         </div>
 
 
