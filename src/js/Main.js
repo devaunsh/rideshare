@@ -39,26 +39,16 @@ export class Main extends Component {
               let ref = firebase.database().ref('/users/' + firebaseUser.user.uid);
 
               ref.once('value').then(snapshot => {
-                if (!snapshot.val()) {
+                  if (this.props.history.location.pathname === '/') {
+                    if (!snapshot.val()) {
+                      ref.set(firebaseUser.user.uid, () => {
+                      ref.set({name: firebaseUser.user.displayName, email: firebaseUser.user.email});
+                    });
+                  }
+                    this.props.history.push('/ride');
+                  }
 
-                  this.props.history.push('/');
-                }
-                else {
-              
-                  this.props.history.push('/ride');
-                }
-                // if (this.props.history.location.pathname === '/') {
-                //   console.log(auth.currentUser.get().getBasicProfile());
-                //
-                //   console.log(this.props.user);
-                //   if (!snapshot.val()) {
-                //
-                //     ref.set(firebaseUser.user.uid, () => {
-                //       ref.set({name: this.props.user.name, email: this.props.user.email});
-                //     });
-                //   }
-                //   this.props.history.push('/ride');
-                // }
+
               })
 
 
