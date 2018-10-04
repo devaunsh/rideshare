@@ -12,18 +12,12 @@ export class NavBar extends Component {
 
   signOut() {
     this.props.userLogout();
-//    this.props.setPlayingMusicId('');
-//    this.props.setPlaylists({});
     this.props.history.push('/');
   }
 
-  handleToggleClick() {
-//    this.props.setSidebarOpenState(true);
-  }
 
   render() {
     const { user } = this.props;
-
     return (
       <Navbar>
         <Navbar.Header>
@@ -31,13 +25,14 @@ export class NavBar extends Component {
             <a><img alt="logo" src={logo} /></a>
           </Navbar.Brand>
         </Navbar.Header>
-          <NavItem eventKey={1} href="#">
+        <Nav>
+          <NavItem eventKey={1} href="/home">
           Home
           </NavItem>
           <NavItem eventKey={2} href="#">
           Find a Ride
           </NavItem>
-          <NavItem eventKey={2} href="#">
+          <NavItem eventKey={2} href="/ride">
           Create a Ride
           </NavItem>
           <NavItem eventKey={3} href="#">
@@ -60,9 +55,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     userLogout: () => dispatch(userLogout()),
-  //  setSidebarOpenState: isSidebarOpen => dispatch(setSidebarOpenState(isSidebarOpen)),
-//    setPlaylists: playlists => dispatch(setPlaylists(playlists)),
-//    setPlayingMusicId: id => dispatch(setPlayingMusicId(id))
+
   }
 }
 

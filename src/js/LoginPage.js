@@ -15,20 +15,22 @@ class LoginPage extends Component {
     if (gapiAuth.isSignedIn.get()) {
       this.props.userLogin(gapiAuth.currentUser.get().getBasicProfile());
     } else {
-      console.log("here");
       gapiAuth.signIn().then(user => {
         this.props.userLogin(user.getBasicProfile());
         firebase.auth().signInAndRetrieveDataWithCredential(
           firebase.auth.GoogleAuthProvider.credential(user.getAuthResponse().id_token)
         ).then(firebaseUser => {
-          console.log(firebaseUser);
           let ref = firebase.database().ref('/users/' + firebaseUser.user.uid);
 
           // Reroute user if user is at '/'
 
           ref.once('value').then(snapshot => {
             if (this.props.history.location.pathname === '/' || !snapshot.val()) {
-              this.props.history.push('/test');
+              ref.set(firebaseUser.user.uid, () => {
+                ref.set({name: this.props.user.name, email: this.props.user.email});
+              });
+
+              this.props.history.push('/ride');
             }
           })
 

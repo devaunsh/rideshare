@@ -3,9 +3,11 @@ import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import firebase from 'firebase';
+import NavigationBar from './components/NavigationBar';
 
 import LoginPage from './LoginPage';
-import TestPage from './TestPage';
+import HomePage from './HomePage';
+import RidePage from './RidePage';
 
 import { userLogin, setFirebase, setGAPI } from './redux/actions';
 
@@ -34,17 +36,29 @@ export class Main extends Component {
 
               this.props.setGAPI(gapi);
               this.props.setFirebase(firebase);
-              console.log(firebaseUser);
-               let ref = firebase.database().ref('/users/' + firebaseUser.user.uid);
-              console.log(ref);
-
-              // Reroute user if user is at '/' or user does not have any playlists
+              let ref = firebase.database().ref('/users/' + firebaseUser.user.uid);
 
               ref.once('value').then(snapshot => {
-                console.log(snapshot);
-                if (this.props.history.location.pathname === '/' || !snapshot.val()) {
-                  this.props.history.push('/test');
+                if (!snapshot.val()) {
+
+                  this.props.history.push('/');
                 }
+                else {
+                  console.log(!snapshot.val());
+                  //this.props.history.push('/ride');
+                }
+                // if (this.props.history.location.pathname === '/') {
+                //   console.log(auth.currentUser.get().getBasicProfile());
+                //
+                //   console.log(this.props.user);
+                //   if (!snapshot.val()) {
+                //
+                //     ref.set(firebaseUser.user.uid, () => {
+                //       ref.set({name: this.props.user.name, email: this.props.user.email});
+                //     });
+                //   }
+                //   this.props.history.push('/ride');
+                // }
               })
 
 
@@ -68,10 +82,11 @@ export class Main extends Component {
   render() {
     return (
       <div className="App">
-
+        <NavigationBar />
         <Switch key={this.props.location.pathname} location={this.props.location}>
           <Route exact path="/" component={LoginPage} />
-          <Route path="/test" component={TestPage} />
+          <Route path="/home" component={HomePage} />
+          <Route path="/ride" component={RidePage} />
         </Switch>
       </div>
     );
@@ -83,7 +98,7 @@ const mapDispatchToProps = dispatch => {
     userLogin: user => dispatch(userLogin(user)),
     setFirebase: firebase => dispatch(setFirebase(firebase)),
     setGAPI: gapi => dispatch(setGAPI(gapi)),
-    
+
   }
 }
 

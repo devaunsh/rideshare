@@ -5,7 +5,7 @@ import {
 
 const initialState = {
   name: null,
-
+  email: null,
 }
 
 const UserReducer = (state = initialState, action) => {
@@ -14,11 +14,13 @@ const UserReducer = (state = initialState, action) => {
       return {
         ...state,
         name: action.name,
+        email: action.email,
       }
     case USER_LOGOUT:
       return {
         ...state,
         name: null,
+        email: null,
       }
 
     default:
