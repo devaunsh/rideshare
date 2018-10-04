@@ -40,6 +40,7 @@ export class NavBar extends Component {
           </NavItem>
           <MenuItem eventKey={1.1} onClick={this.signOut.bind(this)} >Log out</MenuItem>
           <div>Welcome, {user.name}!</div>
+        </Nav>
       </Navbar>
     );
   }
