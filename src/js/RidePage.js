@@ -22,7 +22,7 @@ import ReactDOM from 'react-dom';
 
 import { userLogin } from './redux/actions'
 import logo from '../img/logo.svg';
-
+import Rides from './components/Rides'
 
 class RidePage extends Component {
 
@@ -197,6 +197,7 @@ constructor(props, context) {
 
     return (
       <div className="ride-page">
+        <Rides />
         <div className="ride-page-title-wrapper">
           <h1>RidePage</h1>
         </div>

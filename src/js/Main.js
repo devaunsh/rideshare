@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { withRouter } from 'react-router';
-import firebase from 'firebase';
+import firebase from './firebase.js';
 import NavigationBar from './components/NavigationBar';
 
 import LoginPage from './LoginPage';
@@ -14,21 +14,12 @@ import { userLogin, setFirebase, setGAPI } from './redux/actions';
 export class Main extends Component {
 
   componentWillMount() {
-    const firebaseConfig = {
-      apiKey: "AIzaSyCmtoHnfyQB9ffgfuYCt-ztRJFMWkLErfs",
-      authDomain: "rideshare-3c3c1.firebaseapp.com",
-      databaseURL: "https://rideshare-3c3c1.firebaseio.com",
-      projectId: "rideshare-3c3c1",
-      storageBucket: "rideshare-3c3c1.appspot.com",
-      messagingSenderId: "591511873815"
-    }
     const gapiConfig = {
       client_id: '591511873815-grq5if4sl6dcn2jpcnncauvk7kneo1ji.apps.googleusercontent.com'
     }
     require('google-client-api')().then(gapi => {
       gapi.load('auth2', () => {
         gapi.auth2.init(gapiConfig).then(auth => {
-          firebase.initializeApp(firebaseConfig);
           if (auth.isSignedIn.get()) {
             firebase.auth().signInAndRetrieveDataWithCredential(
               firebase.auth.GoogleAuthProvider.credential(auth.currentUser.get().getAuthResponse().id_token, null)
