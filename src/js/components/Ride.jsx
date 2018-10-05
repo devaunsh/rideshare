@@ -3,18 +3,18 @@ import { Well } from "react-bootstrap";
 
 class Ride extends Component {
   state = {
-    chargeType: this.props.chargeType,
-    cost: this.props.cost,
-    date: this.props.date,
-    description: this.props.description,
-    dest: this.props.dest,
-    participants: this.props.participants,
-    paymentMethods: this.props.paymentMethods,
-    picture: this.props.picture,
-    seats: this.props.seats,
-    start: this.props.start,
-    time: this.props.time,
-    trip_id: this.props.trip_id
+    chargeType: this.props.ride.chargeType,
+    cost: this.props.ride.cost,
+    date: this.props.ride.date,
+    description: this.props.ride.description,
+    dest: this.props.ride.dest,
+    participants: this.props.ride.participants,
+    paymentMethods: this.props.ride.paymentMethods,
+    picture: this.props.ride.picture,
+    seats: this.props.ride.seats,
+    start: this.props.ride.start,
+    time: this.props.ride.time,
+    trip_id: this.props.ride.trip_id
   };
   render() {
     return (
