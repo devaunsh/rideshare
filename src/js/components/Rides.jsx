@@ -34,19 +34,20 @@ class Rides extends Component {
       for (let trip in trips) {
         console.log(trip);
         newState.push({
-          id: trip,
-          chargeType: trips[trip].chargeType,
+          id: trips[trip].UsersArray[0],
+          chargeType: trips[trip].total_or_perperson,
           cost: trips[trip].costs,
           date: trips[trip].date,
           description: trips[trip].description,
           dest: trips[trip].dest,
-          participants: trips[trip].participants,
           paymentMethods: trips[trip].paymentMethods,
           picture: trips[trip].picture,
           seats: trips[trip].seats,
           start: trips[trip].start,
           time: trips[trip].time,
-          trip_id: trips[trip].trip_id
+          cash: trips[trip].cash,
+          paypal: trips[trip].Paypal,
+          venmo: trips[trip].Venmo
         });
       }
       console.log(newState);
@@ -57,7 +58,8 @@ class Rides extends Component {
   }
   render() {
     return (
-      <div>
+      <div className="container-fluid">
+        <h2>Available Rides</h2>
         {this.state.rides.map(ride => (
           <Ride ride={ride} />
         ))}

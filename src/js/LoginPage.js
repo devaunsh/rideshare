@@ -1,13 +1,12 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Button } from 'react-bootstrap';
-import { withRouter } from 'react-router';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Button } from "react-bootstrap";
+import { withRouter } from "react-router";
 
-import { userLogin } from './redux/actions';
-import logo from '../img/logo.svg';
+import { userLogin } from "./redux/actions";
+import logo from "../img/logo.svg";
 
 class LoginPage extends Component {
-
   handleGoogleSigninClick() {
     const { gapi, firebase } = this.props.packages;
     const gapiAuth = gapi.auth2.getAuthInstance();
@@ -17,28 +16,39 @@ class LoginPage extends Component {
     } else {
       gapiAuth.signIn().then(user => {
         this.props.userLogin(user.getBasicProfile());
-        firebase.auth().signInAndRetrieveDataWithCredential(
-          firebase.auth.GoogleAuthProvider.credential(user.getAuthResponse().id_token)
-        ).then(firebaseUser => {
-          let ref = firebase.database().ref('/users/' + firebaseUser.user.uid);
+        firebase
+          .auth()
+          .signInAndRetrieveDataWithCredential(
+            firebase.auth.GoogleAuthProvider.credential(
+              user.getAuthResponse().id_token
+            )
+          )
+          .then(firebaseUser => {
+            let ref = firebase
+              .database()
+              .ref("/users/" + firebaseUser.user.uid);
 
-          // Reroute user if user is at '/'
+            // Reroute user if user is at '/'
 
-          ref.once('value').then(snapshot => {
-            if (this.props.history.location.pathname === '/' || !snapshot.val()) {
-              ref.set(firebaseUser.user.uid, () => {
-                ref.set({name: this.props.user.name, email: this.props.user.email});
-              });
+            ref.once("value").then(snapshot => {
+              if (
+                this.props.history.location.pathname === "/" ||
+                !snapshot.val()
+              ) {
+                ref.set(firebaseUser.user.uid, () => {
+                  ref.set({
+                    name: this.props.user.name,
+                    email: this.props.user.email
+                  });
+                });
 
-              this.props.history.push('/ride');
-            }
+                this.props.history.push("/ride");
+              }
+            });
           })
-
-
-
-        }).catch(error => {
-          console.log(error);
-        });
+          .catch(error => {
+            console.log(error);
+          });
       });
     }
   }
@@ -51,26 +61,36 @@ class LoginPage extends Component {
           <h1>RideShare</h1>
         </div>
 
-        <Button className="google-signin-button" onClick={this.handleGoogleSigninClick.bind(this)} />
-
+        <Button
+          bsStyle="primary"
+          bsSize="Large"
+          onClick={this.handleGoogleSigninClick.bind(this)}
+        >
+          Sign in with Google
+        </Button>
       </div>
     );
   }
 }
 
 const mapStateToProps = state => {
-	return {
+  return {
     user: state.user,
     packages: state.packages
-	}
-}
+  };
+};
 
 const mapDispatchToProps = dispatch => {
   return {
     userLogin: user => {
-      dispatch(userLogin(user))
+      dispatch(userLogin(user));
     }
-  }
-}
+  };
+};
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LoginPage));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(LoginPage)
+);
