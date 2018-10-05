@@ -5,57 +5,61 @@ import { Well } from "react-bootstrap";
 class Rides extends Component {
   constructor(props) {
     super(props);
-    this.state = { rides: [],
-    chargeType: this.props.chargeType,
-    cost: this.props.cost,
-    date: this.props.date,
-    description: this.props.description,
-    dest: this.props.dest,
-    participants: this.props.participants,
-    paymentMethods: this.props.paymentMethods,
-    picture: this.props.picture,
-    seats: this.props.seats,
-    start: this.props.start,
-    time: this.props.time,
-    trip_id: this.props.trip_id};
+    this.state = {
+      rides: []
+    };
   }
 
+  //componentDidMount() {
+  //  let tripsRef = firebase.database().ref("/trips/");
+  //  tripsRef.on("value", function(snapshot) {
+  //    console.log(snapshot.val());
+  //    let trips = [];
+  //    snapshot.forEach(function(childSnapshot) {
+  //      trips.push(childSnapshot.val());
+  //      console.log(childSnapshot.val());
+  //     let trip = childSnapshot.val();
+  //     trip["trip_id"] = childSnapshot.key;
+  //     console.log(trip);
+  //   });
+  // });
+  //  console.log(trips);
+  //  this.setState({ rides: trips });
+  // }
   componentDidMount() {
-    let trips = [];
-    let tripsRef = firebase.database().ref("/trips/");
-    const ref = this;
-    tripsRef.on('value', function(snapshot) {
-      snapshot.forEach(function(childSnapshot) {
-        trips.push(childSnapshot.val());
-        //console.log(childSnapshot.val());
-        let trip = childSnapshot.val();
+    const tripsRef = firebase.database().ref("/trips/");
+    tripsRef.on("value", snapshot => {
+      let trips = snapshot.val();
+      let newState = [];
+      for (let trip in trips) {
         console.log(trip);
-        trip["trip_id"] = childSnapshot.key;
+        newState.push({
+          id: trip,
+          chargeType: trips[trip].chargeType,
+          cost: trips[trip].costs,
+          date: trips[trip].date,
+          description: trips[trip].description,
+          dest: trips[trip].dest,
+          participants: trips[trip].participants,
+          paymentMethods: trips[trip].paymentMethods,
+          picture: trips[trip].picture,
+          seats: trips[trip].seats,
+          start: trips[trip].start,
+          time: trips[trip].time,
+          trip_id: trips[trip].trip_id
+        });
+      }
+      console.log(newState);
+      this.setState({
+        rides: newState
       });
     });
-    console.log(trips);
-    this.setState({ rides: trips });
-    console.log(this.state.rides);
   }
-
   render() {
     return (
       <div>
         {this.state.rides.map(ride => (
-          <Well>
-            <p>Ride chargeType: {}</p>
-            <p>Ride cost: {ride.costs}</p>
-            <p>Ride date {this.state.date}</p>
-            <p>Ride description: {ride.description}</p>
-            <p>Ride dest: {this.state.dest}</p>
-            <p>Ride participants: {this.state.participants}</p>
-            <p>Ride paymentMethods: {this.state.paymentMethods}</p>
-            <p>Ride picture: {this.state.picture}</p>
-            <p>Ride seats: {this.state.seats}</p>
-            <p>Ride start: {this.state.start}</p>
-            <p>Ride time: {this.state.time}</p>
-            <p>Ride trip_id: {this.state.trip_id}</p>
-          </Well>
+          <Ride ride={ride} />
         ))}
       </div>
     );
