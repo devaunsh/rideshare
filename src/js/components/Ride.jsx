@@ -3,35 +3,39 @@ import { Well } from "react-bootstrap";
 
 class Ride extends Component {
   state = {
+    id: this.props.ride.id,
     chargeType: this.props.ride.chargeType,
     cost: this.props.ride.cost,
     date: this.props.ride.date,
     description: this.props.ride.description,
     dest: this.props.ride.dest,
-    participants: this.props.ride.participants,
     paymentMethods: this.props.ride.paymentMethods,
     picture: this.props.ride.picture,
     seats: this.props.ride.seats,
     start: this.props.ride.start,
     time: this.props.ride.time,
-    trip_id: this.props.ride.trip_id
+    cash: this.props.ride.cash,
+    paypal: this.props.ride.paypal,
+    venmo: this.props.ride.venmo
   };
   render() {
         return (
       <Well>
-        <p>Ride chargeType: {this.state.chargeType}</p>
-        <p>Ride cost: {this.state.cost}</p>
-        <p>Ride date {this.state.date}</p>
-        <p>Ride description: {this.state.description}</p>
-        <p>Ride dest: {this.state.dest}</p>
-        <p>Ride participants: {this.state.participants}</p>
+        <p>id: {this.state.id}</p>
+        <p>description: {this.state.description}</p>
+        <p>cost: {this.state.cost}</p>
+        <p>date: {this.state.date}</p>
+        <p>start location: {this.state.start}</p>
+        <p>destination: {this.state.dest}</p>
+        <p>seats: {this.state.seats}</p>
+        <p>
+          chargeType: {this.state.chargeType === "2" && "Total Cost"}
+          {this.state.chargeType === 1 && "Cost per person"}
+        </p>
         <p>Ride paymentMethods: {this.state.paymentMethods}</p>
         <p>Ride picture: {this.state.picture}</p>
-        <p>Ride seats: {this.state.seats}</p>
-        <p>Ride start: {this.state.start}</p>
+
         <p>Ride time: {this.state.time}</p>
-        <p>Ride trip_id: {this.state.trip_id}</p>
-        <img src={this.state.picture} alt="No image"/>
       </Well>
     );
   }
