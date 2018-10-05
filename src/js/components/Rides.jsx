@@ -32,7 +32,7 @@ class Rides extends Component {
       let trips = snapshot.val();
       let newState = [];
       for (let trip in trips) {
-        console.log(trip);
+
         newState.push({
           id: trip,
           chargeType: trips[trip].chargeType,
@@ -42,14 +42,14 @@ class Rides extends Component {
           dest: trips[trip].dest,
           participants: trips[trip].participants,
           paymentMethods: trips[trip].paymentMethods,
-          picture: trips[trip].picture,
+          picture: trips[trip].ImageURL,
           seats: trips[trip].seats,
           start: trips[trip].start,
           time: trips[trip].time,
           trip_id: trips[trip].trip_id
         });
       }
-      console.log(newState);
+
       this.setState({
         rides: newState
       });

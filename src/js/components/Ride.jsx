@@ -17,7 +17,7 @@ class Ride extends Component {
     trip_id: this.props.ride.trip_id
   };
   render() {
-    return (
+        return (
       <Well>
         <p>Ride chargeType: {this.state.chargeType}</p>
         <p>Ride cost: {this.state.cost}</p>
@@ -31,6 +31,7 @@ class Ride extends Component {
         <p>Ride start: {this.state.start}</p>
         <p>Ride time: {this.state.time}</p>
         <p>Ride trip_id: {this.state.trip_id}</p>
+        <img src={this.state.picture} alt="No image"/>
       </Well>
     );
   }

@@ -156,7 +156,13 @@ constructor(props, context) {
             xhr.onload = function(e) {
               if (this.status == 200) {
                 var myImage = this.response;
-                ref_storage.put(myImage);
+                ref_storage.put(myImage).then(snapshot => {
+                  snapshot.ref.getDownloadURL().then(value => {
+                    ref.child('ImageURL').set(value);
+                  });
+                });
+
+                //ref.set({ImageURL: })
               }
             };
             xhr.send();
