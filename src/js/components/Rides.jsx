@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Ride from "./Ride.jsx";
 import firebase from "../firebase.js";
-import { Well } from "react-bootstrap";
+import { Well, Table } from "react-bootstrap";
 class Rides extends Component {
   constructor(props) {
     super(props);
@@ -34,15 +34,15 @@ class Rides extends Component {
       for (let trip in trips) {
         let payMethods = [];
         if (trips[trip].Cash) {
-          payMethods.push('Cash');
-          payMethods.push(' ');
+          payMethods.push("Cash");
+          payMethods.push(" ");
         }
         if (trips[trip].Paypal) {
-          payMethods.push('Paypal');
-          payMethods.push(' ');
+          payMethods.push("Paypal");
+          payMethods.push(" ");
         }
         if (trips[trip].Venmo) {
-          payMethods.push('Venmo');
+          payMethods.push("Venmo");
         }
 
         newState.push({
@@ -56,24 +56,41 @@ class Rides extends Component {
           picture: trips[trip].ImageURL,
           seats: trips[trip].seats,
           start: trips[trip].start,
-          time: trips[trip].time,
-
+          time: trips[trip].time
         });
       }
 
       this.setState({
         rides: newState
-      }
-      );
+      });
     });
   }
   render() {
     return (
       <div className="container-fluid">
         <h2>Available Rides</h2>
-        {this.state.rides.map(ride => (
-          <Ride ride={ride} />
-        ))}
+        <Table striped bordered condensed hover>
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Cost</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>From</th>
+              <th>To</th>
+              <th>Seats Available</th>
+              <th>Charge Type</th>
+              <th>Payment Methods</th>
+              <th>Picture</th>
+              <th>Book this trip</th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.state.rides.map(ride => (
+              <Ride ride={ride} />
+            ))}
+          </tbody>
+        </Table>
       </div>
     );
   }
