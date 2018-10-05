@@ -5,6 +5,7 @@ import {
 
 const initialState = {
   name: null,
+  profilePicUrl: null,
   email: null,
 }
 
@@ -14,12 +15,14 @@ const UserReducer = (state = initialState, action) => {
       return {
         ...state,
         name: action.name,
+        profilePicURL: action.profilePicURL,
         email: action.email,
       }
     case USER_LOGOUT:
       return {
         ...state,
         name: null,
+        profilePicURL: null,
         email: null,
       }
 

@@ -13,6 +13,7 @@ export const userLogin = user => {
     type: USER_LOGIN,
     name: user.getName(),
     email: user.getEmail(),
+    profilePicURL: user.getImageUrl()
   });
 };
 
@@ -28,7 +29,8 @@ export const userLogout = () => {
         return dispatch({
           type: USER_LOGOUT,
           name: null,
-          email: null
+          email: null,
+          profilePicURL: null
         });
       });
     })

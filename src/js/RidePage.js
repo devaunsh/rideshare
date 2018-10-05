@@ -187,7 +187,6 @@ class RidePage extends Component {
       }
     });
   }
-
   render() {
     const popover = (
       <Popover id="modal-popover" title="popover">
@@ -199,7 +198,7 @@ class RidePage extends Component {
     const tooltip = <Tooltip id="modal-tooltip">wow.</Tooltip>;
 
     return (
-      <div className="ride-page">
+      <div id="ride-page">
         <Rides />
 
         <div>
