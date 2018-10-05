@@ -48,7 +48,7 @@ export class NavBar extends Component {
               </MenuItem>
             </NavItem>
             <NavItem eventKey={2} href="#">
-              <div>Welcome, {user.name}!</div>
+              <div><img className="navbar-user-icon" src={user.profilePicURL} alt="User logo" />{user.name}</div>
             </NavItem>
           </Nav>
         </Navbar.Collapse>

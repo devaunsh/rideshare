@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import { Well } from "react-bootstrap";
+import { Well, Image } from "react-bootstrap";
 
 class Ride extends Component {
   state = {
-    id: this.props.ride.id,
     chargeType: this.props.ride.chargeType,
     cost: this.props.ride.cost,
     date: this.props.ride.date,
@@ -21,7 +20,6 @@ class Ride extends Component {
   render() {
         return (
       <Well>
-        <p>id: {this.state.id}</p>
         <p>description: {this.state.description}</p>
         <p>cost: {this.state.cost}</p>
         <p>date: {this.state.date}</p>
@@ -33,9 +31,11 @@ class Ride extends Component {
           {this.state.chargeType === 1 && "Cost per person"}
         </p>
         <p>Ride paymentMethods: {this.state.paymentMethods}</p>
-        <p>Ride picture: {this.state.picture}</p>
-
         <p>Ride time: {this.state.time}</p>
+        <p>Ride picture</p>
+        <Image src={this.state.picture} alt="No image"/>
+
+
       </Well>
     );
   }

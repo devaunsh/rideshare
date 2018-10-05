@@ -32,7 +32,6 @@ class Rides extends Component {
       let trips = snapshot.val();
       let newState = [];
       for (let trip in trips) {
-
         newState.push({
           id: trips[trip].UsersArray[0],
           chargeType: trips[trip].total_or_perperson,
@@ -53,7 +52,8 @@ class Rides extends Component {
 
       this.setState({
         rides: newState
-      });
+      }
+      );
     });
   }
   render() {
