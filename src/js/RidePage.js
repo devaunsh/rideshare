@@ -27,6 +27,7 @@ import Rides from './components/Rides'
 class RidePage extends Component {
 
 constructor(props, context) {
+
     super(props, context);
 
     this.handleShow = this.handleShow.bind(this);
@@ -58,6 +59,13 @@ constructor(props, context) {
       PayPal: false,
       ImageURL: null,
     };
+  }
+
+  componentDidMount() {
+    if(!window.location.hash) {
+        window.location = window.location + '#rides';
+        window.location.reload();
+    }
   }
 
   handleClose() {
@@ -382,6 +390,7 @@ constructor(props, context) {
     );
   }
 }
+
 
 
 const mapStateToProps = state => {
