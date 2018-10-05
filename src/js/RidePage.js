@@ -181,7 +181,10 @@ constructor(props, context) {
     });
 
   }
-
+  componentWillMount() {
+    // const element = <Rides />;
+    // ReactDOM.render(element, document.getElementById('ride-page'));
+  }
 
 
 
@@ -196,7 +199,7 @@ constructor(props, context) {
     const tooltip = <Tooltip id="modal-tooltip">wow.</Tooltip>;
 
     return (
-      <div className="ride-page">
+      <div id="ride-page">
         <Rides />
         <div className="ride-page-title-wrapper">
           <h1>RidePage</h1>

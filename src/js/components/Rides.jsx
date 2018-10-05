@@ -8,29 +8,30 @@ class Rides extends Component {
     this.state = { rides: [] };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     let trips = [];
     let tripsRef = firebase.database().ref("/trips/");
     const ref = this;
     tripsRef.on('value', function(snapshot) {
       snapshot.forEach(function(childSnapshot) {
         trips.push(childSnapshot.val());
-        //console.log(childSnapshot.val());
         let trip = childSnapshot.val();
-        console.log(trip);
-        trip["trip_id"] = childSnapshot.key;
+        trip['trip_id'] = childSnapshot.key;
       });
-    });
-    console.log(trips);
-    this.setState({ rides: trips });
-    console.log(this.state.rides);
+    //   this.setState({ rides: trips }, () => {
+    //     console.log(this.state.rides);
+    //   });
+     });
+
+
+
   }
 
   render() {
     return (
       <div>
         {this.state.rides.map(ride => (
-          <Ride key={ride.trip_id} ride={ride} />
+          <Ride key={this.props.trip_id} ride={ride} />
         ))}
       </div>
     );

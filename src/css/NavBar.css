@@ -22,7 +22,12 @@
     display:inline-block;
     vertical-align: top;
 }
-
+.navbar-user-icon {
+  height: 40px;
+  display: inline-block;
+  border-radius: 50px;
+  margin-right: 10px;
+}
 @media (max-width: 768px) {
     .navbar-collapse  {
         display: block;

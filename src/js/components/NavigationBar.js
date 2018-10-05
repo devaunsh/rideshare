@@ -40,6 +40,8 @@ export class NavBar extends Component {
           </NavItem>
           <MenuItem eventKey={1.1} onClick={this.signOut.bind(this)} >Log out</MenuItem>
           <div>Welcome, {user.name}!</div>
+          <div><img className="navbar-user-icon" src={user.profilePicURL} alt="User logo" />{user.name}</div>
+      
         </Nav>
       </Navbar>
     );
