@@ -50,7 +50,7 @@ class RidePage extends Component {
       dest: null,
       date: null,
       time: null,
-      seats: 0,
+      seats: 1,
       description: null,
       costs: 0,
       total_or_perperson: 1,
@@ -125,7 +125,33 @@ class RidePage extends Component {
 
     this.setState({ ImageURL: localImageURL });
   }
+  getValidationStateStart(){
+  	if(this.state.start === "" )
+  		return 'error';
+  }
+  getValidationStateDest(){
+  	if(this.state.dest === "" )
+  		return 'error';
+  }
+  getValidationStateDate(){
+  	if(this.state.date === "" )
+  		return 'error';
+  }
+  getValidationStateTime(){
+  	if(this.state.time === "" )
+  		return 'error';
+  }
+  getValidationStateCost(){
+  	if(this.state.costs === "" )
+  		return 'error';
+  }
+
   handleSubmit() {
+  	if(this.state.start === "" || this.state.start === null || this.state.dest === "" || this.state.dest === null || this.state.date === "" || this.state.date === null 
+  		|| this.state.costs === "" || this.state.costs === null ){
+  		alert('Please make sure to complete the required fields before you Submit');
+  		return;
+  	}
     const { gapi, firebase } = this.props.packages;
     let date = new Date();
     let timestamp = date.toGMTString();
@@ -230,56 +256,60 @@ class RidePage extends Component {
                     <Tab eventKey={1} title="Ride Information">
                       <Form horizontal>
                         <p />
-                        <FormGroup controlId="formHorizontalLeave">
+                        <FormGroup controlId="formHorizontalLeave" validationState={this.getValidationStateStart()}>
                           <p />
                           <Col componentClass={ControlLabel} sm={3}>
-                            Leaving from
+                            Leaving from *
                           </Col>
                           <Col sm={9}>
                             <FormControl
                               name="start"
                               type="text"
                               placeholder="Enter the start location"
+                              value={this.state.value}
                               onChange={event => this.handleStartChange(event)}
                             />
                           </Col>
                         </FormGroup>
 
-                        <FormGroup controlId="formHorizontalGoing">
+                        <FormGroup controlId="formHorizontalGoing" validationState={this.getValidationStateDest()}>
                           <Col componentClass={ControlLabel} sm={3}>
-                            Going to
+                            Going to *
                           </Col>
                           <Col sm={9}>
                             <FormControl
                               name="dest"
                               type="text"
                               placeholder="Enter the destination"
+                              value={this.state.value}
                               onChange={event => this.handleDestChange(event)}
                             />
                           </Col>
                         </FormGroup>
 
-                        <FormGroup controlId="formHorizontalDate">
+                        <FormGroup controlId="formHorizontalDate" validationState={this.getValidationStateDate()}> 
                           <Col componentClass={ControlLabel} sm={3}>
-                            Date
+                            Date *
                           </Col>
                           <Col sm={9}>
                             <FormControl
                               type="text"
                               placeholder="mm/dd/yyyy"
+                              value={this.state.value}
                               onChange={event => this.handleDateChange(event)}
                             />
                           </Col>
                         </FormGroup>
 
-                        <FormGroup controlId="formHorizontalGoing">
+                        <FormGroup controlId="formHorizontalGoing" validationState={this.getValidationStateTime()}>
                           <Col componentClass={ControlLabel} sm={3}>
-                            Time
+                            Time *
                           </Col>
                           <Col sm={9}>
                             <FormControl
                               type="text"
                               placeholder="hh:mm"
+                              value={this.state.value}
                               onChange={event => this.handleTimeChange(event)}
                             />
                           </Col>
@@ -287,15 +317,13 @@ class RidePage extends Component {
 
                         <FormGroup controlId="formHorizontalSelectSeats">
                           <Col componentClass={ControlLabel} sm={3}>
-                            Available Seats
+                            Available Seats *
                           </Col>
                           <Col sm={9}>
                             <FormControl
                               componentClass="select"
                               placeholder="select"
-                              inputRef={ref => {
-                                this.input = ref;
-                              }}
+                              value={this.state.value}
                               onChange={event => this.handleSeatsChange(event)}
                               >
                                 <option value="1">1</option>
@@ -327,15 +355,16 @@ class RidePage extends Component {
                       <Tab eventKey={2} title="Payment">
                         <Form horizontal>
                           <p />
-                          <FormGroup controlId="formHorizontalCost">
+                          <FormGroup controlId="formHorizontalCost" validationState={this.getValidationStateCost()}>
                             <p />
                             <Col componentClass={ControlLabel} sm={3}>
-                              Cost
+                              Cost *
                             </Col>
                             <Col sm={9}>
                               <FormControl
-                                type="text"
+                                type="number"
                                 placeholder="Enter the amount to be charged"
+                                value={this.state.value}
                                 onChange={event => this.handleCostsChange(event)}
                               />
                             </Col>
@@ -352,9 +381,7 @@ class RidePage extends Component {
                               <FormControl
                                 componentClass="select"
                                 placeholder="select"
-                                inputRef={ref => {
-                                  this.input1 = ref;
-                                }}
+                                
                                 onChange={event => this.handleTypeChange(event)}
                                 >
                                   <option value="1">Cost Per Person</option>
