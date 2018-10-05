@@ -32,6 +32,19 @@ class Rides extends Component {
       let trips = snapshot.val();
       let newState = [];
       for (let trip in trips) {
+        let payMethods = [];
+        if (trips[trip].Cash) {
+          payMethods.push('Cash');
+          payMethods.push(' ');
+        }
+        if (trips[trip].Paypal) {
+          payMethods.push('Paypal');
+          payMethods.push(' ');
+        }
+        if (trips[trip].Venmo) {
+          payMethods.push('Venmo');
+        }
+
         newState.push({
           id: trips[trip].UsersArray[0],
           chargeType: trips[trip].total_or_perperson,
@@ -39,14 +52,12 @@ class Rides extends Component {
           date: trips[trip].date,
           description: trips[trip].description,
           dest: trips[trip].dest,
-          paymentMethods: trips[trip].paymentMethods,
+          paymentMethods: payMethods,
           picture: trips[trip].ImageURL,
           seats: trips[trip].seats,
           start: trips[trip].start,
           time: trips[trip].time,
-          cash: trips[trip].cash,
-          paypal: trips[trip].Paypal,
-          venmo: trips[trip].Venmo
+
         });
       }
 

@@ -13,10 +13,8 @@ class Ride extends Component {
     seats: this.props.ride.seats,
     start: this.props.ride.start,
     time: this.props.ride.time,
-    cash: this.props.ride.cash,
-    paypal: this.props.ride.paypal,
-    venmo: this.props.ride.venmo
   };
+
   render() {
         return (
       <Well>
