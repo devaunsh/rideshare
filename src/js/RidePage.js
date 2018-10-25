@@ -237,6 +237,221 @@ class RidePage extends Component {
         <div id="ride-page">
           <Rides />
 
+
+          <div>
+            <Button
+              className="button"
+              bsStyle="primary"
+              bsSize="xsmall"
+              onClick={this.handleShow}
+              >
+                Edit Ride
+              </Button>
+
+              <Modal show={this.state.show} onHide={this.handleClose}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Create Ride</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <Tabs defaultActiveKey={1} id="uncontrolled-tab-example">
+                    <Tab eventKey={1} title="Ride Information">
+                      <Form horizontal>
+                        <p />
+                        <FormGroup controlId="formHorizontalLeave" validationState={this.getValidationStateStart()}>
+                          <p />
+                          <Col componentClass={ControlLabel} sm={3}>
+                            Leaving from *
+                          </Col>
+                          <Col sm={9}>
+                            <FormControl
+                              name="start"
+                              type="text"
+                              placeholder="Enter the start location"
+                              value={this.state.value}
+                              onChange={event => this.handleStartChange(event)}
+                            />
+                          </Col>
+                        </FormGroup>
+
+                        <FormGroup controlId="formHorizontalGoing" validationState={this.getValidationStateDest()}>
+                          <Col componentClass={ControlLabel} sm={3}>
+                            Going to *
+                          </Col>
+                          <Col sm={9}>
+                            <FormControl
+                              name="dest"
+                              type="text"
+                              placeholder="Enter the destination"
+                              value={this.state.value}
+                              onChange={event => this.handleDestChange(event)}
+                            />
+                          </Col>
+                        </FormGroup>
+
+                        <FormGroup controlId="formHorizontalDate" validationState={this.getValidationStateDate()}>
+                          <Col componentClass={ControlLabel} sm={3}>
+                            Date *
+                          </Col>
+                          <Col sm={9}>
+                            <FormControl
+                              type="text"
+                              placeholder="mm/dd/yyyy"
+                              value={this.state.value}
+                              onChange={event => this.handleDateChange(event)}
+                            />
+                          </Col>
+                        </FormGroup>
+
+                        <FormGroup controlId="formHorizontalGoing" validationState={this.getValidationStateTime()}>
+                          <Col componentClass={ControlLabel} sm={3}>
+                            Time *
+                          </Col>
+                          <Col sm={9}>
+                            <FormControl
+                              type="text"
+                              placeholder="hh:mm"
+                              value={this.state.value}
+                              onChange={event => this.handleTimeChange(event)}
+                            />
+                          </Col>
+                        </FormGroup>
+
+                        <FormGroup controlId="formHorizontalSelectSeats">
+                          <Col componentClass={ControlLabel} sm={3}>
+                            Available Seats *
+                          </Col>
+                          <Col sm={9}>
+                            <FormControl
+                              componentClass="select"
+                              placeholder="select"
+                              value={this.state.value}
+                              onChange={event => this.handleSeatsChange(event)}
+                              >
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                              </FormControl>
+                            </Col>
+                          </FormGroup>
+
+                          <FormGroup controlId="formHorizontalDesc">
+                            <Col componentClass={ControlLabel} sm={3}>
+                              Trip Description
+                            </Col>
+                            <Col sm={9}>
+                              <FormControl
+                                componentClass="textarea"
+                                placeholder="Enter trip details"
+                                onChange={event =>
+                                  this.handleDescriptionChange(event)
+                                }
+                              />
+                            </Col>
+                          </FormGroup>
+                        </Form>
+                      </Tab>
+
+                      <Tab eventKey={2} title="Payment">
+                        <Form horizontal>
+                          <p />
+                          <FormGroup controlId="formHorizontalCost" validationState={this.getValidationStateCost()}>
+                            <p />
+                            <Col componentClass={ControlLabel} sm={3}>
+                              Cost *
+                            </Col>
+                            <Col sm={9}>
+                              <FormControl
+                                type="number"
+                                placeholder="Enter the amount to be charged"
+                                value={this.state.value}
+                                onChange={event => this.handleCostsChange(event)}
+                              />
+                            </Col>
+                          </FormGroup>
+
+                          <FormGroup controlId="formHorizontalSelectCharge">
+                            <Col componentClass={ControlLabel} sm={3}>
+                              Charge{" "}
+                              <OverlayTrigger overlay={popover}>
+                                <a href="#popover">Type</a>
+                              </OverlayTrigger>
+                            </Col>
+                            <Col sm={9}>
+                              <FormControl
+                                componentClass="select"
+                                placeholder="select"
+
+                                onChange={event => this.handleTypeChange(event)}
+                                >
+                                  <option value="1">Cost Per Person</option>
+                                  <option value="2">Total Cost</option>
+                                </FormControl>
+                              </Col>
+                            </FormGroup>
+
+                            <FormGroup controlId="formHorizontalPayment">
+                              <Col componentClass={ControlLabel} sm={3}>
+                                Payment Methods
+                              </Col>
+                              <Col sm={9}>
+                                <Checkbox
+                                  inline
+                                  checked={this.state.CashChecked}
+                                  onChange={event => this.handleCash(event)}
+                                  >
+                                    Cash
+                                  </Checkbox>{" "}
+                                  <Checkbox
+                                    inline
+                                    checked={this.state.VenmoChecked}
+                                    onChange={event => this.handleVenmo(event)}
+                                    >
+                                      Venmo
+                                    </Checkbox>{" "}
+                                    <Checkbox
+                                      checked={this.state.PayPalChecked}
+                                      onChange={event => this.handlePaypal(event)}
+                                      >
+                                        PayPal
+                                      </Checkbox>
+                                    </Col>
+                                  </FormGroup>
+                                </Form>
+                              </Tab>
+
+                              <Tab eventKey={3} title="Picture">
+                                <Form horizontal>
+                                  <p />
+                                  <FormGroup controlId="formHorizontalCost">
+                                    <Col componentClass={ControlLabel} sm={3}>
+                                      Upload
+                                    </Col>
+                                    <p />
+                                    <Col sm={6}>
+                                      <FormControl
+                                        type="file"
+                                        accept="image/*"
+                                        inputRef={ref => (this.input2 = ref)}
+                                        onChange={event => this.handleImageChange(event)}
+                                      />
+                                    </Col>
+                                  </FormGroup>
+                                </Form>
+                              </Tab>
+                            </Tabs>
+                          </Modal.Body>
+                          <Modal.Footer>
+                            <Button bsStyle="primary" onClick={this.handleSubmit}>
+                              Submit
+                            </Button>
+                            <Button onClick={this.handleClose}>Close</Button>
+                          </Modal.Footer>
+                        </Modal>
+                      </div>
+
+
           <div>
             <Button
               className="fixedbutton"
@@ -449,6 +664,8 @@ class RidePage extends Component {
                           </Modal.Footer>
                         </Modal>
                       </div>
+
+
                     </div>
                   );
                 }
