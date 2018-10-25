@@ -13,25 +13,19 @@ export class NavBar extends Component {
   }
 
   render() {
+      /*do not modify! Notify Zhe before make changes*/
     const { user } = this.props;
     return (
-      <Navbar
-        inverse
-        collapseOnSelect
-        style={{ display: user.name ? "block" : "none" }}
-      >
+      <Navbar>
         <Navbar.Header>
-          <Navbar.Brand>
-            <a href="#brand">RideShare</a>
-          </Navbar.Brand>
-          <Navbar.Toggle />
+            <img src={logo} className="navbar-logo" alt="logo" />
         </Navbar.Header>
         <Navbar.Collapse>
           <Nav>
-            <NavItem eventKey={1} href="#">
+            <NavItem eventKey={1} href="/home">
               Home
             </NavItem>
-            <NavItem eventKey={2} href="#">
+            <NavItem eventKey={2} href="/ride">
               Find a Ride
             </NavItem>
             <NavItem eventKey={3} href="#">

@@ -37,6 +37,9 @@ class Ride extends Component {
         <td>
           <Button bsStyle="primary">Book now!</Button>
         </td>
+        <td>
+          <Button bsStyle="primary" onClick={this.handleCancel} >Cancel!</Button>
+        </td>
       </tr>
     );
   }

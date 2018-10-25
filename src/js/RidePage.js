@@ -67,7 +67,7 @@ class RidePage extends Component {
       window.location.reload();
     }
   }
-  
+
 
 
   handleClose() {
@@ -147,7 +147,7 @@ class RidePage extends Component {
   }
 
   handleSubmit() {
-  	if(this.state.start === "" || this.state.start === null || this.state.dest === "" || this.state.dest === null || this.state.date === "" || this.state.date === null 
+  	if(this.state.start === "" || this.state.start === null || this.state.dest === "" || this.state.dest === null || this.state.date === "" || this.state.date === null
   		|| this.state.costs === "" || this.state.costs === null ){
   		alert('Please make sure to complete the required fields before you Submit');
   		return;
@@ -287,7 +287,7 @@ class RidePage extends Component {
                           </Col>
                         </FormGroup>
 
-                        <FormGroup controlId="formHorizontalDate" validationState={this.getValidationStateDate()}> 
+                        <FormGroup controlId="formHorizontalDate" validationState={this.getValidationStateDate()}>
                           <Col componentClass={ControlLabel} sm={3}>
                             Date *
                           </Col>
@@ -381,7 +381,7 @@ class RidePage extends Component {
                               <FormControl
                                 componentClass="select"
                                 placeholder="select"
-                                
+
                                 onChange={event => this.handleTypeChange(event)}
                                 >
                                   <option value="1">Cost Per Person</option>
