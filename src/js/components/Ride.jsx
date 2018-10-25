@@ -37,6 +37,11 @@ constructor(props, context) {
     this.setState({ show: true });
     }
 
+    getAvailableSeats(){
+    if(this.state.seats === 0 )
+      return 'true';
+  }
+
   
 
   render() {
@@ -60,7 +65,7 @@ constructor(props, context) {
           <Image src={this.state.picture} alt="No image" />
         </td>
         <td>
-          <Button onClick={this.handleShow} bsStyle="primary">Book now!</Button>
+          <Button onClick={this.handleShow} bsStyle="primary" disabled = {this.getAvailableSeats()}>Book now!</Button>
 
           <Modal show={this.state.show} onHide={this.handleClose}>
                 <Modal.Header closeButton>
