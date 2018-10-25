@@ -1,8 +1,21 @@
 import React, { Component } from "react";
 import { Well, Image, tr, td, Button } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
+import { FormGroup } from "react-bootstrap";
+import { FormControl } from "react-bootstrap";
+import { Form } from "react-bootstrap";
+import { Col } from "react-bootstrap";
+import { ControlLabel } from "react-bootstrap";
 
 class Ride extends Component {
-  state = {
+
+constructor(props, context) {
+    super(props, context);
+
+    this.handleShow = this.handleShow.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.state = {
+    show: false,
     chargeType: this.props.ride.chargeType,
     cost: this.props.ride.cost,
     date: this.props.ride.date,
@@ -14,9 +27,21 @@ class Ride extends Component {
     start: this.props.ride.start,
     time: this.props.ride.time
   };
+  }
+
+    handleClose() {
+    this.setState({ show: false });
+    }
+
+    handleShow() {
+    this.setState({ show: true });
+    }
+
+  
 
   render() {
     return (
+
       <tr>
         <td>{this.state.description}</td>
         <td>{this.state.cost}</td>
@@ -35,9 +60,107 @@ class Ride extends Component {
           <Image src={this.state.picture} alt="No image" />
         </td>
         <td>
-          <Button bsStyle="primary">Book now!</Button>
+          <Button onClick={this.handleShow} bsStyle="primary">Book now!</Button>
+
+          <Modal show={this.state.show} onHide={this.handleClose}>
+                <Modal.Header closeButton>
+                  <Modal.Title>Confirm Ride</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                <Form horizontal>
+                  <FormGroup>
+                    <Col componentClass={ControlLabel} sm={6}>
+                      Leaving from : 
+                    </Col>
+                    <Col sm={6}>
+                    <p>
+                    </p>
+
+                      {this.state.start}
+                    </Col>
+                  </FormGroup>
+
+                  <FormGroup>
+                    <Col componentClass={ControlLabel} sm={6}>
+                      Going To : 
+                    </Col>
+                    <Col sm={6}>
+                    <p>
+                    </p>
+                      {this.state.dest}
+                    </Col>
+                  </FormGroup>
+
+                  <FormGroup>
+                    <Col componentClass={ControlLabel} sm={6}>
+                      Date : 
+                    </Col>
+                    <Col sm={6}>
+                    <p>
+                    </p>
+                      {this.state.date}
+                    </Col>
+                  </FormGroup>
+
+                  <FormGroup>
+                    <Col componentClass={ControlLabel} sm={6}>
+                      Time : 
+                    </Col>
+                    <Col sm={6}>
+                    <p>
+                    </p>
+                      {this.state.time}
+                    </Col>
+                  </FormGroup>
+
+                  <FormGroup>
+                    <Col componentClass={ControlLabel} sm={6}>
+                      Description : 
+                    </Col>
+                    <Col sm={6}>
+                    <p>
+                    </p>
+                      {this.state.description}
+                    </Col>
+                  </FormGroup>
+
+                   <FormGroup>
+                    <Col componentClass={ControlLabel} sm={6}>
+                      Cost : 
+                    </Col>
+                    <Col sm={6}>
+                    <p>
+                    </p>
+                      {this.state.cost}
+                    </Col>
+                  </FormGroup>
+
+                  <FormGroup>
+                    <Col componentClass={ControlLabel} sm={6}>
+                      Accepted Payment Methods : 
+                    </Col>
+                    <Col sm={6}>
+                    <p>
+                    </p>
+                      {this.state.paymentMethods}
+                    </Col>
+                  </FormGroup>
+
+                </Form>
+
+                </Modal.Body>
+                <Modal.Footer>
+                            <Button bsStyle="primary" >
+                              Confirm
+                            </Button>
+                            <Button onClick={this.handleClose}>Close</Button>
+                          </Modal.Footer>
+                </Modal>
         </td>
       </tr>
+              
+                
+                
     );
   }
 }
