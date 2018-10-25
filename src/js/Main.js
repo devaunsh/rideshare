@@ -5,6 +5,8 @@ import { withRouter } from 'react-router';
 import firebase from './firebase.js';
 import NavigationBar from './components/NavigationBar';
 
+import MyRides from './MyRides';
+
 import LoginPage from './LoginPage';
 import HomePage from './HomePage';
 import RidePage from './RidePage';
@@ -68,6 +70,7 @@ export class Main extends Component {
           <Route exact path="/" component={LoginPage} />
           <Route path="/home" component={HomePage} />
           <Route path="/ride" component={RidePage} />
+          <Route path="/MyRides" component={MyRides} />
         </Switch>
       </div>
     );
