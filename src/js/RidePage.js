@@ -201,8 +201,16 @@ class RidePage extends Component {
             .database()
             .ref("/users/" + firebase.auth().currentUser.uid);
             ref2.once("value").then(snapshot => {
-              console.log(this.TripsArray);
-              ref2.set({TripsArray: });
+              console.log(snapshot.child('TripsArray').val());
+              var temp;
+              if (snapshot.child('TripsArray').exists()) {
+                temp = snapshot.child('TripsArray').val();
+                temp.push(unique);
+              }
+              else {
+                temp = [unique];
+              }
+              ref2.child('TripsArray').set(temp);
                 this.setState({
                   show: false,
                   start: null,
