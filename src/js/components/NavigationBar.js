@@ -16,7 +16,7 @@ export class NavBar extends Component {
       /*do not modify! Notify Zhe before make changes*/
     const { user } = this.props;
     return (
-      <Navbar>
+      <Navbar collapseOnSelect style={{ display: user.name ? "block": "none"}}>
         <Navbar.Header>
             <img src={logo} className="navbar-logo" alt="logo" />
         </Navbar.Header>
