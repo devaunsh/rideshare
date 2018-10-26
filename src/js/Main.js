@@ -5,7 +5,7 @@ import { withRouter } from 'react-router';
 import firebase from './firebase.js';
 import NavigationBar from './components/NavigationBar';
 
-import MyRides from './MyRides';
+
 
 import LoginPage from './LoginPage';
 import RidePage from './RidePage';
