@@ -8,8 +8,8 @@ import NavigationBar from './components/NavigationBar';
 import MyRides from './MyRides';
 
 import LoginPage from './LoginPage';
-import HomePage from './HomePage';
 import RidePage from './RidePage';
+import AccountPage from './AccountPage';
 
 import { userLogin, setFirebase, setGAPI } from './redux/actions';
 
@@ -68,9 +68,8 @@ export class Main extends Component {
         <NavigationBar />
         <Switch key={this.props.location.pathname} location={this.props.location}>
           <Route exact path="/" component={LoginPage} />
-          <Route path="/home" component={HomePage} />
           <Route path="/ride" component={RidePage} />
-          <Route path="/MyRides" component={MyRides} />
+          <Route path="/account" component={AccountPage} />
         </Switch>
       </div>
     );
