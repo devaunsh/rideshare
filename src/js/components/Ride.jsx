@@ -164,6 +164,9 @@ constructor(props, context) {
                           </Modal.Footer>
                 </Modal>
         </td>
+        <td>
+          <Button bsStyle="primary" onClick={this.handleCancel} >Cancel!</Button>
+        </td>
       </tr>
               
                 

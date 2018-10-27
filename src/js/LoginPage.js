@@ -58,7 +58,6 @@ class LoginPage extends Component {
       <div className="login-page">
         <div className="login-page-title-wrapper">
           <img src={logo} className="login-page-logo" alt="logo" />
-          <h1>RideShare</h1>
         </div>
 
         <Button
