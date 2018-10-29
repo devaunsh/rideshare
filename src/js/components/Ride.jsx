@@ -6,28 +6,26 @@ import { FormControl } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import { Col } from "react-bootstrap";
 import { ControlLabel } from "react-bootstrap";
+import firebase from "../firebase.js";
+import { userLogin } from "../redux/actions";
 
-class CancelModal extends React.Component {
+class CancelModal extends Component {
   constructor(props, context) {
     super(props, context);
-    this.handleYes = this.handleYes.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
     this.state = {
-      start: null,
-      dest: null,
-      date: null,
-      time: null,
-      seats: 1,
-      description: null,
-      costs: 0,
-      total_or_perperson: 1,
-      Cash: false,
-      Venmo: false,
-      PayPal: false,
-      ImageURL: null
+      Timestamp: this.props.timestamp,
+      rider: this.props.rider
     };
   }
 
-  handleYes() {
+  handleCancel() {
+      let timestamp = this.state.Timestamp;
+      console.log(timestamp);
+      let unique = this.props.rider + timestamp;
+      let ref = firebase.database().ref("/trips");
+      var desertRef = ref.child(unique);
+      desertRef.remove();
 
   }
 
@@ -62,19 +60,21 @@ constructor(props, context) {
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.state = {
-    show: false,
-    smShow: false,
-    chargeType: this.props.ride.chargeType,
-    cost: this.props.ride.cost,
-    date: this.props.ride.date,
-    description: this.props.ride.description,
-    dest: this.props.ride.dest,
-    paymentMethods: this.props.ride.paymentMethods,
-    picture: this.props.ride.picture,
-    seats: this.props.ride.seats,
-    start: this.props.ride.start,
-    time: this.props.ride.time
-  };
+      show: false,
+      smShow: false,
+      chargeType: this.props.ride.chargeType,
+      cost: this.props.ride.cost,
+      date: this.props.ride.date,
+      description: this.props.ride.description,
+      dest: this.props.ride.dest,
+      paymentMethods: this.props.ride.paymentMethods,
+      picture: this.props.ride.picture,
+      seats: this.props.ride.seats,
+      start: this.props.ride.start,
+      time: this.props.ride.time,
+      Timestamp: this.props.ride.Timestamp,
+      rider: this.props.ride.id,
+    };
   }
 
     handleClose() {
@@ -95,6 +95,7 @@ constructor(props, context) {
 
 
   render() {
+    console.log(this.state.Timestamp);//////
     let smClose = () => this.setState({ smShow: false });
     return (
 
@@ -215,7 +216,7 @@ constructor(props, context) {
         </td>
         <td>
           <Button bsStyle="primary" onClick={() => this.setState({ smShow: true })} >Cancel!</Button>
-          <CancelModal show={this.state.smShow} onHide={smClose} />
+          <CancelModal rider={this.state.rider} timestamp={this.state.Timestamp} show={this.state.smShow} onHide={smClose} />
         </td>
       </tr>
 

@@ -56,7 +56,8 @@ class Rides extends Component {
           picture: trips[trip].ImageURL,
           seats: trips[trip].seats,
           start: trips[trip].start,
-          time: trips[trip].time
+          time: trips[trip].time,
+          Timestamp: trips[trip].Timestamp,
         });
       }
 
