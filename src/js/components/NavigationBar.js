@@ -31,7 +31,7 @@ export class NavBar extends Component {
             <NavItem eventKey={3} href="#">
               Create a Ride
             </NavItem>
-            <NavItem eventKey={4} href="#">
+            <NavItem eventKey={4} href="/account">
               Account
             </NavItem>
           </Nav>

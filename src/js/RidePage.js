@@ -57,7 +57,9 @@ class RidePage extends Component {
       Cash: false,
       Venmo: false,
       PayPal: false,
-      ImageURL: null
+      ImageURL: null,
+      Timestamp: null,
+      rider: null
     };
   }
 
@@ -174,7 +176,9 @@ class RidePage extends Component {
             Paypal: this.state.PayPal,
             Venmo: this.state.Venmo,
             Cash: this.state.Cash,
-            UsersArray: [firebase.auth().currentUser.uid]
+            UsersArray: [firebase.auth().currentUser.uid],
+            Timestamp: timestamp,
+            rider: firebase.auth().currentUser.uid
           },
           () => {
             if (this.state.ImageURL !== null) {
@@ -224,7 +228,9 @@ class RidePage extends Component {
                   PayPal: false,
                   Venmo: false,
                   Cash: false,
-                  ImageURL: null
+                  ImageURL: null,
+                  Timestamp: null,
+                  rider: null
                 });
 
             });
