@@ -7,6 +7,53 @@ import { Form } from "react-bootstrap";
 import { Col } from "react-bootstrap";
 import { ControlLabel } from "react-bootstrap";
 
+class CancelModal extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+    this.handleYes = this.handleYes.bind(this);
+    this.state = {
+      start: null,
+      dest: null,
+      date: null,
+      time: null,
+      seats: 1,
+      description: null,
+      costs: 0,
+      total_or_perperson: 1,
+      Cash: false,
+      Venmo: false,
+      PayPal: false,
+      ImageURL: null
+    };
+  }
+
+  handleYes() {
+
+  }
+
+  render() {
+    return (
+      <Modal
+       {...this.props}
+       bsSize="small"
+       aria-labelledby="contained-modal-title-sm"
+     >
+       <Modal.Header closeButton>
+         <Modal.Title id="contained-modal-title-sm">Comfirm</Modal.Title>
+       </Modal.Header>
+       <Modal.Body>
+         <p>
+           Are you sure you want to cancel this trip?
+         </p>
+       </Modal.Body>
+       <Modal.Footer>
+         <Button onClick={this.props.onHide}>Close</Button>
+         <Button bsStyle="primary" onClick={this.handleCancel}>Yes</Button>
+       </Modal.Footer>
+     </Modal>
+   );
+  }
+}
 class Ride extends Component {
 
 constructor(props, context) {
@@ -16,6 +63,7 @@ constructor(props, context) {
     this.handleClose = this.handleClose.bind(this);
     this.state = {
     show: false,
+    smShow: false,
     chargeType: this.props.ride.chargeType,
     cost: this.props.ride.cost,
     date: this.props.ride.date,
@@ -44,9 +92,10 @@ constructor(props, context) {
       return false;
   }
 
-  
+
 
   render() {
+    let smClose = () => this.setState({ smShow: false });
     return (
 
       <tr>
@@ -77,7 +126,7 @@ constructor(props, context) {
                 <Form horizontal>
                   <FormGroup>
                     <Col componentClass={ControlLabel} sm={6}>
-                      Leaving from : 
+                      Leaving from :
                     </Col>
                     <Col sm={6}>
                     <p>
@@ -89,7 +138,7 @@ constructor(props, context) {
 
                   <FormGroup>
                     <Col componentClass={ControlLabel} sm={6}>
-                      Going To : 
+                      Going To :
                     </Col>
                     <Col sm={6}>
                     <p>
@@ -100,7 +149,7 @@ constructor(props, context) {
 
                   <FormGroup>
                     <Col componentClass={ControlLabel} sm={6}>
-                      Date : 
+                      Date :
                     </Col>
                     <Col sm={6}>
                     <p>
@@ -111,7 +160,7 @@ constructor(props, context) {
 
                   <FormGroup>
                     <Col componentClass={ControlLabel} sm={6}>
-                      Time : 
+                      Time :
                     </Col>
                     <Col sm={6}>
                     <p>
@@ -122,7 +171,7 @@ constructor(props, context) {
 
                   <FormGroup>
                     <Col componentClass={ControlLabel} sm={6}>
-                      Description : 
+                      Description :
                     </Col>
                     <Col sm={6}>
                     <p>
@@ -133,7 +182,7 @@ constructor(props, context) {
 
                    <FormGroup>
                     <Col componentClass={ControlLabel} sm={6}>
-                      Cost : 
+                      Cost :
                     </Col>
                     <Col sm={6}>
                     <p>
@@ -144,7 +193,7 @@ constructor(props, context) {
 
                   <FormGroup>
                     <Col componentClass={ControlLabel} sm={6}>
-                      Accepted Payment Methods : 
+                      Accepted Payment Methods :
                     </Col>
                     <Col sm={6}>
                     <p>
@@ -165,12 +214,13 @@ constructor(props, context) {
                 </Modal>
         </td>
         <td>
-          <Button bsStyle="primary" onClick={this.handleCancel} >Cancel!</Button>
+          <Button bsStyle="primary" onClick={() => this.setState({ smShow: true })} >Cancel!</Button>
+          <CancelModal show={this.state.smShow} onHide={smClose} />
         </td>
       </tr>
-              
-                
-                
+
+
+
     );
   }
 }
