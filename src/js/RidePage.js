@@ -94,7 +94,7 @@ class RidePage extends Component {
   }
   handleSeatsChange() {
     //  console.log(ReactDOM.findDOMNode(this.select).value);
-    if (this.input)
+    if (this.input && this.input.value != 0)
       this.setState({ seats: this.input.value });
   }
   handleDescriptionChange(event) {
