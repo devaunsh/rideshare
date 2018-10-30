@@ -239,6 +239,7 @@ class RidePage extends Component {
         );
       }
     });
+    window.location.reload();
   }
 
   render() {
