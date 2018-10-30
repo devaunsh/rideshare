@@ -14,6 +14,7 @@ class CancelModal extends Component {
     super(props, context);
     this.handleCancel = this.handleCancel.bind(this);
     this.state = {
+      show: this.props.show,
       Timestamp: this.props.timestamp,
       rider: this.props.rider
     };
@@ -26,7 +27,7 @@ class CancelModal extends Component {
       let ref = firebase.database().ref("/trips");
       var desertRef = ref.child(unique);
       desertRef.remove();
-
+      window.location.reload();
   }
 
   render() {
@@ -46,7 +47,7 @@ class CancelModal extends Component {
        </Modal.Body>
        <Modal.Footer>
          <Button onClick={this.props.onHide}>Close</Button>
-         <Button bsStyle="primary" onClick={this.handleCancel}>Yes</Button>
+         <Button bsStyle="primary" onClick={this.handleCancel }>Yes</Button>
        </Modal.Footer>
      </Modal>
    );
