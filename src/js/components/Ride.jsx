@@ -16,14 +16,14 @@ class CancelModal extends Component {
     this.state = {
       show: this.props.show,
       Timestamp: this.props.timestamp,
-      rider: this.props.rider
+      driver: this.props.driver
     };
   }
 
   handleCancel() {
     let timestamp = this.state.Timestamp;
-    let unique = this.props.rider + timestamp;
-    if (this.props.rider == firebase.auth().currentUser.uid) {
+    let unique = this.props.driver + timestamp;
+    if (this.props.driver == firebase.auth().currentUser.uid) {
 
       let ref = firebase.database().ref("/trips");
       ref.once('value').then(snapshot => {
@@ -38,7 +38,7 @@ class CancelModal extends Component {
 
       let ref = firebase.database().ref(`/trips/${unique}/UsersArray`);
       ref.once('value').then(snapshot => {
-      let temp = snapshot.val();
+        let temp = snapshot.val();
 
         if (temp === null) {
           console.log("Error: UsersArray Empty")
@@ -114,30 +114,31 @@ class Ride extends Component {
       start: this.props.ride.start,
       time: this.props.ride.time,
       Timestamp: this.props.ride.Timestamp,
-      rider: this.props.ride.id, //driver
+      driver: this.props.ride.id, //driver
     };
   }
   handleConfirm() {
     //should be block if already in TripsArray
     var currentUser = firebase.auth().currentUser.uid;
     var ref_userTrips = firebase.database().ref("/users/" + currentUser);
-    var ref_tripUsers = firebase.database().ref("/trips/" + this.state.rider + this.state.Timestamp);
-
+    var ref_tripUsers = firebase.database().ref("/trips/" + this.state.driver
+    + this.state.Timestamp);
+    let date = new Date();
+    let timestamp = date.toGMTString();
     ref_userTrips.once('value').then(snapshot => {
-      var temp;
-      //  if (snapshot.child('TripsArray').exists()) {
-      temp = snapshot.child('TripsArray').val();
+      let temp = snapshot.child('TripsArray').val();
       if (temp == null) {
-        temp = [];
+        temp = {};
       }
-      temp.push(this.state.rider + this.state.Timestamp);
+      temp[this.state.driver + this.state.Timestamp] = timestamp;
       ref_userTrips.child('TripsArray').set(temp , () => {
         ref_tripUsers.once('value').then(snapshot => {
-          var temp1;
-          if (snapshot.child('UsersArray').exists()) {
-            temp1 = snapshot.child('UsersArray').val();
-            temp1.push(currentUser);
+          let temp1 = snapshot.child("UsersArray").val();
+          if (temp1 === null) {
+            console.log("Error: UsersArray Empty");
+            return;
           }
+          temp1[currentUser].timestamp;
           ref_tripUsers.child('UsersArray').set(temp1);
           window.location.reload();
         });
@@ -287,7 +288,7 @@ class Ride extends Component {
       </td>
       <td>
       <Button bsStyle="primary" onClick={() => this.setState({ smShow: true })} >Cancel!</Button>
-      <CancelModal rider={this.state.rider} timestamp={this.state.Timestamp} show={this.state.smShow} onHide={smClose} />
+      <CancelModal driver={this.state.driver} timestamp={this.state.Timestamp} show={this.state.smShow} onHide={smClose} />
       </td>
       </tr>
 
