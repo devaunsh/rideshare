@@ -46,7 +46,7 @@ class Rides extends Component {
         }
 
         newState.push({
-          id: trips[trip].UsersArray[0],
+          id: trips[trip].driver,
           chargeType: trips[trip].total_or_perperson,
           cost: trips[trip].costs,
           date: trips[trip].date,
