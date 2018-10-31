@@ -127,7 +127,7 @@ class RidePage extends Component {
     //     }
     const localImageURL = window.URL.createObjectURL(this.input2.files[0]);
 
-    this.setState({ ImageURL: localImageURL });
+    this.setState({ ImageURL: localImageURL }, () => {console.log(this.state.ImageURL);});
   }
   getValidationStateStart(){
     if(this.state.start === "" )
@@ -191,7 +191,9 @@ class RidePage extends Component {
                   var myImage = this.response;
                   ref_storage.put(myImage).then(snapshot => {
                     snapshot.ref.getDownloadURL().then(value => {
+                      console.log(value);
                       ref.child('ImageURL').set(value);
+                      window.location.reload();
                     });
                   });
 
@@ -239,7 +241,7 @@ class RidePage extends Component {
         );
       }
     });
-    window.location.reload();
+
   }
 
   render() {
