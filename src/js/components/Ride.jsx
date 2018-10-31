@@ -21,43 +21,75 @@ class CancelModal extends Component {
   }
 
   handleCancel() {
-      let timestamp = this.state.Timestamp;
-      console.log(timestamp);
-      if (this.props.rider == firebase.auth().currentUser.uid) {
-        let unique = this.props.rider + timestamp;
-        let ref = firebase.database().ref("/trips");
+    let timestamp = this.state.Timestamp;
+    let unique = this.props.rider + timestamp;
+    if (this.props.rider == firebase.auth().currentUser.uid) {
+
+      let ref = firebase.database().ref("/trips");
+      ref.once('value').then(snapshot => {
         var desertRef = ref.child(unique);
         desertRef.remove();
-      } else {
-        let unique = this.props.rider + timestamp;
-        let ref = firebase.database().ref(`/trips/${unique}/UsersArray`);
-        var desertRef = ref.child(firebase.auth().currentUser.uid).remove();
+      })
 
+
+
+
+    } else {
+
+      let ref = firebase.database().ref(`/trips/${unique}/UsersArray`);
+      ref.once('value').then(snapshot => {
+      let temp = snapshot.val();
+
+        if (temp === null) {
+          console.log("Error: UsersArray Empty")
+          return;
+        }
+        temp = temp.filter(value => {return value != firebase.auth().currentUser.uid});
+        ref.set(temp);
+      })
+
+
+    }
+    //delete from users TripsArray
+    let currentUser = firebase.auth().currentUser.uid;
+    let ref_userTrips = firebase.database().ref("/users/" + currentUser);
+    ref_userTrips.once('value').then(snapshot => {
+
+
+      let temp = snapshot.child("TripsArray").val();
+      if (temp === null) {
+        console.log("Error: TripsArray Empty");
+        return;
       }
-      window.location.reload();
+      temp = temp.filter(value => {return value != unique});
+      ref_userTrips.child("TripsArray").set(temp);
+
+
+    });
+    window.location.reload();
   }
 
   render() {
     return (
       <Modal
-       {...this.props}
-       bsSize="small"
-       aria-labelledby="contained-modal-title-sm"
-     >
-       <Modal.Header closeButton>
-         <Modal.Title id="contained-modal-title-sm">Comfirm</Modal.Title>
-       </Modal.Header>
-       <Modal.Body>
-         <p>
-           Are you sure you want to cancel this trip?
-         </p>
-       </Modal.Body>
-       <Modal.Footer>
-         <Button onClick={this.props.onHide}>Close</Button>
-         <Button bsStyle="primary" onClick={this.handleCancel }>Yes</Button>
-       </Modal.Footer>
-     </Modal>
-   );
+      {...this.props}
+      bsSize="small"
+      aria-labelledby="contained-modal-title-sm"
+      >
+      <Modal.Header closeButton>
+      <Modal.Title id="contained-modal-title-sm">Comfirm</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+      <p>
+      Are you sure you want to cancel this trip?
+      </p>
+      </Modal.Body>
+      <Modal.Footer>
+      <Button onClick={this.props.onHide}>Close</Button>
+      <Button bsStyle="primary" onClick={this.handleCancel }>Yes</Button>
+      </Modal.Footer>
+      </Modal>
+    );
   }
 }
 class Ride extends Component {
@@ -82,10 +114,39 @@ class Ride extends Component {
       start: this.props.ride.start,
       time: this.props.ride.time,
       Timestamp: this.props.ride.Timestamp,
-      rider: this.props.ride.id,
+      rider: this.props.ride.id, //driver
     };
   }
   handleConfirm() {
+    //should be block if already in TripsArray
+    var currentUser = firebase.auth().currentUser.uid;
+    var ref_userTrips = firebase.database().ref("/users/" + currentUser);
+    var ref_tripUsers = firebase.database().ref("/trips/" + this.state.rider + this.state.Timestamp);
+
+    ref_userTrips.once('value').then(snapshot => {
+      var temp;
+      //  if (snapshot.child('TripsArray').exists()) {
+      temp = snapshot.child('TripsArray').val();
+      if (temp == null) {
+        temp = [];
+      }
+      temp.push(this.state.rider + this.state.Timestamp);
+      ref_userTrips.child('TripsArray').set(temp , () => {
+        ref_tripUsers.once('value').then(snapshot => {
+          var temp1;
+          if (snapshot.child('UsersArray').exists()) {
+            temp1 = snapshot.child('UsersArray').val();
+            temp1.push(currentUser);
+          }
+          ref_tripUsers.child('UsersArray').set(temp1);
+          window.location.reload();
+        });
+      });
+      //  }
+    });
+
+
+
 
   }
   handleClose() {
@@ -106,7 +167,6 @@ class Ride extends Component {
 
 
   render() {
-    console.log(this.state.Timestamp);//////
     let smClose = () => this.setState({ smShow: false });
     return (
 
@@ -130,105 +190,105 @@ class Ride extends Component {
       <td>
       <Button onClick={this.handleShow} bsStyle="primary" disabled = {this.getAvailableSeats()}>Book now!</Button>
 
-          <Modal show={this.state.show} onHide={this.handleClose}>
-                <Modal.Header closeButton>
-                  <Modal.Title>Confirm Ride</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                <Form horizontal>
-                  <FormGroup>
-                    <Col componentClass={ControlLabel} sm={6}>
-                      Leaving from :
-                    </Col>
-                    <Col sm={6}>
-                    <p>
-                    </p>
+      <Modal show={this.state.show} onHide={this.handleClose}>
+      <Modal.Header closeButton>
+      <Modal.Title>Confirm Ride</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+      <Form horizontal>
+      <FormGroup>
+      <Col componentClass={ControlLabel} sm={6}>
+      Leaving from :
+      </Col>
+      <Col sm={6}>
+      <p>
+      </p>
 
       {this.state.start}
       </Col>
       </FormGroup>
 
-                  <FormGroup>
-                    <Col componentClass={ControlLabel} sm={6}>
-                      Going To :
-                    </Col>
-                    <Col sm={6}>
-                    <p>
-                    </p>
-                      {this.state.dest}
-                    </Col>
-                  </FormGroup>
+      <FormGroup>
+      <Col componentClass={ControlLabel} sm={6}>
+      Going To :
+      </Col>
+      <Col sm={6}>
+      <p>
+      </p>
+      {this.state.dest}
+      </Col>
+      </FormGroup>
 
-                  <FormGroup>
-                    <Col componentClass={ControlLabel} sm={6}>
-                      Date :
-                    </Col>
-                    <Col sm={6}>
-                    <p>
-                    </p>
-                      {this.state.date}
-                    </Col>
-                  </FormGroup>
+      <FormGroup>
+      <Col componentClass={ControlLabel} sm={6}>
+      Date :
+      </Col>
+      <Col sm={6}>
+      <p>
+      </p>
+      {this.state.date}
+      </Col>
+      </FormGroup>
 
-                  <FormGroup>
-                    <Col componentClass={ControlLabel} sm={6}>
-                      Time :
-                    </Col>
-                    <Col sm={6}>
-                    <p>
-                    </p>
-                      {this.state.time}
-                    </Col>
-                  </FormGroup>
+      <FormGroup>
+      <Col componentClass={ControlLabel} sm={6}>
+      Time :
+      </Col>
+      <Col sm={6}>
+      <p>
+      </p>
+      {this.state.time}
+      </Col>
+      </FormGroup>
 
-                  <FormGroup>
-                    <Col componentClass={ControlLabel} sm={6}>
-                      Description :
-                    </Col>
-                    <Col sm={6}>
-                    <p>
-                    </p>
-                      {this.state.description}
-                    </Col>
-                  </FormGroup>
+      <FormGroup>
+      <Col componentClass={ControlLabel} sm={6}>
+      Description :
+      </Col>
+      <Col sm={6}>
+      <p>
+      </p>
+      {this.state.description}
+      </Col>
+      </FormGroup>
 
-                   <FormGroup>
-                    <Col componentClass={ControlLabel} sm={6}>
-                      Cost :
-                    </Col>
-                    <Col sm={6}>
-                    <p>
-                    </p>
-                      {this.state.cost}
-                    </Col>
-                  </FormGroup>
+      <FormGroup>
+      <Col componentClass={ControlLabel} sm={6}>
+      Cost :
+      </Col>
+      <Col sm={6}>
+      <p>
+      </p>
+      {this.state.cost}
+      </Col>
+      </FormGroup>
 
-                  <FormGroup>
-                    <Col componentClass={ControlLabel} sm={6}>
-                      Accepted Payment Methods :
-                    </Col>
-                    <Col sm={6}>
-                    <p>
-                    </p>
-                      {this.state.paymentMethods}
-                    </Col>
-                  </FormGroup>
+      <FormGroup>
+      <Col componentClass={ControlLabel} sm={6}>
+      Accepted Payment Methods :
+      </Col>
+      <Col sm={6}>
+      <p>
+      </p>
+      {this.state.paymentMethods}
+      </Col>
+      </FormGroup>
 
       </Form>
 
-                </Modal.Body>
-                <Modal.Footer>
-                            <Button bsStyle="primary" >
-                              Confirm
-                            </Button>
-                            <Button onClick={this.handleClose}>Close</Button>
-                          </Modal.Footer>
-                </Modal>
-        </td>
-        <td>
-          <Button bsStyle="primary" onClick={() => this.setState({ smShow: true })} >Cancel!</Button>
-          <CancelModal rider={this.state.rider} timestamp={this.state.Timestamp} show={this.state.smShow} onHide={smClose} />
-        </td>
+      </Modal.Body>
+      <Modal.Footer>
+      <Button bsStyle="primary" onClick={this.handleConfirm}>
+      Confirm
+      </Button>
+      <Button onClick={this.handleClose}>Close</Button>
+      </Modal.Footer>
+      </Modal>
+      </td>
+      <td>
+      <Button bsStyle="primary" onClick={() => this.setState({ smShow: true })} >Cancel!</Button>
+      <CancelModal rider={this.state.rider} timestamp={this.state.Timestamp} show={this.state.smShow} onHide={smClose} />
+      </td>
       </tr>
 
 

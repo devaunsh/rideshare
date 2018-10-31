@@ -207,7 +207,6 @@ class RidePage extends Component {
             .database()
             .ref("/users/" + firebase.auth().currentUser.uid);
             ref2.once("value").then(snapshot => {
-              console.log(snapshot.child('TripsArray').val());
               var temp;
               if (snapshot.child('TripsArray').exists()) {
                 temp = snapshot.child('TripsArray').val();
@@ -236,7 +235,9 @@ class RidePage extends Component {
                 });
 
             });
-
+            if (this.state.ImageURL == null) {
+              window.location.reload();
+            }
           }
         );
       }
