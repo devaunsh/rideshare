@@ -31,37 +31,7 @@ class CancelModal extends Component {
       } else {
         let ref = firebase.database().ref(`/trips/${unique}/UsersArray`);
         var desertRef = ref.child(firebase.auth().currentUser.uid).remove();
-
-
-
-
-    } else {
-
-      let ref = firebase.database().ref(`/trips/${unique}/UsersArray`);
-      ref.once('value').then(snapshot => {
-        let temp = snapshot.val();
-
-        if (temp === null) {
-          console.log("Error: UsersArray Empty")
-          return;
-        }
-        temp = temp.filter(value => {return value != firebase.auth().currentUser.uid});
-        ref.set(temp);
-      })
-
-
     }
-    //delete from users TripsArray
-    let currentUser = firebase.auth().currentUser.uid;
-    let ref_userTrips = firebase.database().ref("/users/" + currentUser);
-    ref_userTrips.once('value').then(snapshot => {
-
-
-      let temp = snapshot.child("TripsArray").val();
-      if (temp === null) {
-        console.log("Error: TripsArray Empty");
-        return;
-      }
       //delete the TripsArray
       let userRef = firebase.auth().currentUser.uid;
       let ref = firebase.database().ref(`/users/${userRef}/TripsArray`);
