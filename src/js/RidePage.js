@@ -213,32 +213,17 @@ class RidePage extends Component {
                 temp = {};
               }
               temp[unique] = timestamp;
-              ref2.child("TripsArray").set(temp);
-
-
-
-              this.setState({
-                show: false,
-                start: null,
-                dest: null,
-                date: null,
-                time: null,
-                seats: 0,
-                description: null,
-                costs: 0,
-                total_or_perperson: 0,
-                PayPal: false,
-                Venmo: false,
-                Cash: false,
-                ImageURL: null,
-                Timestamp: null,
-                driver: null
+              ref2.child("TripsArray").set(temp, () => {
+                if (this.state.ImageURL == null) {
+                  window.location.reload();
+                }
               });
 
+
+
+
             });
-            if (this.state.ImageURL == null) {
-              window.location.reload();
-            }
+
           }
         );
       }

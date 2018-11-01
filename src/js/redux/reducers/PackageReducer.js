@@ -1,11 +1,13 @@
 import {
   SET_FIREBASE,
-  SET_GAPI
+  SET_GAPI,
+  SET_GMAIL
 } from '../actions';
 
 const initialState = {
   firebase: null,
-  gapi: null
+  gapi: null,
+  gmail: null
 }
 
 const PackageReducer = (state = initialState, action) => {
@@ -21,6 +23,11 @@ const PackageReducer = (state = initialState, action) => {
         ...state,
         gapi: payload
       }
+      case SET_GMAIL:
+        return {
+          ...state,
+          gmail: payload
+        }
     default:
       return state
   }

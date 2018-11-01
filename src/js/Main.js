@@ -5,19 +5,24 @@ import { withRouter } from 'react-router';
 import firebase from './firebase.js';
 import NavigationBar from './components/NavigationBar';
 
-
-
 import LoginPage from './LoginPage';
 import RidePage from './RidePage';
 import AccountPage from './AccountPage';
 
-import { userLogin, setFirebase, setGAPI } from './redux/actions';
+import { userLogin, setFirebase, setGAPI, setGmail } from './redux/actions';
 
 export class Main extends Component {
+  getGmail() {
 
+  }
   componentWillMount() {
     const gapiConfig = {
-      client_id: '591511873815-grq5if4sl6dcn2jpcnncauvk7kneo1ji.apps.googleusercontent.com'
+      client_id: '591511873815-grq5if4sl6dcn2jpcnncauvk7kneo1ji.apps.googleusercontent.com',
+  //    scope: ['https://www.googleapis.com/auth/gmail.send'],
+
+    //  cookiepolicy: 'single_host_origin',
+      //api_key: 'AIzaSyCmtoHnfyQB9ffgfuYCt-ztRJFMWkLErfs',
+    //  discoveryDocs: ['https://people.googleapis.com/$discovery/rest']
     }
     require('google-client-api')().then(gapi => {
       gapi.load('auth2', () => {
@@ -81,6 +86,7 @@ const mapDispatchToProps = dispatch => {
     userLogin: user => dispatch(userLogin(user)),
     setFirebase: firebase => dispatch(setFirebase(firebase)),
     setGAPI: gapi => dispatch(setGAPI(gapi)),
+    setGmail: gmail => dispatch(setGmail(gmail))
 
   }
 }
