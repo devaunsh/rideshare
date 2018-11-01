@@ -7,7 +7,7 @@ import { Form } from "react-bootstrap";
 import { Col } from "react-bootstrap";
 import { ControlLabel } from "react-bootstrap";
 import firebase from "../firebase.js";
-import { userLogin } from "../redux/actions";
+
 
 class CancelModal extends Component {
   constructor(props, context) {
@@ -138,7 +138,7 @@ class Ride extends Component {
             console.log("Error: UsersArray Empty");
             return;
           }
-          temp1[currentUser].timestamp;
+          temp1[currentUser] = timestamp;
           ref_tripUsers.child('UsersArray').set(temp1);
           window.location.reload();
         });
