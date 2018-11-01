@@ -25,18 +25,43 @@ class CancelModal extends Component {
       console.log(timestamp);
       let unique = this.props.driver + timestamp;
       if (this.props.driver == firebase.auth().currentUser.uid) {
+        //cancel driver case
         let ref = firebase.database().ref("/trips");
+
+        let ref2 = firebase.database().ref(`/trips/${unique}/UsersArray`);
+        ref2.once('value').then(snapshot => {
+        let temp = snapshot.val();
+        Object.entries(temp).forEach(entry => {
+          let key = entry[0];
+          console.log(key);
+          let userRef = key;
+          let ref3 = firebase.database().ref(`/users/${userRef}/TripsArray`);
+           ref3.once('value').then(snapshot1 => {
+             console.log(snapshot1.val());
+             var desertRef = ref3.child(unique).remove();
+           })
+          //var desertRef = ref3.child(unique).remove();
+        })
+          if (temp === null) {
+            console.log("Error: UsersArray Empty")
+            return;
+          }
+        })
         var desertRef = ref.child(unique);
         desertRef.remove();
+      //  window.location.reload();
       } else {
+        //cancel passenger case
         let ref = firebase.database().ref(`/trips/${unique}/UsersArray`);
         var desertRef = ref.child(firebase.auth().currentUser.uid).remove();
+
+        //delete in the TripsArray
+        let userRef = firebase.auth().currentUser.uid;
+        let ref2 = firebase.database().ref(`/users/${userRef}/TripsArray`);
+        var desertRef2 = ref2.child(unique).remove();
+        window.location.reload();
     }
-      //delete in the TripsArray
-      let userRef = firebase.auth().currentUser.uid;
-      let ref = firebase.database().ref(`/users/${userRef}/TripsArray`);
-      var desertRef = ref.child(unique).remove();
-      window.location.reload();
+
   }
 
   render() {

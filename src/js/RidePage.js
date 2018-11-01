@@ -222,9 +222,11 @@ class RidePage extends Component {
 
 
 
+
             });
 
           }
+          
         );
       }
     });
