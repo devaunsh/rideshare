@@ -23,8 +23,8 @@ class CancelModal extends Component {
   handleCancel() {
       let timestamp = this.state.Timestamp;
       console.log(timestamp);
-      let unique = this.props.rider + timestamp;
-      if (this.props.rider == firebase.auth().currentUser.uid) {
+      let unique = this.props.driver + timestamp;
+      if (this.props.driver == firebase.auth().currentUser.uid) {
         let ref = firebase.database().ref("/trips");
         var desertRef = ref.child(unique);
         desertRef.remove();
@@ -32,7 +32,7 @@ class CancelModal extends Component {
         let ref = firebase.database().ref(`/trips/${unique}/UsersArray`);
         var desertRef = ref.child(firebase.auth().currentUser.uid).remove();
     }
-      //delete the TripsArray
+      //delete in the TripsArray
       let userRef = firebase.auth().currentUser.uid;
       let ref = firebase.database().ref(`/users/${userRef}/TripsArray`);
       var desertRef = ref.child(unique).remove();
