@@ -12,39 +12,33 @@ import AccountPage from './AccountPage';
 import { userLogin, setFirebase, setGAPI, setGmail } from './redux/actions';
 
 export class Main extends Component {
-  getGmail() {
-
-  }
-  componentWillMount() {
+  loadClient() {
     const gapiConfig = {
       client_id: '591511873815-grq5if4sl6dcn2jpcnncauvk7kneo1ji.apps.googleusercontent.com',
-  //    scope: ['https://www.googleapis.com/auth/gmail.send'],
-
-    //  cookiepolicy: 'single_host_origin',
-      //api_key: 'AIzaSyCmtoHnfyQB9ffgfuYCt-ztRJFMWkLErfs',
-    //  discoveryDocs: ['https://people.googleapis.com/$discovery/rest']
     }
     require('google-client-api')().then(gapi => {
       gapi.load('auth2', () => {
+
         gapi.auth2.init(gapiConfig).then(auth => {
           if (auth.isSignedIn.get()) {
             firebase.auth().signInAndRetrieveDataWithCredential(
               firebase.auth.GoogleAuthProvider.credential(auth.currentUser.get().getAuthResponse().id_token, null)
             ).then(firebaseUser => {
 
+
               this.props.setGAPI(gapi);
               this.props.setFirebase(firebase);
               let ref = firebase.database().ref('/users/' + firebaseUser.user.uid);
 
               ref.once('value').then(snapshot => {
-                  if (this.props.history.location.pathname === '/') {
-                    if (!snapshot.val()) {
-                      ref.set(firebaseUser.user.uid, () => {
+                if (this.props.history.location.pathname === '/') {
+                  if (!snapshot.val()) {
+                    ref.set(firebaseUser.user.uid, () => {
                       ref.set({name: firebaseUser.user.displayName, email: firebaseUser.user.email});
                     });
                   }
-                    this.props.history.push('/ride');
-                  }
+                  this.props.history.push('/ride');
+                }
 
 
               })
@@ -56,28 +50,55 @@ export class Main extends Component {
 
             this.props.userLogin(auth.currentUser.get().getBasicProfile());
           } else {
+
             this.props.setGAPI(gapi)
             this.props.setFirebase(firebase)
           }
         }, error => {
           console.log(error);
-         })
+        })
 
       })
-    });
+    })
+
   }
+
+  loadServer() {
+    const gapiConfig = {
+      client_id: '591511873815-grq5if4sl6dcn2jpcnncauvk7kneo1ji.apps.googleusercontent.com',
+      scope: 'https://www.googleapis.com/auth/gmail.send',
+
+      cookiepolicy: 'single_host_origin',
+      api_key: 'AIzaSyCmtoHnfyQB9ffgfuYCt-ztRJFMWkLErfs',
+      discoveryDocs: 'https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest'
+    }
+  }
+  componentWillMount() {
+    this.loadClient();
+  }
+
+
+
+
 
   render() {
     return (
       <div className="App">
-        <NavigationBar />
-        <Switch key={this.props.location.pathname} location={this.props.location}>
-          <Route exact path="/" component={LoginPage} />
-          <Route path="/ride" component={RidePage} />
-          <Route path="/account" component={AccountPage} />
-        </Switch>
+      <NavigationBar />
+      <Switch key={this.props.location.pathname} location={this.props.location}>
+      <Route exact path="/" component={LoginPage} />
+      <Route path="/ride" component={RidePage} />
+      //  <Route path="/ride#rides" component={RidePage} />
+      <Route path="/account" component={AccountPage} />
+      </Switch>
       </div>
     );
+  }
+}
+const mapStateToProps = state => {
+  return {
+    packages: state.packages,
+    user: state.user
   }
 }
 
@@ -91,4 +112,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default withRouter(connect(null, mapDispatchToProps)(Main));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));

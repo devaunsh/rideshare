@@ -53,6 +53,7 @@ class Rides extends Component {
         let res =
           year + "-" + month + "-" + day + "T" + trips[trip].time + ":00";
 
+
         newState.push({
           id: trips[trip].driver,
           chargeType: trips[trip].total_or_perperson,
@@ -65,6 +66,7 @@ class Rides extends Component {
           seats: trips[trip].seats,
           start: trips[trip].start,
           time: trips[trip].time,
+          Timestamp: trips[trip].Timestamp,
           dateandtime: res
         });
       }

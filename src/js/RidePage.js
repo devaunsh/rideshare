@@ -156,7 +156,7 @@ class RidePage extends Component {
       alert('Please make sure to complete the required fields before you Submit');
       return;
     }
-    const { gapi, firebase } = this.props.packages;
+    const { firebase } = this.props.packages;
     let date = new Date();
     let timestamp = date.toGMTString();
     let unique = firebase.auth().currentUser.uid + timestamp;
