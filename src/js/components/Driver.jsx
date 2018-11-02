@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import Ride from "./Ride.jsx";
+import DriverRide from "./DriverRide.jsx";
 import firebase from "../firebase.js";
 import { Well, Table } from "react-bootstrap";
-class Rides extends Component {
+class Driver extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -32,41 +32,42 @@ class Rides extends Component {
       let trips = snapshot.val();
       let newState = [];
       for (let trip in trips) {
-        let payMethods = [];
-        if (trips[trip].Cash) {
-          payMethods.push("Cash");
-          payMethods.push(" ");
-        }
-        if (trips[trip].Paypal) {
-          payMethods.push("Paypal");
-          payMethods.push(" ");
-        }
-        if (trips[trip].Venmo) {
-          payMethods.push("Venmo");
-        }
+        if (trips[trip].driver == firebase.auth().currentUser.uid) {
+          let payMethods = [];
+          if (trips[trip].Cash) {
+            payMethods.push("Cash");
+            payMethods.push(" ");
+          }
+          if (trips[trip].Paypal) {
+            payMethods.push("Paypal");
+            payMethods.push(" ");
+          }
+          if (trips[trip].Venmo) {
+            payMethods.push("Venmo");
+          }
+          let format_date = trips[trip].date;
+          format_date = format_date.split("/");
+          let month = format_date[0];
+          let day = format_date[1];
+          let year = format_date[2];
+          let res =
+            year + "-" + month + "-" + day + "T" + trips[trip].time + ":00";
 
-        let format_date = trips[trip].date;
-        format_date = format_date.split("/");
-        let month = format_date[0];
-        let day = format_date[1];
-        let year = format_date[2];
-        let res =
-          year + "-" + month + "-" + day + "T" + trips[trip].time + ":00";
-
-        newState.push({
-          id: trips[trip].driver,
-          chargeType: trips[trip].total_or_perperson,
-          cost: trips[trip].costs,
-          date: trips[trip].date,
-          description: trips[trip].description,
-          dest: trips[trip].dest,
-          paymentMethods: payMethods,
-          picture: trips[trip].ImageURL,
-          seats: trips[trip].seats,
-          start: trips[trip].start,
-          time: trips[trip].time,
-          dateandtime: res
-        });
+          newState.push({
+            id: trips[trip].UsersArray[0],
+            chargeType: trips[trip].total_or_perperson,
+            cost: trips[trip].costs,
+            date: trips[trip].date,
+            description: trips[trip].description,
+            dest: trips[trip].dest,
+            paymentMethods: payMethods,
+            picture: trips[trip].ImageURL,
+            seats: trips[trip].seats,
+            start: trips[trip].start,
+            time: trips[trip].time,
+            dateandtime: res
+          });
+        }
       }
 
       this.setState({
@@ -80,7 +81,7 @@ class Rides extends Component {
       .sort((a, b) => new Date(a.dateandtime) - new Date(b.dateandtime));
     return (
       <div className="container-fluid">
-        <h2>Available Rides</h2>
+        <h2>Driving</h2>
         <Table striped bordered condensed hover>
           <thead>
             <tr>
@@ -94,12 +95,13 @@ class Rides extends Component {
               <th>Charge Type</th>
               <th>Payment Methods</th>
               <th>Picture</th>
-              <th>Book this trip</th>
+              <th>Cancel this trip</th>
+              <th>Edit this trip</th>
             </tr>
           </thead>
           <tbody>
             {sorted.map(ride => (
-              <Ride ride={ride} />
+              <DriverRide packages={this.props.packages} ride={ride} />
             ))}
           </tbody>
         </Table>
@@ -108,4 +110,4 @@ class Rides extends Component {
   }
 }
 
-export default Rides;
+export default Driver;

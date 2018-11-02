@@ -234,6 +234,7 @@ class RidePage extends Component {
   }
 
   render() {
+
     const popover = (
       <Popover id="modal-popover" title="popover">
       Cost Per Person: The same amount will be charged to each rider.
