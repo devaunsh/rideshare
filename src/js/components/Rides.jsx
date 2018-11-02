@@ -52,9 +52,7 @@ class Rides extends Component {
         let year = format_date[2];
         let res =
           year + "-" + month + "-" + day + "T" + trips[trip].time + ":00";
-        console.log(
-          new Date("12-10-09T07:30:00") - new Date("12-10-12T04:30:00")
-        );
+      
 
         newState.push({
           id: trips[trip].driver,
