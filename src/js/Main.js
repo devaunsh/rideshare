@@ -8,6 +8,7 @@ import NavigationBar from './components/NavigationBar';
 import LoginPage from './LoginPage';
 import RidePage from './RidePage';
 import AccountPage from './AccountPage';
+import Feedback from './feedback';
 
 import { userLogin, setFirebase, setGAPI, setGmail } from './redux/actions';
 
@@ -79,7 +80,7 @@ export class Main extends Component {
       <Switch key={this.props.location.pathname} location={this.props.location}>
       <Route exact path="/" component={LoginPage} />
       <Route path="/ride" component={RidePage} />
-      //  <Route path="/ride#rides" component={RidePage} />
+      <Route path="/feedback" component={Feedback} />
       <Route path="/account" component={AccountPage} />
       </Switch>
       </div>
