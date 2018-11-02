@@ -118,7 +118,6 @@ class Ride extends Component {
 
     var ref_tripUsers = firebase.database().ref("/trips/" + this.state.driver
     + this.state.Timestamp);
-    console.log(this.state);
     let date = new Date();
     let timestamp = date.toGMTString();
     ref_userTrips.once('value').then(snapshot => {

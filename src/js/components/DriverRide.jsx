@@ -59,7 +59,8 @@ class CancelModal extends Component {
         let userRef = firebase.auth().currentUser.uid;
         let ref2 = firebase.database().ref(`/users/${userRef}/TripsArray`);
         var desertRef2 = ref2.child(unique).remove();
-        window.location.reload();
+        console.log(this.state);
+      //  window.location.reload();
     }
 
   }
@@ -94,7 +95,6 @@ class DriverRide extends Component {
 
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
-    this.handleConfirm = this.handleConfirm.bind(this);
     this.state = {
       show: false,
       smShow: false,
@@ -112,39 +112,11 @@ class DriverRide extends Component {
       driver: this.props.ride.id, //driver
     };
   }
-  handleConfirm() {
-    //should be block if already in TripsArray
-    var currentUser = firebase.auth().currentUser.uid;
-    var ref_userTrips = firebase.database().ref("/users/" + currentUser);
-    var ref_tripUsers = firebase.database().ref("/trips/" + this.state.driver
-    + this.state.Timestamp);
-    let date = new Date();
-    let timestamp = date.toGMTString();
-    ref_userTrips.once('value').then(snapshot => {
-      let temp = snapshot.child('TripsArray').val();
-      if (temp == null) {
-        temp = {};
-      }
-      temp[this.state.driver + this.state.Timestamp] = timestamp;
-      ref_userTrips.child('TripsArray').set(temp , () => {
-        ref_tripUsers.once('value').then(snapshot => {
-          let temp1 = snapshot.child("UsersArray").val();
-          if (temp1 === null) {
-            console.log("Error: UsersArray Empty");
-            return;
-          }
-          temp1[currentUser] = timestamp;
-          ref_tripUsers.child('UsersArray').set(temp1);
-          window.location.reload();
-        });
-      });
-      //  }
-    });
 
 
 
 
-  }
+
   handleClose() {
     this.setState({ show: false });
   }

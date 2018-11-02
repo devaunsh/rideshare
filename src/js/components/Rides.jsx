@@ -52,7 +52,7 @@ class Rides extends Component {
         let year = format_date[2];
         let res =
           year + "-" + month + "-" + day + "T" + trips[trip].time + ":00";
-      
+
 
         newState.push({
           id: trips[trip].driver,
@@ -66,6 +66,7 @@ class Rides extends Component {
           seats: trips[trip].seats,
           start: trips[trip].start,
           time: trips[trip].time,
+          Timestamp: trips[trip].Timestamp,
           dateandtime: res
         });
       }
