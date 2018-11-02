@@ -66,7 +66,7 @@ class Rides extends Component {
           seats: trips[trip].seats,
           start: trips[trip].start,
           time: trips[trip].time,
-          Timestamp: res
+          dateandtime: res
         });
       }
 
@@ -78,32 +78,32 @@ class Rides extends Component {
   render() {
     const sorted = []
       .concat(this.state.rides)
-      .sort((a, b) => new Date(a.Timestamp) - new Date(b.Timestamp));
+      .sort((a, b) => new Date(a.dateandtime) - new Date(b.dateandtime));
     return (
       <div className="container-fluid">
-      <h2>Available Rides</h2>
-      <Table striped bordered condensed hover>
-      <thead>
-      <tr>
-      <th>Description</th>
-      <th>Cost</th>
-      <th>Date</th>
-      <th>Time</th>
-      <th>From</th>
-      <th>To</th>
-      <th>Seats Available</th>
-      <th>Charge Type</th>
-      <th>Payment Methods</th>
-      <th>Picture</th>
-      <th>Book this trip</th>
-      </tr>
-      </thead>
-      <tbody>
-      {this.state.rides.map(ride => (
-        <Ride ride={ride} />
-      ))}
-      </tbody>
-      </Table>
+        <h2>Available Rides</h2>
+        <Table striped bordered condensed hover>
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Cost</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>From</th>
+              <th>To</th>
+              <th>Seats Available</th>
+              <th>Charge Type</th>
+              <th>Payment Methods</th>
+              <th>Picture</th>
+              <th>Book this trip</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sorted.map(ride => (
+              <Ride ride={ride} />
+            ))}
+          </tbody>
+        </Table>
       </div>
     );
   }
