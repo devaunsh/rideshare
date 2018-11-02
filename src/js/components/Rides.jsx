@@ -45,6 +45,17 @@ class Rides extends Component {
           payMethods.push("Venmo");
         }
 
+        let format_date = trips[trip].date;
+        format_date = format_date.split("/");
+        let month = format_date[0];
+        let day = format_date[1];
+        let year = format_date[2];
+        let res =
+          year + "-" + month + "-" + day + "T" + trips[trip].time + ":00";
+        console.log(
+          new Date("12-10-09T07:30:00") - new Date("12-10-12T04:30:00")
+        );
+
         newState.push({
           id: trips[trip].driver,
           chargeType: trips[trip].total_or_perperson,
@@ -57,7 +68,7 @@ class Rides extends Component {
           seats: trips[trip].seats,
           start: trips[trip].start,
           time: trips[trip].time,
-          Timestamp: trips[trip].Timestamp,
+          Timestamp: res
         });
       }
 
@@ -67,32 +78,35 @@ class Rides extends Component {
     });
   }
   render() {
+    const sorted = []
+      .concat(this.state.rides)
+      .sort((a, b) => new Date(a.Timestamp) - new Date(b.Timestamp));
     return (
       <div className="container-fluid">
-      <h2>Available Rides</h2>
-      <Table striped bordered condensed hover>
-      <thead>
-      <tr>
-      <th>Description</th>
-      <th>Cost</th>
-      <th>Date</th>
-      <th>Time</th>
-      <th>From</th>
-      <th>To</th>
-      <th>Seats Available</th>
-      <th>Charge Type</th>
-      <th>Payment Methods</th>
-      <th>Picture</th>
-      <th>Book this trip</th>
-      <th>Cancel this trip</th>
-      </tr>
-      </thead>
-      <tbody>
-      {this.state.rides.map(ride => (
-        <Ride ride={ride} />
-      ))}
-      </tbody>
-      </Table>
+        <h2>Available Rides</h2>
+        <Table striped bordered condensed hover>
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Cost</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>From</th>
+              <th>To</th>
+              <th>Seats Available</th>
+              <th>Charge Type</th>
+              <th>Payment Methods</th>
+              <th>Picture</th>
+              <th>Book this trip</th>
+              <th>Cancel this trip</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sorted.map(ride => (
+              <Ride ride={ride} />
+            ))}
+          </tbody>
+        </Table>
       </div>
     );
   }
