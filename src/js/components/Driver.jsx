@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import MyRidesRide from "./MyRidesRide.jsx";
+import DriverRide from "./DriverRide.jsx";
 import firebase from "../firebase.js";
 import { Well, Table } from "react-bootstrap";
-class MyRides extends Component {
+class Driver extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -32,38 +32,34 @@ class MyRides extends Component {
       let trips = snapshot.val();
       let newState = [];
       for (let trip in trips) {
-        for(let user in trips[trip].UsersArray){
-          if(user == firebase.auth().currentUser.uid &&
-          trips[trip].driver != firebase.auth().currentUser.uid){
-            let payMethods = [];
-            if (trips[trip].Cash) {
-              payMethods.push("Cash");
-              payMethods.push(" ");
-            }
-            if (trips[trip].Paypal) {
-              payMethods.push("Paypal");
-              payMethods.push(" ");
-            }
-            if (trips[trip].Venmo) {
-              payMethods.push("Venmo");
-            }
-            newState.push({
-              id: trips[trip].UsersArray[0],
-              chargeType: trips[trip].total_or_perperson,
-              cost: trips[trip].costs,
-              date: trips[trip].date,
-              description: trips[trip].description,
-              dest: trips[trip].dest,
-              paymentMethods: payMethods,
-              picture: trips[trip].ImageURL,
-              seats: trips[trip].seats,
-              start: trips[trip].start,
-              time: trips[trip].time
-            });
-            break;
+        if(trips[trip].driver == firebase.auth().currentUser.uid){
+          let payMethods = [];
+          if (trips[trip].Cash) {
+            payMethods.push("Cash");
+            payMethods.push(" ");
           }
-        }
+          if (trips[trip].Paypal) {
+            payMethods.push("Paypal");
+            payMethods.push(" ");
+          }
+          if (trips[trip].Venmo) {
+            payMethods.push("Venmo");
+          }
 
+          newState.push({
+            id: trips[trip].UsersArray[0],
+            chargeType: trips[trip].total_or_perperson,
+            cost: trips[trip].costs,
+            date: trips[trip].date,
+            description: trips[trip].description,
+            dest: trips[trip].dest,
+            paymentMethods: payMethods,
+            picture: trips[trip].ImageURL,
+            seats: trips[trip].seats,
+            start: trips[trip].start,
+            time: trips[trip].time
+          });
+        }
       }
 
       this.setState({
@@ -74,7 +70,7 @@ class MyRides extends Component {
   render() {
     return (
       <div className="container-fluid">
-        <h2>Riding</h2>
+        <h2>Driving</h2>
         <Table striped bordered condensed hover>
           <thead>
             <tr>
@@ -93,7 +89,7 @@ class MyRides extends Component {
           </thead>
           <tbody>
             {this.state.rides.map(ride => (
-              <MyRidesRide ride={ride} />
+              <DriverRide ride={ride} />
             ))}
           </tbody>
         </Table>
@@ -102,4 +98,4 @@ class MyRides extends Component {
   }
 }
 
-export default MyRides;
+export default Driver;
