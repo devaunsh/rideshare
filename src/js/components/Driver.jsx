@@ -10,22 +10,7 @@ class Driver extends Component {
     };
   }
 
-  //componentDidMount() {
-  //  let tripsRef = firebase.database().ref("/trips/");
-  //  tripsRef.on("value", function(snapshot) {
-  //    console.log(snapshot.val());
-  //    let trips = [];
-  //    snapshot.forEach(function(childSnapshot) {
-  //      trips.push(childSnapshot.val());
-  //      console.log(childSnapshot.val());
-  //     let trip = childSnapshot.val();
-  //     trip["trip_id"] = childSnapshot.key;
-  //     console.log(trip);
-  //   });
-  // });
-  //  console.log(trips);
-  //  this.setState({ rides: trips });
-  // }
+  
   componentDidMount() {
     const tripsRef = firebase.database().ref("/trips/");
     tripsRef.on("value", snapshot => {

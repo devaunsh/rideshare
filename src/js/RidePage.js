@@ -214,6 +214,9 @@ class RidePage extends Component {
               }
               temp[unique] = timestamp;
               ref2.child("TripsArray").set(temp, () => {
+
+                
+
                 if (this.state.ImageURL == null) {
                   window.location.reload();
                 }

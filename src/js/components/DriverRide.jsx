@@ -7,7 +7,8 @@ import { Form } from "react-bootstrap";
 import { Col } from "react-bootstrap";
 import { ControlLabel } from "react-bootstrap";
 import firebase from "../firebase.js";
-
+import { withRouter } from "react-router";
+import { connect } from "react-redux";
 
 class CancelModal extends Component {
   constructor(props, context) {
@@ -16,15 +17,16 @@ class CancelModal extends Component {
     this.state = {
       show: this.props.show,
       Timestamp: this.props.timestamp,
-      driver: this.props.driver
+      driver: this.props.driver,
+      email: this.props.email,
+      info: this.props.info
     };
   }
 
   handleCancel() {
       let timestamp = this.state.Timestamp;
-      console.log(timestamp);
       let unique = this.props.driver + timestamp;
-      if (this.props.driver == firebase.auth().currentUser.uid) {
+
         //cancel driver case
         let ref = firebase.database().ref("/trips");
 
@@ -32,16 +34,37 @@ class CancelModal extends Component {
         ref2.once('value').then(snapshot => {
         let temp = snapshot.val();
         Object.entries(temp).forEach(entry => {
+
           let key = entry[0];
-          console.log(key);
           let userRef = key;
-          let ref3 = firebase.database().ref(`/users/${userRef}/TripsArray`);
+          let ref3 = firebase.database().ref("/users");
+
+          console.log("here");
            ref3.once('value').then(snapshot1 => {
-             console.log(snapshot1.val());
-             var desertRef = ref3.child(unique).remove();
+             var message = snapshot1.child(`${userRef}/email`).val() + "\n" +
+             "Cancel Ride Info" + "\n" +
+             this.state.info.date + "\n" +
+             this.state.info.time + "\n" +
+              this.state.info.start + "\n" +
+              this.state.info.dest + "\n" +
+              this.state.info.paymentMethods + "\n" +
+               this.state.info.cost + "\n" +
+               this.state.info.description;
+
+             var request = new XMLHttpRequest();
+
+             request.open("POST", "https://rideshare-server1.herokuapp.com", true);
+             request.setRequestHeader('Content-Type', 'text/plain');
+
+             
+             request.send(message);
+
+             var desertRef = ref3.child(`${userRef}/TripsArray/${unique}`).remove();
+
            })
           //var desertRef = ref3.child(unique).remove();
         })
+
           if (temp === null) {
             console.log("Error: UsersArray Empty")
             return;
@@ -50,18 +73,14 @@ class CancelModal extends Component {
         var desertRef = ref.child(unique);
         desertRef.remove();
       //  window.location.reload();
-      } else {
-        //cancel passenger case
-        let ref = firebase.database().ref(`/trips/${unique}/UsersArray`);
-        var desertRef = ref.child(firebase.auth().currentUser.uid).remove();
+
 
         //delete in the TripsArray
         let userRef = firebase.auth().currentUser.uid;
-        let ref2 = firebase.database().ref(`/users/${userRef}/TripsArray`);
-        var desertRef2 = ref2.child(unique).remove();
-        console.log(this.state);
-      //  window.location.reload();
-    }
+        let ref4 = firebase.database().ref(`/users/${userRef}/TripsArray`);
+        var desertRef2 = ref4.child(unique).remove();
+
+
 
   }
 
@@ -109,6 +128,7 @@ class DriverRide extends Component {
       start: this.props.ride.start,
       time: this.props.ride.time,
       Timestamp: this.props.ride.Timestamp,
+      email: this.props.user.email,
       driver: this.props.ride.id, //driver
     };
   }
@@ -157,7 +177,7 @@ class DriverRide extends Component {
       </td>
       <td>
       <Button bsStyle="primary" onClick={() => this.setState({ smShow: true })} >Cancel!</Button>
-      <CancelModal driver={this.state.driver} timestamp={this.state.Timestamp} show={this.state.smShow} onHide={smClose} />
+      <CancelModal driver={this.state.driver} timestamp={this.state.Timestamp} info={this.state} email={this.state.email} show={this.state.smShow} onHide={smClose} />
       </td>
       </tr>
 
@@ -167,4 +187,17 @@ class DriverRide extends Component {
   }
 }
 
-export default DriverRide;
+const mapStateToProps = state => {
+  return {
+    user: state.user,
+
+  };
+};
+
+
+export default withRouter(
+  connect(
+    mapStateToProps,
+    null
+  )(DriverRide)
+);

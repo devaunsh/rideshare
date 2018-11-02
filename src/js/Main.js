@@ -63,16 +63,7 @@ export class Main extends Component {
 
   }
 
-  loadServer() {
-    const gapiConfig = {
-      client_id: '591511873815-grq5if4sl6dcn2jpcnncauvk7kneo1ji.apps.googleusercontent.com',
-      scope: 'https://www.googleapis.com/auth/gmail.send',
 
-      cookiepolicy: 'single_host_origin',
-      api_key: 'AIzaSyCmtoHnfyQB9ffgfuYCt-ztRJFMWkLErfs',
-      discoveryDocs: 'https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest'
-    }
-  }
   componentWillMount() {
     this.loadClient();
   }
