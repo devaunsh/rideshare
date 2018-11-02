@@ -97,12 +97,11 @@ class Driver extends Component {
               <th>Payment Methods</th>
               <th>Picture</th>
               <th>Cancel this trip</th>
-              <th>Edit this trip</th>
             </tr>
           </thead>
           <tbody>
             {sorted.map(ride => (
-              <DriverRide packages={this.props.packages} ride={ride} />
+              <DriverRide ride={ride} />
             ))}
           </tbody>
         </Table>

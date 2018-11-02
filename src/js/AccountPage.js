@@ -15,7 +15,7 @@ class AccountPage extends Component {
       <div className="home-page">
       <Tabs defaultActiveKey={2} id="uncontrolled-tab-example">
         <Tab eventKey={1} title="Driver">
-          <Driver packages={this.props.packages}/>
+          <Driver />
         </Tab>
         <Tab eventKey={2} title="Rider">
           <MyRides />
