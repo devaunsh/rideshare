@@ -13,6 +13,9 @@ class LoginPage extends Component {
 
     if (gapiAuth.isSignedIn.get()) {
       this.props.userLogin(gapiAuth.currentUser.get().getBasicProfile());
+      gapi.client.load('https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest').then(() => {
+        this.props.setGmail(gapi.client.gmail);
+      })
     } else {
       gapiAuth.signIn().then(user => {
         this.props.userLogin(user.getBasicProfile());

@@ -156,7 +156,7 @@ class RidePage extends Component {
       alert('Please make sure to complete the required fields before you Submit');
       return;
     }
-    const { gapi, firebase } = this.props.packages;
+    const { firebase } = this.props.packages;
     let date = new Date();
     let timestamp = date.toGMTString();
     let unique = firebase.auth().currentUser.uid + timestamp;
@@ -193,7 +193,7 @@ class RidePage extends Component {
                     snapshot.ref.getDownloadURL().then(value => {
 
                       ref.child('ImageURL').set(value);
-                      window.location.reload();
+                    //  window.location.reload();
                     });
                   });
 
@@ -215,7 +215,7 @@ class RidePage extends Component {
               temp[unique] = timestamp;
               ref2.child("TripsArray").set(temp, () => {
                 if (this.state.ImageURL == null) {
-                  window.location.reload();
+                //  window.location.reload();
                 }
               });
 
@@ -226,7 +226,7 @@ class RidePage extends Component {
             });
 
           }
-          
+
         );
       }
     });
