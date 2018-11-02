@@ -84,7 +84,6 @@ class Rides extends Component {
       <th>Payment Methods</th>
       <th>Picture</th>
       <th>Book this trip</th>
-      <th>Cancel this trip</th>
       </tr>
       </thead>
       <tbody>
