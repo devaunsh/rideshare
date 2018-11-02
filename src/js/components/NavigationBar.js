@@ -22,17 +22,14 @@ export class NavBar extends Component {
         </Navbar.Header>
         <Navbar.Collapse>
           <Nav>
-            <NavItem eventKey={1} href="/home">
+            <NavItem eventKey={1} href="/ride">
               Home
             </NavItem>
-            <NavItem eventKey={2} href="/ride">
-              Find a Ride
-            </NavItem>
-            <NavItem eventKey={3} href="#">
-              Create a Ride
-            </NavItem>
-            <NavItem eventKey={4} href="/account">
+            <NavItem eventKey={2} href="/account">
               Account
+            </NavItem>
+            <NavItem eventKey={3} href="/feedback" >
+              Feedback
             </NavItem>
           </Nav>
           <Nav pullRight>

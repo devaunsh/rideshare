@@ -5,8 +5,18 @@ import { FormGroup } from "react-bootstrap";
 import { FormControl } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import { Col } from "react-bootstrap";
-import { ControlLabel } from "react-bootstrap";
 import firebase from "../firebase.js";
+
+import { Collapse } from "react-bootstrap";
+
+import { Popover } from "react-bootstrap";
+import { Tooltip } from "react-bootstrap";
+import { OverlayTrigger } from "react-bootstrap";
+import { Panel } from "react-bootstrap";
+import { Tab } from "react-bootstrap";
+import { Tabs } from "react-bootstrap";
+import { ControlLabel } from "react-bootstrap";
+import { Checkbox } from "react-bootstrap";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 
@@ -39,7 +49,6 @@ class CancelModal extends Component {
           let userRef = key;
           let ref3 = firebase.database().ref("/users");
 
-          console.log("here");
            ref3.once('value').then(snapshot1 => {
              var message = snapshot1.child(`${userRef}/email`).val() + "\n" +
              "Cancel Ride Info" + "\n" +
@@ -56,7 +65,7 @@ class CancelModal extends Component {
              request.open("POST", "https://rideshare-server1.herokuapp.com", true);
              request.setRequestHeader('Content-Type', 'text/plain');
 
-             
+
              request.send(message);
 
              var desertRef = ref3.child(`${userRef}/TripsArray/${unique}`).remove();
