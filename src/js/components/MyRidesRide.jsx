@@ -22,8 +22,8 @@ class CancelModal extends Component {
 
   handleCancel() {
       let timestamp = this.state.Timestamp;
-      console.log(timestamp);
       let unique = this.props.driver + timestamp;
+      console.log(unique);
       if (this.props.driver == firebase.auth().currentUser.uid) {
         //cancel driver case
         let ref = firebase.database().ref("/trips");
