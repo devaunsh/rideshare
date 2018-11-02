@@ -53,6 +53,17 @@ class Driver extends Component {
           let res =
             year + "-" + month + "-" + day + "T" + trips[trip].time + ":00";
 
+          var cash = false;
+          var venmo = false;
+          var paypal = false;
+
+          if(payMethods.includes("Venmo"))
+            venmo = true;
+          if(payMethods.includes("Cash"))
+            cash = true;
+          if(payMethods.includes("PayPal"))
+            paypal = true;
+
           newState.push({
             id: trips[trip].driver,
             chargeType: trips[trip].total_or_perperson,
@@ -66,7 +77,10 @@ class Driver extends Component {
             start: trips[trip].start,
             time: trips[trip].time,
             Timestamp: trips[trip].Timestamp,
-            dateandtime: res
+            dateandtime: res,
+            Cash: cash,
+            Venmo: venmo,
+            PayPal: paypal
           });
         }
       }
