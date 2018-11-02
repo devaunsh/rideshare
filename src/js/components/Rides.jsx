@@ -2,6 +2,16 @@ import React, { Component } from "react";
 import Ride from "./Ride.jsx";
 import firebase from "../firebase.js";
 import { Well, Table } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.css";
+import {
+  Card,
+  CardImg,
+  CardText,
+  CardBody,
+  CardTitle,
+  CardSubtitle,
+  Button
+} from "reactstrap";
 class Rides extends Component {
   constructor(props) {
     super(props);
@@ -52,9 +62,6 @@ class Rides extends Component {
         let year = format_date[2];
         let res =
           year + "-" + month + "-" + day + "T" + trips[trip].time + ":00";
-        console.log(
-          new Date("12-10-09T07:30:00") - new Date("12-10-12T04:30:00")
-        );
 
         newState.push({
           id: trips[trip].driver,
@@ -68,7 +75,7 @@ class Rides extends Component {
           seats: trips[trip].seats,
           start: trips[trip].start,
           time: trips[trip].time,
-          Timestamp: res
+          dateandtime: res
         });
       }
 
@@ -80,32 +87,49 @@ class Rides extends Component {
   render() {
     const sorted = []
       .concat(this.state.rides)
-      .sort((a, b) => new Date(a.Timestamp) - new Date(b.Timestamp));
+      .sort((a, b) => new Date(a.dateandtime) - new Date(b.dateandtime));
     return (
       <div className="container-fluid">
-      <h2>Available Rides</h2>
-      <Table striped bordered condensed hover>
-      <thead>
-      <tr>
-      <th>Description</th>
-      <th>Cost</th>
-      <th>Date</th>
-      <th>Time</th>
-      <th>From</th>
-      <th>To</th>
-      <th>Seats Available</th>
-      <th>Charge Type</th>
-      <th>Payment Methods</th>
-      <th>Picture</th>
-      <th>Book this trip</th>
-      </tr>
-      </thead>
-      <tbody>
-      {this.state.rides.map(ride => (
-        <Ride ride={ride} />
-      ))}
-      </tbody>
-      </Table>
+        <h2>Available Rides</h2>
+        <Card>
+          <CardImg
+            top
+            width="100%"
+            src="https://placeholdit.imgix.net/~text?txtsize=33&txt=318%C3%97180&w=318&h=180"
+            alt="Card image cap"
+          />
+          <CardBody>
+            <CardTitle>Card title</CardTitle>
+            <CardSubtitle>Card subtitle</CardSubtitle>
+            <CardText>
+              Some quick example text to build on the card title and make up the
+              bulk of the card's content.
+            </CardText>
+            <Button>Button</Button>
+          </CardBody>
+        </Card>
+        <Table striped bordered condensed hover>
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th>Cost</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>From</th>
+              <th>To</th>
+              <th>Seats Available</th>
+              <th>Charge Type</th>
+              <th>Payment Methods</th>
+              <th>Picture</th>
+              <th>Book this trip</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sorted.map(ride => (
+              <Ride ride={ride} />
+            ))}
+          </tbody>
+        </Table>
       </div>
     );
   }
