@@ -68,7 +68,7 @@ class MyRides extends Component {
   render() {
     return (
       <div className="container-fluid">
-        <h2>Available Rides</h2>
+        <h2>My Rides</h2>
         <Table striped bordered condensed hover>
           <thead>
             <tr>
@@ -83,6 +83,7 @@ class MyRides extends Component {
               <th>Payment Methods</th>
               <th>Picture</th>
               <th>Book this trip</th>
+              <th>Cancel this trip</th>
             </tr>
           </thead>
           <tbody>

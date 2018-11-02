@@ -6,7 +6,53 @@ import { FormControl } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import { Col } from "react-bootstrap";
 import { ControlLabel } from "react-bootstrap";
+import firebase from "../firebase.js";
+import { userLogin } from "../redux/actions";
 
+class CancelModal extends Component {
+  constructor(props, context) {
+    super(props, context);
+    this.handleCancel = this.handleCancel.bind(this);
+    this.state = {
+      show: this.props.show,
+      Timestamp: this.props.timestamp,
+      rider: this.props.rider
+    };
+  }
+
+  handleCancel() {
+      let timestamp = this.state.Timestamp;
+      console.log(timestamp);
+      let unique = this.props.rider + timestamp;
+      let ref = firebase.database().ref("/trips");
+      var desertRef = ref.child(unique);
+      desertRef.remove();
+      window.location.reload();
+  }
+
+  render() {
+    return (
+      <Modal
+       {...this.props}
+       bsSize="small"
+       aria-labelledby="contained-modal-title-sm"
+     >
+       <Modal.Header closeButton>
+         <Modal.Title id="contained-modal-title-sm">Comfirm</Modal.Title>
+       </Modal.Header>
+       <Modal.Body>
+         <p>
+           Are you sure you want to cancel this trip?
+         </p>
+       </Modal.Body>
+       <Modal.Footer>
+         <Button onClick={this.props.onHide}>Close</Button>
+         <Button bsStyle="primary" onClick={this.handleCancel }>Yes</Button>
+       </Modal.Footer>
+     </Modal>
+   );
+  }
+}
 class Ride extends Component {
 
   constructor(props, context) {
@@ -50,6 +96,8 @@ class Ride extends Component {
 
 
   render() {
+    console.log(this.state.Timestamp);//////
+    let smClose = () => this.setState({ smShow: false });
     return (
 
       <tr>
