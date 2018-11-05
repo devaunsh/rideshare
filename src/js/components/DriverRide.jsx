@@ -6,7 +6,7 @@ import { FormControl } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import { Col } from "react-bootstrap";
 import firebase from "../firebase.js";
-
+import { ReactDOM } from "react-dom";
 import { Collapse } from "react-bootstrap";
 
 import { Popover } from "react-bootstrap";
@@ -32,10 +32,9 @@ class CancelModal extends Component {
 
   handleCancel() {
       let timestamp = this.state.Timestamp;
-      console.log(timestamp);
+
       let unique = this.props.driver + timestamp;
-      if (this.props.driver == firebase.auth().currentUser.uid) {
-        //cancel driver case
+        console.log(unique);
         let ref = firebase.database().ref("/trips");
 
         let ref2 = firebase.database().ref(`/trips/${unique}/UsersArray`);
@@ -59,19 +58,7 @@ class CancelModal extends Component {
         })
         var desertRef = ref.child(unique);
         desertRef.remove();
-      //  window.location.reload();
-      } else {
-        //cancel passenger case
-        let ref = firebase.database().ref(`/trips/${unique}/UsersArray`);
-        var desertRef = ref.child(firebase.auth().currentUser.uid).remove();
-
-        //delete in the TripsArray
-        let userRef = firebase.auth().currentUser.uid;
-        let ref2 = firebase.database().ref(`/users/${userRef}/TripsArray`);
-        var desertRef2 = ref2.child(unique).remove();
-        console.log(this.state);
-      //  window.location.reload();
-    }
+    //    window.location.reload();
 
   }
 
@@ -123,6 +110,7 @@ class DriverRide extends Component {
       Timestamp: this.props.ride.Timestamp,
       driver: this.props.ride.id, //driver
       total_or_perperson: 1,
+      element: null,
       Cash: false,
       Venmo: false,
       PayPal: false
@@ -232,8 +220,8 @@ class DriverRide extends Component {
       let ref = firebase.database().ref("/trips/" + unique);
       ref.once("value").then(snapshot => {
         if (!snapshot.val()) {
-          console.log(this.state);
-          console.log(ref);
+      //    console.log(this.state);
+      //    console.log(ref);
           ref.set(
             {
               start: this.state.start,
@@ -264,7 +252,7 @@ class DriverRide extends Component {
                       snapshot.ref.getDownloadURL().then(value => {
 
                         ref.child('ImageURL').set(value);
-                        window.location.reload();
+                      //  window.location.reload();
                       });
                     });
 
@@ -286,7 +274,7 @@ class DriverRide extends Component {
                 temp[unique] = timestamp;
                 ref2.child("TripsArray").set(temp, () => {
                   if (this.state.ImageURL == null) {
-                    window.location.reload();
+                  //  window.location.reload();
                   }
                 });
               });
@@ -297,7 +285,8 @@ class DriverRide extends Component {
         }
       });
       this.setState({ editShow: false });
-      CancelModal.handleCancel();
+      console.log(this.state.element);
+      this.state.element.handleCancel();
     }
 
   getAvailableSeats(){
@@ -542,7 +531,7 @@ class DriverRide extends Component {
       </td>
       <td>
       <Button bsStyle="primary" onClick={() => this.setState({ smShow: true })} >Cancel!</Button>
-      <CancelModal driver={this.props.ride.driver} timestamp={this.props.ride.Timestamp} show={this.state.smShow} onHide={smClose} />
+      <CancelModal ref={el => this.state.element = el} driver={this.state.driver} timestamp={this.state.Timestamp} show={this.state.smShow} onHide={smClose} />
       </td>
       <td>
       <Button bsStyle="primary" onClick={() => this.setState({ editShow: true})}>Edit!</Button>
