@@ -6,7 +6,7 @@ import { FormControl } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import { Col } from "react-bootstrap";
 import firebase from "../firebase.js";
-
+import { ReactDOM } from "react-dom";
 import { Collapse } from "react-bootstrap";
 
 import { Popover } from "react-bootstrap";
@@ -59,11 +59,7 @@ class CancelModal extends Component {
         })
         var desertRef = ref.child(unique);
         desertRef.remove();
-      //  window.location.reload();
-      } else {
-        //cancel passenger case
-        let ref = firebase.database().ref(`/trips/${unique}/UsersArray`);
-        var desertRef = ref.child(firebase.auth().currentUser.uid).remove();
+    //    window.location.reload();
 
         //delete in the TripsArray
         let userRef = firebase.auth().currentUser.uid;
@@ -279,8 +275,8 @@ class DriverRide extends Component {
       let ref = firebase.database().ref("/trips/" + unique);
       ref.once("value").then(snapshot => {
         if (!snapshot.val()) {
-          console.log(this.state);
-          console.log(ref);
+      //    console.log(this.state);
+      //    console.log(ref);
           ref.set(
             {
               start: this.state.start,
@@ -313,7 +309,7 @@ class DriverRide extends Component {
 
                       console.log(value);
                         ref.child('ImageURL').set(value);
-                        window.location.reload();
+                      //  window.location.reload();
                       });
                     });
 
@@ -592,7 +588,7 @@ class DriverRide extends Component {
       </td>
       <td>
       <Button bsStyle="primary" onClick={() => this.setState({ smShow: true })} >Cancel!</Button>
-      <CancelModal driver={this.props.ride.driver} timestamp={this.props.ride.Timestamp} show={this.state.smShow} onHide={smClose} />
+      <CancelModal ref={el => this.state.element = el} driver={this.state.driver} timestamp={this.state.Timestamp} show={this.state.smShow} onHide={smClose} />
       </td>
       <td>
       <Button bsStyle="primary" onClick={() => this.setState({ editShow: true})}>Edit!</Button>
