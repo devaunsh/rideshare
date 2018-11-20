@@ -81,26 +81,11 @@ class CancelModal extends Component {
         })
         var desertRef = ref.child(unique);
         desertRef.remove();
-<<<<<<< HEAD
-    //    window.location.reload();
-
-        //delete in the TripsArray
-        let userRef = firebase.auth().currentUser.uid;
-        let ref1 = firebase.database().ref(`/users/${userRef}/TripsArray`);
-        var desertRef2 = ref1.child(unique).remove();
-        window.location.reload();
-    }
-=======
-      //  window.location.reload();
-
 
         //delete in the TripsArray
         let userRef = firebase.auth().currentUser.uid;
         let ref4 = firebase.database().ref(`/users/${userRef}/TripsArray`);
         var desertRef2 = ref4.child(unique).remove();
-
-
->>>>>>> 23d2dbac33f49b692e160e175c08d7802e68b8ee
 
   }
 
@@ -165,7 +150,6 @@ class DriverRide extends Component {
     this.setState({ show: true });
   }
 
-<<<<<<< HEAD
 
     handleStartChange(event) {
       this.setState({ start: event.target.value });
@@ -326,8 +310,6 @@ class DriverRide extends Component {
       this.handleCancel();
     }
 
-=======
->>>>>>> 23d2dbac33f49b692e160e175c08d7802e68b8ee
   getAvailableSeats(){
     if(this.state.seats === 0 )
     return true;
@@ -360,14 +342,9 @@ class DriverRide extends Component {
       </td>
       <td>
       <Button bsStyle="primary" onClick={() => this.setState({ smShow: true })} >Cancel!</Button>
-<<<<<<< HEAD
-      <CancelModal ref={el => this.state.element = el} driver={this.state.driver} timestamp={this.state.Timestamp} show={this.state.smShow} onHide={smClose} />
-      </td>
-      <td>
-      <Button bsStyle="primary" onClick={() => this.setState({ editShow: true})}>Edit!</Button>
-=======
+
       <CancelModal driver={this.state.driver} timestamp={this.state.Timestamp} info={this.state} email={this.state.email} show={this.state.smShow} onHide={smClose} />
->>>>>>> 23d2dbac33f49b692e160e175c08d7802e68b8ee
+
       </td>
       </tr>
 
