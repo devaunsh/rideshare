@@ -42,6 +42,14 @@ class Ride extends Component {
 
     var ref_tripUsers = firebase.database().ref("/trips/" + this.state.driver
     + this.state.Timestamp);
+
+    var ref_seatChange = firebase.database().ref("/trips/" + this.state.driver
+    + this.state.Timestamp);
+    ref_seatChange.once('value').then(snapshot => {
+      this.state.seats--;
+      ref_seatChange.update({seats: this.state.seats});
+    });
+
     let date = new Date();
     let timestamp = date.toGMTString();
     ref_userTrips.once('value').then(snapshot => {
@@ -97,12 +105,19 @@ class Ride extends Component {
   }
 
   getAvailableSeats(){
-    if(this.state.seats === 0 || this.state.driver == (firebase.auth().currentUser.uid) )
+    if(this.state.seats === 0 || this.state.driver == (firebase.auth().currentUser.uid))
     return true;
     else
     return false;
   }
 
+  ifBooked() {
+    if(this.state.seats != 0 || this.state.driver == (firebase.auth().currentUser.uid)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
 
   render() {
@@ -223,6 +238,9 @@ class Ride extends Component {
       <Button onClick={this.handleClose}>Close</Button>
       </Modal.Footer>
       </Modal>
+      </td>
+      <td>
+      <Button onClick={this.handleShow} bsStyle="primary" disabled = {this.ifBooked()}>Waitlist</Button>
       </td>
       </tr>
 

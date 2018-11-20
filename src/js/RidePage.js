@@ -50,7 +50,7 @@ class RidePage extends Component {
       dest: null,
       date: null,
       time: null,
-      seats: 1,
+      seats: 3,
       description: null,
       costs: 0,
       total_or_perperson: 1,
@@ -94,8 +94,9 @@ class RidePage extends Component {
   }
   handleSeatsChange() {
     //  console.log(ReactDOM.findDOMNode(this.select).value);
-    if (this.input && this.input.value != 0)
-    this.setState({ seats: this.input.value });
+    if (this.input && this.input.value != 0) {
+      this.setState({ seats: this.input.value });
+    }
   }
   handleDescriptionChange(event) {
     this.setState({ description: event.target.value });
@@ -215,7 +216,7 @@ class RidePage extends Component {
               temp[unique] = timestamp;
               ref2.child("TripsArray").set(temp, () => {
 
-                
+
 
                 if (this.state.ImageURL == null) {
                   window.location.reload();
@@ -336,7 +337,7 @@ class RidePage extends Component {
       <FormControl
       componentClass="select"
       placeholder="select"
-      value={this.state.value}
+      value={this.state.value }
       onChange={event => this.handleSeatsChange(event)}
       >
       <option value="1">1</option>
