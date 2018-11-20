@@ -97,7 +97,7 @@ class Ride extends Component {
   }
 
   getAvailableSeats(){
-    if(this.state.seats === 0 )
+    if(this.state.seats === 0 || this.state.driver == (firebase.auth().currentUser.uid) )
     return true;
     else
     return false;
