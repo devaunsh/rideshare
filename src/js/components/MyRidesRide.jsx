@@ -7,7 +7,8 @@ import { Form } from "react-bootstrap";
 import { Col } from "react-bootstrap";
 import { ControlLabel } from "react-bootstrap";
 import firebase from "../firebase.js";
-
+import { withRouter } from "react-router";
+import { connect } from "react-redux";
 
 class CancelModal extends Component {
   constructor(props, context) {
@@ -16,14 +17,37 @@ class CancelModal extends Component {
     this.state = {
       show: this.props.show,
       Timestamp: this.props.timestamp,
-      driver: this.props.driver
+      driver: this.props.driver,
+      info: this.props.info,
+      email: this.props.email
     };
   }
 
   handleCancel() {
       let timestamp = this.state.Timestamp;
       let unique = this.props.driver + timestamp;
-      console.log(unique);
+      var message = this.state.email + "\n" +
+      "Cancel Ride Info" + "\n" +
+      this.state.info.date + "\n" +
+      this.state.info.time + "\n" +
+       this.state.info.start + "\n" +
+       this.state.info.dest + "\n" +
+       this.state.info.paymentMethods + "\n" +
+        this.state.info.cost + "\n" +
+        this.state.info.description;
+      var request = new XMLHttpRequest();
+
+      request.open("POST", "https://rideshare-server1.herokuapp.com", true);
+      request.setRequestHeader('Content-Type', 'text/plain');
+
+      request.onreadystatechange = function() {
+        if (request.readyState === 4) {
+
+          window.location.reload();
+
+        }
+      }
+      request.send(message);
       if (this.props.driver == firebase.auth().currentUser.uid) {
         //cancel driver case
         let ref = firebase.database().ref("/trips");
@@ -59,8 +83,11 @@ class CancelModal extends Component {
         let userRef = firebase.auth().currentUser.uid;
         let ref2 = firebase.database().ref(`/users/${userRef}/TripsArray`);
         var desertRef2 = ref2.child(unique).remove();
-        window.location.reload();
+
     }
+
+
+
 
   }
 
@@ -87,6 +114,7 @@ class CancelModal extends Component {
     );
   }
 }
+
 class MyRidesRide extends Component {
 
   constructor(props, context) {
@@ -94,7 +122,6 @@ class MyRidesRide extends Component {
 
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
-    this.handleConfirm = this.handleConfirm.bind(this);
     this.state = {
       show: false,
       smShow: false,
@@ -109,42 +136,11 @@ class MyRidesRide extends Component {
       start: this.props.ride.start,
       time: this.props.ride.time,
       Timestamp: this.props.ride.Timestamp,
+      email: this.props.user.email,
       driver: this.props.ride.id, //driver
     };
   }
-  handleConfirm() {
-    //should be block if already in TripsArray
-    var currentUser = firebase.auth().currentUser.uid;
-    var ref_userTrips = firebase.database().ref("/users/" + currentUser);
-    var ref_tripUsers = firebase.database().ref("/trips/" + this.state.driver
-    + this.state.Timestamp);
-    let date = new Date();
-    let timestamp = date.toGMTString();
-    ref_userTrips.once('value').then(snapshot => {
-      let temp = snapshot.child('TripsArray').val();
-      if (temp == null) {
-        temp = {};
-      }
-      temp[this.state.driver + this.state.Timestamp] = timestamp;
-      ref_userTrips.child('TripsArray').set(temp , () => {
-        ref_tripUsers.once('value').then(snapshot => {
-          let temp1 = snapshot.child("UsersArray").val();
-          if (temp1 === null) {
-            console.log("Error: UsersArray Empty");
-            return;
-          }
-          temp1[currentUser] = timestamp;
-          ref_tripUsers.child('UsersArray').set(temp1);
-          window.location.reload();
-        });
-      });
-      //  }
-    });
 
-
-
-
-  }
   handleClose() {
     this.setState({ show: false });
   }
@@ -163,6 +159,7 @@ class MyRidesRide extends Component {
 
 
   render() {
+
     let smClose = () => this.setState({ smShow: false });
     return (
 
@@ -185,7 +182,7 @@ class MyRidesRide extends Component {
       </td>
       <td>
       <Button bsStyle="primary" onClick={() => this.setState({ smShow: true })} >Cancel!</Button>
-      <CancelModal driver={this.state.driver} timestamp={this.state.Timestamp} show={this.state.smShow} onHide={smClose} />
+      <CancelModal driver={this.state.driver} timestamp={this.state.Timestamp} info={this.state} email={this.state.email} show={this.state.smShow} onHide={smClose} />
       </td>
       </tr>
 
@@ -195,4 +192,17 @@ class MyRidesRide extends Component {
   }
 }
 
-export default MyRidesRide;
+const mapStateToProps = state => {
+  return {
+    user: state.user,
+
+  };
+};
+
+
+export default withRouter(
+  connect(
+    mapStateToProps,
+    null
+  )(MyRidesRide)
+);

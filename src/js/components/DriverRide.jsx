@@ -18,6 +18,7 @@ import { Tabs } from "react-bootstrap";
 import { ControlLabel } from "react-bootstrap";
 import { Checkbox } from "react-bootstrap";
 import { withRouter } from "react-router";
+import { connect } from "react-redux";
 
 class CancelModal extends Component {
   constructor(props, context) {
@@ -26,15 +27,16 @@ class CancelModal extends Component {
     this.state = {
       show: this.props.show,
       Timestamp: this.props.timestamp,
-      driver: this.props.driver
+      driver: this.props.driver,
+      email: this.props.email,
+      info: this.props.info
     };
   }
 
   handleCancel() {
       let timestamp = this.state.Timestamp;
-      let unique = this.state.driver + timestamp;
-      console.log(unique);
-      if (this.props.driver == firebase.auth().currentUser.uid) {
+      let unique = this.props.driver + timestamp;
+
         //cancel driver case
         let ref = firebase.database().ref("/trips");
 
@@ -42,16 +44,36 @@ class CancelModal extends Component {
         ref2.once('value').then(snapshot => {
         let temp = snapshot.val();
         Object.entries(temp).forEach(entry => {
+
           let key = entry[0];
-          console.log(key);
           let userRef = key;
-          let ref3 = firebase.database().ref(`/users/${userRef}/TripsArray`);
+          let ref3 = firebase.database().ref("/users");
+
            ref3.once('value').then(snapshot1 => {
-             console.log(snapshot1.val());
-             var desertRef = ref3.child(unique).remove();
+             var message = snapshot1.child(`${userRef}/email`).val() + "\n" +
+             "Cancel Ride Info" + "\n" +
+             this.state.info.date + "\n" +
+             this.state.info.time + "\n" +
+              this.state.info.start + "\n" +
+              this.state.info.dest + "\n" +
+              this.state.info.paymentMethods + "\n" +
+               this.state.info.cost + "\n" +
+               this.state.info.description;
+
+             var request = new XMLHttpRequest();
+
+             request.open("POST", "https://rideshare-server1.herokuapp.com", true);
+             request.setRequestHeader('Content-Type', 'text/plain');
+
+
+             request.send(message);
+
+             var desertRef = ref3.child(`${userRef}/TripsArray/${unique}`).remove();
+
            })
           //var desertRef = ref3.child(unique).remove();
         })
+
           if (temp === null) {
             console.log("Error: UsersArray Empty")
             return;
@@ -59,6 +81,7 @@ class CancelModal extends Component {
         })
         var desertRef = ref.child(unique);
         desertRef.remove();
+<<<<<<< HEAD
     //    window.location.reload();
 
         //delete in the TripsArray
@@ -67,12 +90,22 @@ class CancelModal extends Component {
         var desertRef2 = ref1.child(unique).remove();
         window.location.reload();
     }
+=======
+      //  window.location.reload();
+
+
+        //delete in the TripsArray
+        let userRef = firebase.auth().currentUser.uid;
+        let ref4 = firebase.database().ref(`/users/${userRef}/TripsArray`);
+        var desertRef2 = ref4.child(unique).remove();
+
+
+>>>>>>> 23d2dbac33f49b692e160e175c08d7802e68b8ee
 
   }
 
   render() {
     return (
-
       <Modal
       {...this.props}
       bsSize="small"
@@ -94,7 +127,6 @@ class CancelModal extends Component {
     );
   }
 }
-
 class DriverRide extends Component {
 
   constructor(props, context) {
@@ -105,7 +137,6 @@ class DriverRide extends Component {
     this.state = {
       show: false,
       smShow: false,
-      editShow: false,
       chargeType: this.props.ride.chargeType,
       cost: this.props.ride.cost,
       date: this.props.ride.date,
@@ -117,56 +148,9 @@ class DriverRide extends Component {
       start: this.props.ride.start,
       time: this.props.ride.time,
       Timestamp: this.props.ride.Timestamp,
+      email: this.props.user.email,
       driver: this.props.ride.id, //driver
-      total_or_perperson: this.props.ride.chargeType,
-      Cash: this.props.ride.Cash,
-      Venmo: this.props.ride.Venmo,
-      PayPal: this.props.ride.PayPal
     };
-  }
-
-  handleCancel() {
-      let timestamp = this.state.Timestamp;
-      let unique = this.state.driver + timestamp;
-      console.log(unique);
-      if (this.props.driver == firebase.auth().currentUser.uid) {
-        //cancel driver case
-        let ref = firebase.database().ref("/trips");
-
-        let ref2 = firebase.database().ref(`/trips/${unique}/UsersArray`);
-        ref2.once('value').then(snapshot => {
-        let temp = snapshot.val();
-        Object.entries(temp).forEach(entry => {
-          let key = entry[0];
-          console.log(key);
-          let userRef = key;
-          let ref3 = firebase.database().ref(`/users/${userRef}/TripsArray`);
-           ref3.once('value').then(snapshot1 => {
-             console.log(snapshot1.val());
-             var desertRef = ref3.child(unique).remove();
-           })
-          //var desertRef = ref3.child(unique).remove();
-        })
-          if (temp === null) {
-            console.log("Error: UsersArray Empty")
-            return;
-          }
-        })
-        var desertRef = ref.child(unique);
-        desertRef.remove();
-      //  window.location.reload();
-      } else {
-        //cancel passenger case
-        let ref = firebase.database().ref(`/trips/${unique}/UsersArray`);
-        var desertRef = ref.child(firebase.auth().currentUser.uid).remove();
-
-        //delete in the TripsArray
-        let userRef = firebase.auth().currentUser.uid;
-        let ref2 = firebase.database().ref(`/users/${userRef}/TripsArray`);
-        var desertRef2 = ref2.child(unique).remove();
-        window.location.reload();
-    }
-
   }
 
 
@@ -177,14 +161,11 @@ class DriverRide extends Component {
     this.setState({ show: false });
   }
 
-  handleEditClose() {
-    this.setState({ editShow: false });
-  }
-
   handleShow() {
     this.setState({ show: true });
   }
 
+<<<<<<< HEAD
 
     handleStartChange(event) {
       this.setState({ start: event.target.value });
@@ -345,6 +326,8 @@ class DriverRide extends Component {
       this.handleCancel();
     }
 
+=======
+>>>>>>> 23d2dbac33f49b692e160e175c08d7802e68b8ee
   getAvailableSeats(){
     if(this.state.seats === 0 )
     return true;
@@ -355,248 +338,56 @@ class DriverRide extends Component {
 
 
   render() {
-
-  const popover = (
-    <Popover id="modal-popover" title="popover">
-    Cost Per Person: The same amount will be charged to each rider.
-    <hr />
-    Total Cost: The total cost would be split between your riders.
-    </Popover>
-  );
     let smClose = () => this.setState({ smShow: false });
-    let editClose = () => this.setState({ editShow: false });
     return (
 
       <tr>
-      <Modal show={this.state.editShow} onHide={this.handleEditClose.bind(this)}>
-      <Modal.Header closeButton>
-      <Modal.Title>Create Ride</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-      <Tabs defaultActiveKey={1} id="uncontrolled-tab-example">
-      <Tab eventKey={1} title="Ride Information">
-      <Form horizontal>
-      <p />
-      <FormGroup controlId="formHorizontalLeave" validationState={this.getValidationStateStart()}>
-      <p />
-      <Col componentClass={ControlLabel} sm={3}>
-      Leaving from *
-      </Col>
-      <Col sm={9}>
-      <FormControl
-      name="start"
-      type="text"
-      placeholder="Enter the start location"
-      value={this.state.start}
-      onChange={event => this.handleStartChange(event)}
-      />
-      </Col>
-      </FormGroup>
-
-      <FormGroup controlId="formHorizontalGoing" validationState={this.getValidationStateDest()}>
-      <Col componentClass={ControlLabel} sm={3}>
-      Going to *
-      </Col>
-      <Col sm={9}>
-      <FormControl
-      name="dest"
-      type="text"
-      placeholder="Enter the destination"
-      value={this.state.dest}
-      onChange={event => this.handleDestChange(event)}
-      />
-      </Col>
-      </FormGroup>
-
-      <FormGroup controlId="formHorizontalDate" validationState={this.getValidationStateDate()}>
-      <Col componentClass={ControlLabel} sm={3}>
-      Date *
-      </Col>
-      <Col sm={9}>
-      <FormControl
-      type="text"
-      placeholder="mm/dd/yyyy"
-      value={this.state.date}
-      onChange={event => this.handleDateChange(event)}
-      />
-      </Col>
-      </FormGroup>
-
-      <FormGroup controlId="formHorizontalGoing" validationState={this.getValidationStateTime()}>
-      <Col componentClass={ControlLabel} sm={3}>
-      Time *
-      </Col>
-      <Col sm={9}>
-      <FormControl
-      type="text"
-      placeholder="hh:mm"
-      value={this.state.time}
-      onChange={event => this.handleTimeChange(event)}
-      />
-      </Col>
-      </FormGroup>
-
-      <FormGroup controlId="formHorizontalSelectSeats">
-      <Col componentClass={ControlLabel} sm={3}>
-      Available Seats *
-      </Col>
-      <Col sm={9}>
-      <FormControl
-      componentClass="select"
-      placeholder="select"
-      value={this.state.seats}
-      onChange={event => this.handleSeatsChange(event)}
-      >
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-      </FormControl>
-      </Col>
-      </FormGroup>
-
-      <FormGroup controlId="formHorizontalDesc">
-      <Col componentClass={ControlLabel} sm={3}>
-      Trip Description
-      </Col>
-      <Col sm={9}>
-      <FormControl
-      componentClass="textarea"
-      placeholder="Enter trip details"
-      value={this.state.description}
-      onChange={event =>
-        this.handleDescriptionChange(event)
-      }
-      />
-      </Col>
-      </FormGroup>
-      </Form>
-      </Tab>
-
-      <Tab eventKey={2} title="Payment">
-      <Form horizontal>
-      <p />
-      <FormGroup controlId="formHorizontalCost" validationState={this.getValidationStateCost()}>
-      <p />
-      <Col componentClass={ControlLabel} sm={3}>
-      Cost *
-      </Col>
-      <Col sm={9}>
-      <FormControl
-      type="number"
-      placeholder="Enter the amount to be charged"
-      value={this.state.cost}
-      onChange={event => this.handleCostsChange(event)}
-      />
-      </Col>
-      </FormGroup>
-
-      <FormGroup controlId="formHorizontalSelectCharge">
-      <Col componentClass={ControlLabel} sm={3}>
-      Charge{" "}
-      <OverlayTrigger overlay={popover}>
-      <a href="#popover">Type</a>
-      </OverlayTrigger>
-      </Col>
-      <Col sm={9}>
-      <FormControl
-      componentClass="select"
-      placeholder="select"
-      value={this.state.total_or_perperson}
-      onChange={event => this.handleTypeChange(event)}
-      >
-      <option value="1">Cost Per Person</option>
-      <option value="2">Total Cost</option>
-      </FormControl>
-      </Col>
-      </FormGroup>
-
-      <FormGroup controlId="formHorizontalPayment">
-      <Col componentClass={ControlLabel} sm={3}>
-      Payment Methods
-      </Col>
-      <Col sm={9}>
-      <Checkbox
-      inline
-      checked={this.state.Cash}
-      onChange={event => this.handleCash(event)}
-      >
-      Cash
-      </Checkbox>{" "}
-      <Checkbox
-      inline
-      checked={this.state.Venmo}
-      onChange={event => this.handleVenmo(event)}
-      >
-      Venmo
-      </Checkbox>{" "}
-      <Checkbox
-      checked={this.state.PayPal}
-      onChange={event => this.handlePaypal(event)}
-      >
-      PayPal
-      </Checkbox>
-      </Col>
-      </FormGroup>
-      </Form>
-      </Tab>
-
-      <Tab eventKey={3} title="Picture">
-      <Form horizontal>
-      <p />
-      <FormGroup controlId="formHorizontalCost">
-      <Col componentClass={ControlLabel} sm={3}>
-      Upload
-      </Col>
-      <p />
-      <Col sm={6}>
-      <FormControl
-      type="file"
-      accept="image/*"
-      inputRef={ref => (this.input2 = ref)}
-      onChange={event => this.handleImageChange(event)}
-      />
-      </Col>
-      </FormGroup>
-      </Form>
-      </Tab>
-      </Tabs>
-      </Modal.Body>
-      <Modal.Footer>
-      <Button bsStyle="primary" onClick={this.handleSubmit.bind(this)}>
-      Submit
-      </Button>
-      <Button onClick={this.handleEditClose.bind(this)}>Close</Button>
-      </Modal.Footer>
-      </Modal>
-      <td>{this.props.ride.description}</td>
-      <td>{this.props.ride.cost}</td>
-      <td>{this.props.ride.date}</td>
-      <td>{this.props.ride.time}</td>
-      <td>{this.props.ride.start}</td>
-      <td>{this.props.ride.dest}</td>
-      <td>{this.props.ride.seats}</td>
+      <td>{this.state.description}</td>
+      <td>{this.state.cost}</td>
+      <td>{this.state.date}</td>
+      <td>{this.state.time}</td>
+      <td>{this.state.start}</td>
+      <td>{this.state.dest}</td>
+      <td>{this.state.seats}</td>
       <td>
-      {this.props.ride.chargeType === "2" && "Total Cost"}
-      {this.props.ride.chargeType === 1 && "Cost per person"}
+      {this.state.chargeType === "2" && "Total Cost"}
+      {this.state.chargeType === 1 && "Cost per person"}
       </td>
-      <td>{this.props.ride.paymentMethods}</td>
+      <td>{this.state.paymentMethods}</td>
 
       <td>
-      <Image src={this.props.ride.picture} alt="No image" />
+      <Image src={this.state.picture} alt="No image" />
       </td>
       <td>
       <Button bsStyle="primary" onClick={() => this.setState({ smShow: true })} >Cancel!</Button>
+<<<<<<< HEAD
       <CancelModal ref={el => this.state.element = el} driver={this.state.driver} timestamp={this.state.Timestamp} show={this.state.smShow} onHide={smClose} />
       </td>
       <td>
       <Button bsStyle="primary" onClick={() => this.setState({ editShow: true})}>Edit!</Button>
+=======
+      <CancelModal driver={this.state.driver} timestamp={this.state.Timestamp} info={this.state} email={this.state.email} show={this.state.smShow} onHide={smClose} />
+>>>>>>> 23d2dbac33f49b692e160e175c08d7802e68b8ee
       </td>
       </tr>
+
+
 
     );
   }
 }
 
-export default DriverRide;
+const mapStateToProps = state => {
+  return {
+    user: state.user,
+
+  };
+};
+
+
+export default withRouter(
+  connect(
+    mapStateToProps,
+    null
+  )(DriverRide)
+);

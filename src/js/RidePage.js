@@ -214,6 +214,9 @@ class RidePage extends Component {
               }
               temp[unique] = timestamp;
               ref2.child("TripsArray").set(temp, () => {
+
+                
+
                 if (this.state.ImageURL == null) {
                   window.location.reload();
                 }
@@ -234,7 +237,6 @@ class RidePage extends Component {
   }
 
   render() {
-
     const popover = (
       <Popover id="modal-popover" title="popover">
       Cost Per Person: The same amount will be charged to each rider.

@@ -10,22 +10,7 @@ class Driver extends Component {
     };
   }
 
-  //componentDidMount() {
-  //  let tripsRef = firebase.database().ref("/trips/");
-  //  tripsRef.on("value", function(snapshot) {
-  //    console.log(snapshot.val());
-  //    let trips = [];
-  //    snapshot.forEach(function(childSnapshot) {
-  //      trips.push(childSnapshot.val());
-  //      console.log(childSnapshot.val());
-  //     let trip = childSnapshot.val();
-  //     trip["trip_id"] = childSnapshot.key;
-  //     console.log(trip);
-  //   });
-  // });
-  //  console.log(trips);
-  //  this.setState({ rides: trips });
-  // }
+  
   componentDidMount() {
     const tripsRef = firebase.database().ref("/trips/");
     tripsRef.on("value", snapshot => {
@@ -53,17 +38,6 @@ class Driver extends Component {
           let res =
             year + "-" + month + "-" + day + "T" + trips[trip].time + ":00";
 
-          var cash = false;
-          var venmo = false;
-          var paypal = false;
-
-          if(payMethods.includes("Venmo"))
-            venmo = true;
-          if(payMethods.includes("Cash"))
-            cash = true;
-          if(payMethods.includes("PayPal"))
-            paypal = true;
-
           newState.push({
             id: trips[trip].driver,
             chargeType: trips[trip].total_or_perperson,
@@ -77,10 +51,7 @@ class Driver extends Component {
             start: trips[trip].start,
             time: trips[trip].time,
             Timestamp: trips[trip].Timestamp,
-            dateandtime: res,
-            Cash: cash,
-            Venmo: venmo,
-            PayPal: paypal
+            dateandtime: res
           });
         }
       }
@@ -111,12 +82,11 @@ class Driver extends Component {
               <th>Payment Methods</th>
               <th>Picture</th>
               <th>Cancel this trip</th>
-              <th>Edit this trip</th>
             </tr>
           </thead>
           <tbody>
             {sorted.map(ride => (
-              <DriverRide packages={this.props.packages} ride={ride} />
+              <DriverRide ride={ride} />
             ))}
           </tbody>
         </Table>

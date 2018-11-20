@@ -7,7 +7,8 @@ import { Form } from "react-bootstrap";
 import { Col } from "react-bootstrap";
 import { ControlLabel } from "react-bootstrap";
 import firebase from "../firebase.js";
-
+import { withRouter } from "react-router";
+import { connect } from "react-redux";
 
 class Ride extends Component {
 
@@ -58,8 +59,26 @@ class Ride extends Component {
           }
           temp1[currentUser] = timestamp;
           ref_tripUsers.child('UsersArray').set(temp1);
-          this.sendEmail();
-        //  window.location.reload();
+          var request = new XMLHttpRequest();
+
+          request.open("POST", "https://rideshare-server1.herokuapp.com", true);
+          request.setRequestHeader('Content-Type', 'text/plain');
+          request.onreadystatechange = function() {
+            if (request.readyState === 4) {
+              window.location.reload();
+            }
+          }
+          var message = this.props.user.email + "\n" +
+          "Congratulations! You successfully book a ride" + "\n" +
+          this.state.date + "\n" +
+          this.state.time + "\n" +
+           this.state.start + "\n" +
+           this.state.dest + "\n" +
+           this.state.paymentMethods + "\n" +
+            this.state.cost + "\n" +
+            this.state.description;
+          request.send(message);
+
         });
       });
       //  }
@@ -67,40 +86,7 @@ class Ride extends Component {
 
   }
 
-  sendEmail() {
-    console.log("In email");
-    var http = require('https');
 
-    var mail = new Buffer(
-      "From: rideshareofficial@gmail.com\n" +
-      "To: zhongdai.sw@gmail.com\n" +
-      "Subject: Subject Text\n\n" +
-
-      "Message text"
-    ).toString("base64").replace(/\+/g, '-').replace(/\//g, '_');
-
-
-    var post_options = {
-      hostname: 'www.googleapis.com',
-      port: '443',
-      path: '/gmail/v1/users/me/messages/send',
-      method: 'POST',
-      headers: {
-        "Authorization": 'Bearer <ACCESS_TOKEN>',
-        "Content-Type" : "application/json"
-      }
-    };
-
-    var post_req = http.request(post_options, function(res) {
-      res.setEncoding('utf8');
-      res.on('data', function (chunk) {
-        console.log('Response: ' + chunk);
-      });
-    });
-
-    post_req.write(JSON.stringify({ "raw": mail }));
-    post_req.end();
-  }
 
   handleClose() {
     this.setState({ show: false });
@@ -245,5 +231,17 @@ class Ride extends Component {
     );
   }
 }
+const mapStateToProps = state => {
+  return {
+    user: state.user,
 
-export default Ride;
+  };
+};
+
+
+export default withRouter(
+  connect(
+    mapStateToProps,
+    null
+  )(Ride)
+);
