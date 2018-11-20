@@ -63,8 +63,8 @@ class CancelModal extends Component {
 
         //delete in the TripsArray
         let userRef = firebase.auth().currentUser.uid;
-        let ref2 = firebase.database().ref(`/users/${userRef}/TripsArray`);
-        var desertRef2 = ref2.child(unique).remove();
+        let ref1 = firebase.database().ref(`/users/${userRef}/TripsArray`);
+        var desertRef2 = ref1.child(unique).remove();
         window.location.reload();
     }
 
