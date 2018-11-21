@@ -10,6 +10,64 @@ import firebase from "../firebase.js";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 
+class WaitModal extends Component {
+  constructor(props, context) {
+    super(props, context);
+    this.handleWait = this.handleWait.bind(this);
+    this.state = {
+      show: this.props.show,
+      Timestamp: this.props.timestamp,
+      driver: this.props.driver,
+      info: this.props.info,
+      email: this.props.email
+    };
+  }
+
+  handleWait() {
+      let timestamp = this.state.Timestamp;
+      let unique = this.props.driver + timestamp;
+      let date = new Date();
+      let waitstamp = date.toGMTString();
+
+      let ref = firebase.database().ref(`/trips/${unique}/Waitlist`);
+      ref.child(`${this.props.driver}`).once('value', function(snapshot) {
+        if (snapshot.exists()) {
+          ref.child(`${firebase.auth().currentUser.uid}`).set(waitstamp);
+
+        } else {
+          alert("not exists");
+        }
+      });
+
+
+
+
+  }
+
+  render() {
+    return (
+      <Modal
+      {...this.props}
+      bsSize="small"
+      aria-labelledby="contained-modal-title-sm"
+      >
+      <Modal.Header closeButton>
+      <Modal.Title id="contained-modal-title-sm">Comfirm</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+      <p>
+      Are you going to be on the waiting list?
+      </p>
+      </Modal.Body>
+      <Modal.Footer>
+      <Button onClick={this.props.onHide}>Close</Button>
+      <Button bsStyle="primary" onClick={this.handleWait}>Yes</Button>
+      </Modal.Footer>
+      </Modal>
+    );
+  }
+}
+
 class Ride extends Component {
 
   constructor(props, context) {
@@ -105,14 +163,14 @@ class Ride extends Component {
   }
 
   getAvailableSeats(){
-    if(this.state.seats === 0 || this.state.driver == (firebase.auth().currentUser.uid))
+    if(this.state.seats === 0)
     return true;
     else
     return false;
   }
 
   ifBooked() {
-    if(this.state.seats != 0 || this.state.driver == (firebase.auth().currentUser.uid)) {
+    if(this.state.seats != 0) {
       return true;
     } else {
       return false;
@@ -240,7 +298,8 @@ class Ride extends Component {
       </Modal>
       </td>
       <td>
-      <Button onClick={this.handleShow} bsStyle="primary" disabled = {this.ifBooked()}>Waitlist</Button>
+      <Button onClick={() => this.setState({ smShow: true })} bsStyle="primary" disabled = {this.ifBooked()}>Waitlist</Button>
+      <WaitModal driver={this.state.driver} timestamp={this.state.Timestamp} info={this.state} email={this.state.email} show={this.state.smShow} onHide={smClose} />
       </td>
       </tr>
 

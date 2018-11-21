@@ -162,6 +162,7 @@ class RidePage extends Component {
     let timestamp = date.toGMTString();
     let unique = firebase.auth().currentUser.uid + timestamp;
     let ref = firebase.database().ref("/trips/" + unique);
+    let oldstamp = "Tue, 20 Nov 2001 05:37:59 GMT";
     ref.once("value").then(snapshot => {
       if (!snapshot.val()) {
         ref.set(
@@ -179,7 +180,8 @@ class RidePage extends Component {
             Cash: this.state.Cash,
             UsersArray: {[firebase.auth().currentUser.uid]: timestamp},
             Timestamp: timestamp,
-            driver: firebase.auth().currentUser.uid
+            driver: firebase.auth().currentUser.uid,
+            Waitlist: {[firebase.auth().currentUser.uid]: oldstamp}
           },
           () => {
             if (this.state.ImageURL !== null) {
