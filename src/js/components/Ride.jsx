@@ -30,12 +30,14 @@ class WaitModal extends Component {
       let waitstamp = date.toGMTString();
 
       let ref = firebase.database().ref(`/trips/${unique}/Waitlist`);
-      ref.child(`${this.props.driver}`).once('value', function(snapshot) {
+      let childnode = ref.child(`${this.props.driver}`);
+      childnode.once('value', function(snapshot) {
         if (snapshot.exists()) {
           ref.child(`${firebase.auth().currentUser.uid}`).set(waitstamp);
-
+          console.log(ref);
+          childnode.remove();
         } else {
-          alert("not exists");
+          ref.child(`${firebase.auth().currentUser.uid}`).set(waitstamp);
         }
       });
 
