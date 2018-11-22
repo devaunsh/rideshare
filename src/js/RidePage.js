@@ -50,7 +50,7 @@ class RidePage extends Component {
       dest: null,
       date: null,
       time: null,
-      seats: 3,
+      seats: 1,
       description: null,
       costs: 0,
       total_or_perperson: 1,
@@ -93,8 +93,8 @@ class RidePage extends Component {
     this.setState({ time: event.target.value });
   }
   handleSeatsChange() {
-    //  console.log(ReactDOM.findDOMNode(this.select).value);
     if (this.input && this.input.value != 0) {
+      console.log(this.input.value);
       this.setState({ seats: this.input.value });
     }
   }
@@ -340,6 +340,7 @@ class RidePage extends Component {
       componentClass="select"
       placeholder="select"
       value={this.state.value }
+      inputRef={ref => (this.input = ref)}
       onChange={event => this.handleSeatsChange(event)}
       >
       <option value="1">1</option>
@@ -397,7 +398,7 @@ class RidePage extends Component {
       <FormControl
       componentClass="select"
       placeholder="select"
-
+      inputRef={ref => (this.input1 = ref)}
       onChange={event => this.handleTypeChange(event)}
       >
       <option value="1">Cost Per Person</option>
