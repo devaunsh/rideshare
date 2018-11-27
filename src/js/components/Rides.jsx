@@ -64,6 +64,7 @@ class Rides extends Component {
           paymentMethods: payMethods,
           picture: trips[trip].ImageURL,
           seats: trips[trip].seats,
+          waitnum: trips[trip].waitnum,
           start: trips[trip].start,
           time: trips[trip].time,
           Timestamp: trips[trip].Timestamp,

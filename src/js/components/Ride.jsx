@@ -19,29 +19,33 @@ class WaitModal extends Component {
       Timestamp: this.props.timestamp,
       driver: this.props.driver,
       info: this.props.info,
-      email: this.props.email
+      email: this.props.email,
+      waitnum: this.props.waitnum
     };
   }
 
   handleWait() {
       let timestamp = this.state.Timestamp;
       let unique = this.props.driver + timestamp;
-      let date = new Date();
-      let waitstamp = date.toGMTString();
-
+      //let date = new Date();
+      let waitstamp = this.state.waitnum;
       let ref = firebase.database().ref(`/trips/${unique}/Waitlist`);
       let childnode = ref.child(`${this.props.driver}`);
       childnode.once('value', function(snapshot) {
         if (snapshot.exists()) {
           ref.child(`${firebase.auth().currentUser.uid}`).set(waitstamp);
-          console.log(ref);
           childnode.remove();
         } else {
           ref.child(`${firebase.auth().currentUser.uid}`).set(waitstamp);
         }
       });
 
-
+      var ref_waitnumChange = firebase.database().ref("/trips/" + this.state.driver
+      + this.state.Timestamp);
+      ref_waitnumChange.once('value').then(snapshot => {
+        this.state.waitnum++;
+        ref_waitnumChange.update({waitnum: this.state.waitnum});
+      });
 
 
   }
@@ -93,6 +97,7 @@ class Ride extends Component {
       time: this.props.ride.time,
       Timestamp: this.props.ride.Timestamp,
       driver: this.props.ride.id, //driver
+      waitnum: this.props.ride.waitnum
     };
   }
   handleConfirm() {
@@ -301,7 +306,7 @@ class Ride extends Component {
       </td>
       <td>
       <Button onClick={() => this.setState({ smShow: true })} bsStyle="primary" disabled = {this.ifBooked()}>Waitlist</Button>
-      <WaitModal driver={this.state.driver} timestamp={this.state.Timestamp} info={this.state} email={this.state.email} show={this.state.smShow} onHide={smClose} />
+      <WaitModal waitnum={this.state.waitnum} driver={this.state.driver} timestamp={this.state.Timestamp} info={this.state} email={this.state.email} show={this.state.smShow} onHide={smClose} />
       </td>
       </tr>
 

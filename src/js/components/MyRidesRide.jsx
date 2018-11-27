@@ -19,11 +19,16 @@ class CancelModal extends Component {
       Timestamp: this.props.timestamp,
       driver: this.props.driver,
       info: this.props.info,
-      email: this.props.email
+      email: this.props.email,
+      seats: this.props.seats,
+      waitnum:this.props.waitnum
     };
   }
 
   handleCancel() {
+      let date = new Date();
+      let waitstamp = date.toGMTString();
+
       let timestamp = this.state.Timestamp;
       let unique = this.props.driver + timestamp;
       var message = this.state.email + "\n" +
@@ -79,10 +84,39 @@ class CancelModal extends Component {
         let ref = firebase.database().ref(`/trips/${unique}/UsersArray`);
         var desertRef = ref.child(firebase.auth().currentUser.uid).remove();
 
+        //case: when no seats availble and waitnum not 0, rider cancels the trip
+        if ((this.props.seats == 0) && (this.props.waitnum != 0)) {
+          var ref_trip = firebase.database().ref("/trips/" + this.state.driver
+          + this.state.Timestamp);
+          ref_trip.once('value').then(snapshot => {
+            this.state.waitnum--;
+            ref_trip.update({waitnum: this.state.waitnum});
+            //ref.child(`${firebase.auth().currentUser.uid}`).set(waitstamp);
+
+            var waitRef = firebase.database().ref(`/trips/${unique}/Waitlist`);
+            waitRef.orderByValue().on("value", function(data) {
+               data.forEach(function(data) {
+                  console.log("The " + data.key + " rating is " + data.val());
+               });
+            });
+
+          });
+        } else {
+          var desert_trip = firebase.database().ref("/trips/" + this.state.driver
+          + this.state.Timestamp);
+          desert_trip.once('value').then(snapshot => {
+            this.props.seats++;
+            desert_trip.update({seats: this.state.seats});
+          });
+
+        }
+
         //delete in the TripsArray
         let userRef = firebase.auth().currentUser.uid;
         let ref2 = firebase.database().ref(`/users/${userRef}/TripsArray`);
         var desertRef2 = ref2.child(unique).remove();
+
+
 
     }
 
@@ -138,6 +172,7 @@ class MyRidesRide extends Component {
       Timestamp: this.props.ride.Timestamp,
       email: this.props.user.email,
       driver: this.props.ride.id, //driver
+      waitnum: this.props.ride.waitnum
     };
   }
 
@@ -182,7 +217,7 @@ class MyRidesRide extends Component {
       </td>
       <td>
       <Button bsStyle="primary" onClick={() => this.setState({ smShow: true })} >Cancel!</Button>
-      <CancelModal driver={this.state.driver} timestamp={this.state.Timestamp} info={this.state} email={this.state.email} show={this.state.smShow} onHide={smClose} />
+      <CancelModal waitnum={this.state.waitnum} seats={this.state.seats} driver={this.state.driver} timestamp={this.state.Timestamp} info={this.state} email={this.state.email} show={this.state.smShow} onHide={smClose} />
       </td>
       </tr>
 

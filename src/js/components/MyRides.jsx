@@ -71,7 +71,8 @@ class MyRides extends Component {
               start: trips[trip].start,
               time: trips[trip].time,
               Timestamp: trips[trip].Timestamp,
-              dateandtime: res
+              dateandtime: res,
+              waitnum: trips[trip].waitnum
             });
             break;
           }
