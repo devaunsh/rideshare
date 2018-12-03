@@ -48,7 +48,7 @@ class CancelModal extends Component {
       request.onreadystatechange = function() {
         if (request.readyState === 4) {
 
-          window.location.reload();
+          //window.location.reload();
 
         }
       }
@@ -66,7 +66,7 @@ class CancelModal extends Component {
           let userRef = key;
           let ref3 = firebase.database().ref(`/users/${userRef}/TripsArray`);
            ref3.once('value').then(snapshot1 => {
-             console.log(snapshot1.val());
+            // console.log(snapshot1.val());
              var desertRef = ref3.child(unique).remove();
            })
           //var desertRef = ref3.child(unique).remove();
@@ -91,21 +91,26 @@ class CancelModal extends Component {
           ref_trip.once('value').then(snapshot => {
             this.state.waitnum--;
             ref_trip.update({waitnum: this.state.waitnum});
-            //ref.child(`${firebase.auth().currentUser.uid}`).set(waitstamp);
 
             var waitRef = firebase.database().ref(`/trips/${unique}/Waitlist`);
-            waitRef.orderByValue().on("value", function(data) {
-               data.forEach(function(data) {
-                  console.log("The " + data.key + " rating is " + data.val());
-               });
-            });
+            waitRef.once('value').then(snapshot => {
+              let queue = snapshot.val();
+              let dequeue_user = queue.shift();
+              waitRef.set(queue);
+              //add this user to UsersArray
+              ref_trip.child(`UsersArray/${dequeue_user}`).set(0);
+              let dequeue_user_ref = firebase.database().ref(`/users/${dequeue_user}/TripsArray`);
+              dequeue_user_ref.once('value').then(snapshot => {
+                dequeue_user_ref.child(unique).set(0);
+              })
+            })
 
           });
         } else {
           var desert_trip = firebase.database().ref("/trips/" + this.state.driver
           + this.state.Timestamp);
           desert_trip.once('value').then(snapshot => {
-            this.props.seats++;
+            this.state.seats++;
             desert_trip.update({seats: this.state.seats});
           });
 
@@ -115,7 +120,7 @@ class CancelModal extends Component {
         let userRef = firebase.auth().currentUser.uid;
         let ref2 = firebase.database().ref(`/users/${userRef}/TripsArray`);
         var desertRef2 = ref2.child(unique).remove();
-
+        console.log(this.state.info.waitnum);
 
 
     }

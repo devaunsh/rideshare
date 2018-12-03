@@ -28,23 +28,37 @@ class WaitModal extends Component {
       let timestamp = this.state.Timestamp;
       let unique = this.props.driver + timestamp;
       //let date = new Date();
-      let waitstamp = this.state.waitnum;
+  //    let waitstamp = this.state.waitnum;
       let ref = firebase.database().ref(`/trips/${unique}/Waitlist`);
-      let childnode = ref.child(`${this.props.driver}`);
-      childnode.once('value', function(snapshot) {
-        if (snapshot.exists()) {
-          ref.child(`${firebase.auth().currentUser.uid}`).set(waitstamp);
-          childnode.remove();
-        } else {
-          ref.child(`${firebase.auth().currentUser.uid}`).set(waitstamp);
+      // let childnode = ref.child(`${this.props.driver}`);
+      // childnode.once('value', function(snapshot) {
+      //   if (snapshot.exists()) {
+      //     ref.child(waitstamp).set(`${firebase.auth().currentUser.uid}`);
+      //     childnode.remove();
+      //   } else {
+      //     ref.child(waitstamp).set(`${firebase.auth().currentUser.uid}`);
+      //   }
+      // });
+      ref.once('value').then(snapshot => {
+        var queue;
+        if (!snapshot.exists()) {
+          queue = [];
+
         }
-      });
+        else {
+          queue = snapshot.val();
+
+        }
+        queue.push(`${firebase.auth().currentUser.uid}`);
+        ref.set(queue);
+      })
 
       var ref_waitnumChange = firebase.database().ref("/trips/" + this.state.driver
       + this.state.Timestamp);
       ref_waitnumChange.once('value').then(snapshot => {
         this.state.waitnum++;
         ref_waitnumChange.update({waitnum: this.state.waitnum});
+      //  window.location.reload();
       });
 
 
