@@ -9,7 +9,111 @@ import { ControlLabel } from "react-bootstrap";
 import firebase from "../firebase.js";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
+import { Card } from "bootstrap";
+class CancelModal extends Component {
+  constructor(props, context) {
+    super(props, context);
+    this.handleCancel = this.handleCancel.bind(this);
+    this.state = {
+      show: this.props.show,
+      Timestamp: this.props.timestamp,
+      driver: this.props.driver,
+      info: this.props.info,
+      email: this.props.email
+    };
+  }
 
+  handleCancel() {
+      let timestamp = this.state.Timestamp;
+      let unique = this.props.driver + timestamp;
+      var message = this.state.email + "\n" +
+      "Cancel Ride Info" + "\n" +
+      this.state.info.date + "\n" +
+      this.state.info.time + "\n" +
+       this.state.info.start + "\n" +
+       this.state.info.dest + "\n" +
+       this.state.info.paymentMethods + "\n" +
+        this.state.info.cost + "\n" +
+        this.state.info.description;
+      var request = new XMLHttpRequest();
+
+      request.open("POST", "https://rideshare-server1.herokuapp.com", true);
+      request.setRequestHeader('Content-Type', 'text/plain');
+
+      request.onreadystatechange = function() {
+        if (request.readyState === 4) {
+
+          window.location.reload();
+
+        }
+      }
+      request.send(message);
+      if (this.props.driver == firebase.auth().currentUser.uid) {
+        //cancel driver case
+        let ref = firebase.database().ref("/trips");
+
+        let ref2 = firebase.database().ref(`/trips/${unique}/UsersArray`);
+        ref2.once('value').then(snapshot => {
+        let temp = snapshot.val();
+        Object.entries(temp).forEach(entry => {
+          let key = entry[0];
+          console.log(key);
+          let userRef = key;
+          let ref3 = firebase.database().ref(`/users/${userRef}/TripsArray`);
+           ref3.once('value').then(snapshot1 => {
+             console.log(snapshot1.val());
+             var desertRef = ref3.child(unique).remove();
+           })
+          //var desertRef = ref3.child(unique).remove();
+        })
+          if (temp === null) {
+            console.log("Error: UsersArray Empty")
+            return;
+          }
+        })
+        var desertRef = ref.child(unique);
+        desertRef.remove();
+      //  window.location.reload();
+      } else {
+        //cancel passenger case
+        let ref = firebase.database().ref(`/trips/${unique}/UsersArray`);
+        var desertRef = ref.child(firebase.auth().currentUser.uid).remove();
+
+        //delete in the TripsArray
+        let userRef = firebase.auth().currentUser.uid;
+        let ref2 = firebase.database().ref(`/users/${userRef}/TripsArray`);
+        var desertRef2 = ref2.child(unique).remove();
+
+    }
+
+
+
+
+  }
+
+  render() {
+    return (
+      <Modal
+      {...this.props}
+      bsSize="small"
+      aria-labelledby="contained-modal-title-sm"
+      >
+      <Modal.Header closeButton>
+      <Modal.Title id="contained-modal-title-sm">Comfirm</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+      <p>
+      Are you sure you want to cancel this trip?
+      </p>
+      </Modal.Body>
+      <Modal.Footer>
+      <Button onClick={this.props.onHide}>Close</Button>
+      <Button bsStyle="primary" onClick={this.handleCancel }>Yes</Button>
+      </Modal.Footer>
+      </Modal>
+    );
+  }
+}
 class WaitModal extends Component {
   constructor(props, context) {
     super(props, context);
@@ -182,9 +286,13 @@ class Ride extends Component {
 
   render() {
     let smClose = () => this.setState({ smShow: false });
+    let styles = {
+      visibility: ""
+    }
     return (
 
       <tr>
+      <Card />
       <td>{this.state.description}</td>
       <td>{this.state.cost}</td>
       <td>{this.state.date}</td>
@@ -302,6 +410,10 @@ class Ride extends Component {
       <td>
       <Button onClick={() => this.setState({ smShow: true })} bsStyle="primary" disabled = {this.ifBooked()}>Waitlist</Button>
       <WaitModal driver={this.state.driver} timestamp={this.state.Timestamp} info={this.state} email={this.state.email} show={this.state.smShow} onHide={smClose} />
+      </td>
+      <td style={styles}>
+      <Button bsStyle="primary"  >Cancel</Button>
+      <CancelModal driver={this.state.driver} timestamp={this.state.Timestamp} info={this.state} email={this.state.email} show={this.state.smShow} onHide={smClose} />
       </td>
       </tr>
 
