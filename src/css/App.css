@@ -19,3 +19,8 @@
 .App-intro {
   font-size: large;
 }
+
+.card-outline {
+  outline: 1px dashed rgb(231,231,231);
+  background-color: rgb(240,240,240);
+}

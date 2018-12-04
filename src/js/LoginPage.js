@@ -13,7 +13,7 @@ class LoginPage extends Component {
 
     if (gapiAuth.isSignedIn.get()) {
       this.props.userLogin(gapiAuth.currentUser.get().getBasicProfile());
-    
+
     } else {
       gapiAuth.signIn().then(user => {
         this.props.userLogin(user.getBasicProfile());
