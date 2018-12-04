@@ -195,26 +195,24 @@ class Ride extends Component {
       <Breadcrumb>
         <Breadcrumb.Item active>
         {this.state.start}
-        <CardImg width="10%" src={car_icon} alt="No image" />
-         {this.state.dest}</Breadcrumb.Item>
+        <CardImg className = "car-icon" src={car_icon} alt="No image" />
+        {this.state.dest}</Breadcrumb.Item>
         <Breadcrumb.Item active>{this.state.date}</Breadcrumb.Item>
         <Breadcrumb.Item active>{this.state.time}</Breadcrumb.Item>
-        <Breadcrumb.Item active>{this.state.cost}</Breadcrumb.Item>
-        <Breadcrumb.Item active>
-        {this.state.chargeType === "2" && "Total Cost"}
-        {this.state.chargeType === 1 && "Cost per person"}
+        <Breadcrumb.Item active>{this.state.cost}
+        {this.state.chargeType === "2" && " in total"}
+        {this.state.chargeType === 1 && " per person"}
         </Breadcrumb.Item>
+        <Breadcrumb.Item active>{this.state.paymentMethods}</Breadcrumb.Item>
       </Breadcrumb>
       </CardTitle>
 
       <CardText>
-      <CardImg left width="10%" src={this.state.picture} alt="No image" />
+      <CardImg className = "ride-picture" src={this.state.picture} alt="no picture available" />
       <tr>
-      <td>{this.state.description}</td>
-      <td>{this.state.seats}</td>
-
-      <td>{this.state.paymentMethods}</td>
-      <td>
+      <td className = "ride-description">{this.state.description}</td>
+      <td className = "ride-seat">{this.state.seats} seats available</td>
+      <td className = "ride-book">
       <Button onClick={this.handleShow} bsStyle="primary" disabled = {this.getAvailableSeats()}>Book now!</Button>
 
       <Modal show={this.state.show} onHide={this.handleClose}>
@@ -312,7 +310,7 @@ class Ride extends Component {
       </Modal.Footer>
       </Modal>
       </td>
-      <td>
+      <td className = "ride-waitlist">
       <Button onClick={() => this.setState({ smShow: true })} bsStyle="primary" disabled = {this.ifBooked()}>Waitlist</Button>
       <WaitModal waitnum={this.state.waitnum} driver={this.state.driver} timestamp={this.state.Timestamp} info={this.state} email={this.state.email} show={this.state.smShow} onHide={smClose} />
       </td>
