@@ -19,3 +19,56 @@
 .App-intro {
   font-size: large;
 }
+
+.card-outline {
+  margin-top: 30px;
+  position: relative;
+  left: 30px;
+  width: 1000px;
+  height: 400px;
+  outline: 1px dashed rgb(231,231,231);
+  background-color: rgb(240,240,240);
+}
+
+.car-icon {
+   margin-right: 10px;
+   margin-left: 10px;
+   height: 40px;
+}
+.ride-picture {
+   margin-right: 30px;
+   margin-left: 30px;
+   height: 300px;
+}
+
+.ride-description {
+   position: absolute;
+   top: 150px;
+   right: 200px;
+   width: 400px;
+   height: 200px;
+}
+
+.ride-book {
+   position: absolute;
+   top: 200px;
+   right: 100px;
+   width: 40px;
+   height: 40px;
+}
+.ride-waitlist {
+  position: absolute;
+  top: 10px;
+  right: 80px;
+  width: 40px;
+  height: 40px;
+}
+
+.ride-seat {
+  position: absolute;
+  top: 350px;
+  right: 0px;
+  width: 150px;
+  height: 40px;
+  font-size: 18px;
+}
