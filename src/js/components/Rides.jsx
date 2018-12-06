@@ -47,12 +47,8 @@ class Rides extends Component {
         }
 
         let format_date = trips[trip].date;
-        format_date = format_date.split("/");
-        let month = format_date[0];
-        let day = format_date[1];
-        let year = format_date[2];
-        let res =
-          year + "-" + month + "-" + day + "T" + trips[trip].time + ":00";
+
+        let res = format_date + "T" + trips[trip].time + ":00";
 
 
         newState.push({

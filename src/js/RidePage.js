@@ -131,11 +131,11 @@ class RidePage extends Component {
     this.setState({ ImageURL: localImageURL });
   }
   getValidationStateStart(){
-    if(this.state.start === "" )
+    if(this.state.start === "" || this.state.start === "1")
     return 'error';
   }
   getValidationStateDest(){
-    if(this.state.dest === "" )
+    if(this.state.dest === "" || this.state.dest === "1")
     return 'error';
   }
   getValidationStateDate(){
@@ -273,33 +273,41 @@ class RidePage extends Component {
       <Form horizontal>
       <p />
       <FormGroup controlId="formHorizontalLeave" validationState={this.getValidationStateStart()}>
-      <p />
       <Col componentClass={ControlLabel} sm={3}>
-      Leaving from *
+      Leaving From *
       </Col>
       <Col sm={9}>
       <FormControl
-      name="start"
-      type="text"
-      placeholder="Enter the start location"
-      value={this.state.value}
+      componentClass="select"
+      placeholder="select"
+      value={this.state.value }
+      inputRef={ref => (this.input = ref)}
       onChange={event => this.handleStartChange(event)}
-      />
+      >
+      <option value="1"></option>
+      <option value="Chicago">Chicago</option>
+      <option value="Indianapolis">Indianapolis</option>
+      <option value="Purdue">Purdue</option>
+      </FormControl>
       </Col>
       </FormGroup>
-
       <FormGroup controlId="formHorizontalGoing" validationState={this.getValidationStateDest()}>
       <Col componentClass={ControlLabel} sm={3}>
       Going to *
       </Col>
       <Col sm={9}>
       <FormControl
-      name="dest"
-      type="text"
-      placeholder="Enter the destination"
-      value={this.state.value}
+      componentClass="select"
+      placeholder="select"
+      value={this.state.value }
+      inputRef={ref => (this.input = ref)}
       onChange={event => this.handleDestChange(event)}
-      />
+      >
+      <option value="1"></option>
+      <option value="Chicago">Chicago</option>
+      <option value="Indianapolis">Indianapolis</option>
+      <option value="Purdue">Purdue</option>
+      </FormControl>
       </Col>
       </FormGroup>
 
@@ -309,7 +317,7 @@ class RidePage extends Component {
       </Col>
       <Col sm={9}>
       <FormControl
-      type="text"
+      type="date"
       placeholder="mm/dd/yyyy"
       value={this.state.value}
       onChange={event => this.handleDateChange(event)}
@@ -323,7 +331,7 @@ class RidePage extends Component {
       </Col>
       <Col sm={9}>
       <FormControl
-      type="text"
+      type="time"
       placeholder="hh:mm"
       value={this.state.value}
       onChange={event => this.handleTimeChange(event)}
