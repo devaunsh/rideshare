@@ -10,7 +10,7 @@ class Driver extends Component {
     };
   }
 
-  
+
   componentDidMount() {
     const tripsRef = firebase.database().ref("/trips/");
     tripsRef.on("value", snapshot => {
@@ -37,7 +37,7 @@ class Driver extends Component {
           let year = format_date[2];
           let res =
             year + "-" + month + "-" + day + "T" + trips[trip].time + ":00";
-
+            console.log(trips[trip].Paypal);
           newState.push({
             id: trips[trip].driver,
             chargeType: trips[trip].total_or_perperson,
@@ -51,7 +51,10 @@ class Driver extends Component {
             start: trips[trip].start,
             time: trips[trip].time,
             Timestamp: trips[trip].Timestamp,
-            dateandtime: res
+            dateandtime: res,
+            Cash: trips[trip].Cash,
+            Venmo: trips[trip].Venmo,
+            Paypal: trips[trip].Paypal,
           });
         }
       }

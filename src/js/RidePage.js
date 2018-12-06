@@ -106,7 +106,7 @@ class RidePage extends Component {
   }
   handleTypeChange(event) {
     if (this.input1)
-    this.setState({ total_or_perperson: this.input1.value });
+    this.setState({ total_or_perperson: Number(this.input1.value) });
   }
   handleCash(event) {
     this.setState({ Cash: event.target.checked });
@@ -203,6 +203,9 @@ class RidePage extends Component {
                 }
               };
               xhr.send();
+            }
+            else {
+              ref.child('ImageURL').set(-1);
             }
 
             let ref2 = firebase
