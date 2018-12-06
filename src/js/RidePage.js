@@ -180,7 +180,6 @@ class RidePage extends Component {
             UsersArray: {[firebase.auth().currentUser.uid]: timestamp},
             Timestamp: timestamp,
             driver: firebase.auth().currentUser.uid,
-            Waitlist: {[firebase.auth().currentUser.uid]: 0},
             waitnum: 0
           },
           () => {
