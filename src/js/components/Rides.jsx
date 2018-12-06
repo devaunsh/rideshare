@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Ride from "./Ride.jsx";
 import firebase from "../firebase.js";
 import { Well, Table } from "react-bootstrap";
+
 class Rides extends Component {
   constructor(props) {
     super(props);
@@ -46,12 +47,8 @@ class Rides extends Component {
         }
 
         let format_date = trips[trip].date;
-        format_date = format_date.split("/");
-        let month = format_date[0];
-        let day = format_date[1];
-        let year = format_date[2];
-        let res =
-          year + "-" + month + "-" + day + "T" + trips[trip].time + ":00";
+
+        let res = format_date + "T" + trips[trip].time + ":00";
 
 
         newState.push({
@@ -82,31 +79,14 @@ class Rides extends Component {
       .concat(this.state.rides)
       .sort((a, b) => new Date(a.dateandtime) - new Date(b.dateandtime));
     return (
-      <div className="container-fluid">
-        <h2>Available Rides</h2>
-        <Table striped bordered condensed hover>
-          <thead>
-            <tr>
-              <th>Description</th>
-              <th>Cost</th>
-              <th>Date</th>
-              <th>Time</th>
-              <th>From</th>
-              <th>To</th>
-              <th>Seats Available</th>
-              <th>Charge Type</th>
-              <th>Payment Methods</th>
-              <th>Picture</th>
-              <th>Book this trip</th>
-              <th>Waitlist</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sorted.map(ride => (
-              <Ride ride={ride} />
-            ))}
-          </tbody>
-        </Table>
+      <div>
+      <h2>Available Rides</h2>
+
+        {sorted.map(ride => (
+          <Ride ride={ride} />
+        ))}
+
+
       </div>
     );
   }

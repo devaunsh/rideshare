@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Well, Image, tr, td, Button } from "react-bootstrap";
+import { Well, Image, tr, td, Button, Breadcrumb } from "react-bootstrap";
 import { Modal } from "react-bootstrap";
 import { FormGroup } from "react-bootstrap";
 import { FormControl } from "react-bootstrap";
@@ -9,6 +9,8 @@ import { ControlLabel } from "react-bootstrap";
 import firebase from "../firebase.js";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
+import { Card, CardTitle, CardText, CardImg } from 'reactstrap';
+import car_icon from "../../img/car_icon.svg";
 
 class WaitModal extends Component {
   constructor(props, context) {
@@ -202,25 +204,29 @@ class Ride extends Component {
   render() {
     let smClose = () => this.setState({ smShow: false });
     return (
+      <Card className = "card-outline">
+      <CardTitle>
+      <Breadcrumb>
+        <Breadcrumb.Item active>
+        {this.state.start}
+        <CardImg className = "car-icon" src={car_icon} alt="No image" />
+        {this.state.dest}</Breadcrumb.Item>
+        <Breadcrumb.Item active>{this.state.date}</Breadcrumb.Item>
+        <Breadcrumb.Item active>{this.state.time}</Breadcrumb.Item>
+        <Breadcrumb.Item active>{this.state.cost}
+        {this.state.chargeType === "2" && " in total"}
+        {this.state.chargeType === 1 && " per person"}
+        </Breadcrumb.Item>
+        <Breadcrumb.Item active>{this.state.paymentMethods}</Breadcrumb.Item>
+      </Breadcrumb>
+      </CardTitle>
 
+      <CardText>
+      <CardImg className = "ride-picture" src={this.state.picture} alt="no picture available" />
       <tr>
-      <td>{this.state.description}</td>
-      <td>{this.state.cost}</td>
-      <td>{this.state.date}</td>
-      <td>{this.state.time}</td>
-      <td>{this.state.start}</td>
-      <td>{this.state.dest}</td>
-      <td>{this.state.seats}</td>
-      <td>
-      {this.state.chargeType === "2" && "Total Cost"}
-      {this.state.chargeType === 1 && "Cost per person"}
-      </td>
-      <td>{this.state.paymentMethods}</td>
-
-      <td>
-      <Image src={this.state.picture} alt="No image" />
-      </td>
-      <td>
+      <td className = "ride-description">{this.state.description}</td>
+      <td className = "ride-seat">{this.state.seats} seats available</td>
+      <td className = "ride-book">
       <Button onClick={this.handleShow} bsStyle="primary" disabled = {this.getAvailableSeats()}>Book now!</Button>
 
       <Modal show={this.state.show} onHide={this.handleClose}>
@@ -318,11 +324,16 @@ class Ride extends Component {
       </Modal.Footer>
       </Modal>
       </td>
-      <td>
+      <td className = "ride-waitlist">
       <Button onClick={() => this.setState({ smShow: true })} bsStyle="primary" disabled = {this.ifBooked()}>Waitlist</Button>
       <WaitModal waitnum={this.state.waitnum} driver={this.state.driver} timestamp={this.state.Timestamp} info={this.state} email={this.state.email} show={this.state.smShow} onHide={smClose} />
       </td>
       </tr>
+      </CardText>
+
+    </Card>
+
+
 
 
 
