@@ -336,7 +336,7 @@ class Ride extends Component {
       onChange={event => this.handleMultipleSeats(event)}
       >
       <option value="1">1</option>
-      <option show={this.state.seats > 1 ? true : false} value="2">2</option>
+      <option disabled={this.state.seats > 1 ? false : true} value="2">2</option>
       </FormControl>
       </Col>
       </FormGroup>
@@ -347,7 +347,7 @@ class Ride extends Component {
       <Col sm={6}>
       <p>
       </p>
-      {this.state.cost}
+      {this.state.cost * this.state.seatsDelta}
       </Col>
       </FormGroup>
 
