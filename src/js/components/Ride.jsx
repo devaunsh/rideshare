@@ -60,7 +60,25 @@ class WaitModal extends Component {
       ref_waitnumChange.once('value').then(snapshot => {
         this.state.waitnum++;
         ref_waitnumChange.update({waitnum: this.state.waitnum});
-      //  window.location.reload();
+        var request = new XMLHttpRequest();
+
+        request.open("POST", "https://rideshare-server1.herokuapp.com", true);
+        request.setRequestHeader('Content-Type', 'text/plain');
+        request.onreadystatechange = function() {
+          if (request.readyState === 4) {
+            //window.location.reload();
+          }
+        }
+        var message = this.props.user.email + "\n" +
+        "Congratulations! You are in a waitlist of a ride. We will notify you if you are selected." + "\n" +
+        this.state.info.date + "\n" +
+        this.state.info.time + "\n" +
+         this.state.info.start + "\n" +
+         this.state.info.dest + "\n" +
+         this.state.info.paymentMethods + "\n" +
+          this.state.info.cost + "\n" +
+          this.state.info.description;
+        request.send(message);
       });
 
 
