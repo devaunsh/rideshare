@@ -20,6 +20,7 @@
     "react-router-redux": "^4.0.8",
     "react-scripts": "1.1.5",
     "react-slideshow-image": "^1.0.8",
+    "react-social-login-buttons": "^2.3.0",
     "react-toastify": "^4.3.2",
     "reactstrap": "^6.5.0",
     "redux": "^4.0.0",
