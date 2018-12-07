@@ -82,7 +82,7 @@ class Rides extends Component {
       .sort((a, b) => new Date(a.dateandtime) - new Date(b.dateandtime));
     return (
       <div>
-      <h2>Available Rides</h2>
+      <h2 className = "page-header">Available Rides</h2>
 
         {sorted.map(ride => (
           <Ride ride={ride} />

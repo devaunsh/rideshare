@@ -5,6 +5,7 @@ import { withRouter } from "react-router";
 
 import { userLogin } from "./redux/actions";
 import logo from "../img/logo.svg";
+import { GoogleLoginButton } from "react-social-login-buttons";
 
 class LoginPage extends Component {
   handleGoogleSigninClick() {
@@ -61,14 +62,14 @@ class LoginPage extends Component {
         <div className="login-page-title-wrapper">
           <img src={logo} className="login-page-logo" alt="logo" />
         </div>
-
-        <Button
-          bsStyle="primary"
-          bsSize="Large"
+        <div className="login-page-logo">
+        <GoogleLoginButton
+          bsStyle="center"
           onClick={this.handleGoogleSigninClick.bind(this)}
         >
           Sign in with Google
-        </Button>
+        </GoogleLoginButton>
+        </div>
       </div>
     );
   }

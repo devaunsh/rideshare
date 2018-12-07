@@ -91,28 +91,10 @@ class MyRides extends Component {
     return (
       <div className="container-fluid">
         <h2>Riding</h2>
-        <Table striped bordered condensed hover>
-          <thead>
-            <tr>
-              <th>Description</th>
-              <th>Cost</th>
-              <th>Date</th>
-              <th>Time</th>
-              <th>From</th>
-              <th>To</th>
-              <th>Seats Available</th>
-              <th>Charge Type</th>
-              <th>Payment Methods</th>
-              <th>Picture</th>
-              <th>Cancel this trip</th>
-            </tr>
-          </thead>
-          <tbody>
+
             {sorted.map(ride => (
               <MyRidesRide ride={ride} />
             ))}
-          </tbody>
-        </Table>
       </div>
     );
   }

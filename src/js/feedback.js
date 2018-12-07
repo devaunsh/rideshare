@@ -19,6 +19,11 @@ import { ControlLabel } from "react-bootstrap";
 import { Checkbox } from "react-bootstrap";
 import { withRouter } from "react-router";
 
+import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBIcon, MDBInput } from 'mdbreact';
+
+import 'mdbreact/dist/css/mdb.css';
+
+
 import ReactDOM from "react-dom";
 import { userLogin } from "./redux/actions";
 
@@ -37,7 +42,7 @@ class Feedback extends Component {
     };
   }
 
-  
+
 
 
 
@@ -58,18 +63,23 @@ class Feedback extends Component {
   handleRatingChange(event) {
     this.setState({ rating: event.target.value });
   }
-  
+
 
   handleSubmit() {
+
+    console.log(this.state);
+
+    /* TODO: Hook it up to backend */
+
     this.setState({
       email: null,
       feedback: null,
       rating: null
     }, () => {
     	window.location.reload();
-    }); 
-   
-    
+    });
+
+
 
   }
 
@@ -85,72 +95,63 @@ class Feedback extends Component {
 
     return (
 
-    	<div>
-    	
-      
-      
-      <Form horizontal>
-      <p />
-      <FormGroup controlId="feedbackemail" >
-      <p />
-      <Col componentClass={ControlLabel} sm={3}>
-      Enter email
-      </Col>
-      <Col sm={6}>
-      <FormControl
-      name="email"
-      type="email"
-      placeholder="Enter your email here"
-      value={this.state.value}
-      onChange={event => this.handleEmailChange(event)}
-      />
-      </Col>
-      </FormGroup>
 
-      <FormGroup controlId="feedbackdesc" >
-      <Col componentClass={ControlLabel} sm={3}>
-      Enter feedback
-      </Col>
-      <Col sm={6}>
-      <FormControl
-      name="feedback"
-      type="text"
-      placeholder="Enter your feedback here"
-      value={this.state.value}
-      onChange={event => this.handleFeedChange(event)}
-      />
-      </Col>
-      </FormGroup>
+    <MDBContainer style={{ marginLeft: "29%", marginTop: "10%"}}>
+    <MDBRow>
+      <MDBCol md="6">
+        <form>
+          <p className="h3 text-center mb-4">Write to us</p>
+          <div className="grey-text">
 
-      <FormGroup controlId="feedbackrating" >
-      <Col componentClass={ControlLabel} sm={3}>
-      Rating
-      </Col>
-      <Col sm={6}>
-      <FormControl
-      type="text"
-      name="rating"
-      placeholder="1-5"
-      value={this.state.value}
-      onChange={event => this.handleRatingChange(event)}
-      />
-      </Col>
-      </FormGroup>
-      
-      
+            <MDBInput
+              value={this.state.email}
+              label="Enter your email here"
+              onChange={event => this.handleEmailChange(event)}
+              icon="envelope"
+              group
+              size="lg"
+              type="email"
+              validate
+              error="wrong"
+              success="right"
+            />
+            <MDBInput
+              type="textarea"
+              rows="2"
+              size="lg"
+              label="Your message"
+              icon="pencil"
+              value={this.state.feedback}
+              onChange={event => this.handleFeedChange(event)}
+              label="Enter your feedback here"
+            />
 
-      <Button bsStyle="primary" onClick={this.handleSubmit}>
-      Submit
-      </Button>
-      
-      
+            <MDBInput
+              label="Rating"
+              icon="tag"
+              group
+              size="lg"
+              type="text"
+              validate
+              error="wrong"
+              success="right"
+              value={this.state.rating}
+              onChange={event => this.handleRatingChange(event)}
+              label="Enter your rating here (1-5)"
 
-     
+            />
 
-      </Form>
-      
-      </div>
-      
+          </div>
+          <div className="text-center">
+            <MDBBtn size="lg" outline color="primary" onClick={this.handleSubmit}>
+              <b>Send</b> <MDBIcon size="lg" icon="paper-plane" className="indigo-text pr-3" />
+            </MDBBtn>
+          </div>
+        </form>
+      </MDBCol>
+    </MDBRow>
+  </MDBContainer>
+
     );
   }
 }
@@ -176,4 +177,3 @@ export default withRouter(
     mapDispatchToProps
   )(Feedback)
 );
-
