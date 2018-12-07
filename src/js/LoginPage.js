@@ -33,7 +33,7 @@ class LoginPage extends Component {
 
             ref.once("value").then(snapshot => {
               if (
-                this.props.history.location.pathname === "/" ||
+
                 !snapshot.val()
               ) {
                 ref.set(firebaseUser.user.uid, () => {
@@ -43,8 +43,9 @@ class LoginPage extends Component {
                   });
                 });
 
-                this.props.history.push("/ride");
+
               }
+              this.props.history.push("/ride");
             });
           })
           .catch(error => {

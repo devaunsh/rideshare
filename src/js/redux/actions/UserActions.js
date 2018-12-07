@@ -1,9 +1,18 @@
 import {
   USER_LOGIN,
   USER_LOGOUT,
-
+  SET_RIDES
 } from './actionTypes';
-
+/**
+* Save rides to redux
+* @param: rides
+*/
+export const setRides = rides => {
+  return dispatch => dispatch({
+    type: SET_RIDES,
+    rides
+  });
+};
 /**
 * Save user data to redux
 * @param: user(Google login user basic profile)

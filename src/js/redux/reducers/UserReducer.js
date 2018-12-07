@@ -1,12 +1,14 @@
 import {
   USER_LOGIN,
   USER_LOGOUT,
+  SET_RIDES,
 } from '../actions';
 
 const initialState = {
   name: null,
   profilePicUrl: null,
   email: null,
+  rides: {}
 }
 
 const UserReducer = (state = initialState, action) => {
@@ -24,6 +26,11 @@ const UserReducer = (state = initialState, action) => {
         name: null,
         profilePicURL: null,
         email: null,
+      }
+    case SET_RIDES:
+      return {
+        ...state,
+        rides: action.rides
       }
 
     default:

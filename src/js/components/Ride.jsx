@@ -98,6 +98,7 @@ class Ride extends Component {
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleConfirm = this.handleConfirm.bind(this);
+    this.handleMultipleSeats = this.handleMultipleSeats.bind(this);
     this.state = {
       show: false,
       smShow: false,
@@ -113,8 +114,12 @@ class Ride extends Component {
       time: this.props.ride.time,
       Timestamp: this.props.ride.Timestamp,
       driver: this.props.ride.id, //driver
-      waitnum: this.props.ride.waitnum
+      waitnum: this.props.ride.waitnum,
+      seatsDelta: 1
     };
+  }
+  handleMultipleSeats(event) {
+    this.setState({seatsDelta: event.target.value});
   }
   handleConfirm() {
     //should be block if already in TripsArray
@@ -127,7 +132,8 @@ class Ride extends Component {
     var ref_seatChange = firebase.database().ref("/trips/" + this.state.driver
     + this.state.Timestamp);
     ref_seatChange.once('value').then(snapshot => {
-      this.state.seats--;
+      let temp = this.state.seats;
+      this.setState({seats: temp - this.state.seatsDelta});
       ref_seatChange.update({seats: this.state.seats});
     });
 
@@ -138,7 +144,10 @@ class Ride extends Component {
       if (temp == null) {
         temp = {};
       }
-      temp[this.state.driver + this.state.Timestamp] = timestamp;
+      if (!temp[this.state.driver + this.state.Timestamp]) {
+        temp[this.state.driver + this.state.Timestamp] = 0;
+      }
+      temp[this.state.driver + this.state.Timestamp] += Number(this.state.seatsDelta);
       ref_userTrips.child('TripsArray').set(temp , () => {
         ref_tripUsers.once('value').then(snapshot => {
           let temp1 = snapshot.child("UsersArray").val();
@@ -146,6 +155,7 @@ class Ride extends Component {
             console.log("Error: UsersArray Empty");
             return;
           }
+
           temp1[currentUser] = timestamp;
           ref_tripUsers.child('UsersArray').set(temp1);
           var request = new XMLHttpRequest();
@@ -154,7 +164,7 @@ class Ride extends Component {
           request.setRequestHeader('Content-Type', 'text/plain');
           request.onreadystatechange = function() {
             if (request.readyState === 4) {
-              window.location.reload();
+              //window.location.reload();
             }
           }
           var message = this.props.user.email + "\n" +
@@ -290,7 +300,23 @@ class Ride extends Component {
       {this.state.description}
       </Col>
       </FormGroup>
-
+      <FormGroup controlId="SelectSeats">
+      <Col componentClass={ControlLabel} sm={6}>
+      Seats to book :
+      </Col>
+      <Col sm={6}>
+      <FormControl
+      componentClass="select"
+      placeholder="select"
+      value={this.state.value }
+      inputRef={ref => (this.input = ref)}
+      onChange={event => this.handleMultipleSeats(event)}
+      >
+      <option value="1">1</option>
+      <option show={this.state.seats > 1 ? true : false} value="2">2</option>
+      </FormControl>
+      </Col>
+      </FormGroup>
       <FormGroup>
       <Col componentClass={ControlLabel} sm={6}>
       Cost :

@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import Ride from "./Ride.jsx";
 import firebase from "../firebase.js";
 import { Well, Table } from "react-bootstrap";
-
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
+import { setRides } from '../redux/actions';
 class Rides extends Component {
   constructor(props) {
     super(props);
@@ -91,5 +93,22 @@ class Rides extends Component {
     );
   }
 }
+const mapStateToProps = state => {
+  return {
+    user: state.user,
+    packages: state.packages
+  };
+};
 
-export default Rides;
+const mapDispatchToProps = dispatch => {
+  return {
+    setRides: rides => {
+      dispatch(setRides(rides))
+    }
+  };
+};
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Rides));

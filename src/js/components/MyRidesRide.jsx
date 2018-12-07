@@ -55,6 +55,7 @@ class CancelModal extends Component {
       request.send(message);
       if (this.props.driver == firebase.auth().currentUser.uid) {
         //cancel driver case
+        console.log("here");
         let ref = firebase.database().ref("/trips");
 
         let ref2 = firebase.database().ref(`/trips/${unique}/UsersArray`);
@@ -109,18 +110,31 @@ class CancelModal extends Component {
         } else {
           var desert_trip = firebase.database().ref("/trips/" + this.state.driver
           + this.state.Timestamp);
-          desert_trip.once('value').then(snapshot => {
-            this.state.seats++;
-            desert_trip.update({seats: this.state.seats});
-          });
+          let dequeue_user_ref = firebase.database().ref("/users/" + firebase.auth().currentUser.uid + "/TripsArray");
+          dequeue_user_ref.once('value').then(snapshot => {
+            let a = snapshot.val();
+            a = a[this.state.driver
+            + this.state.Timestamp];
+            desert_trip.once('value').then(snapshot => {
+            //  this.state.seats += a;
+              let b = this.state.seats;
+              console.log(a);
+              console.log(b);
+
+                  desert_trip.update({seats: a + b});
+                  let userRef = firebase.auth().currentUser.uid;
+                  let ref2 = firebase.database().ref(`/users/${userRef}/TripsArray`);
+                  var desertRef2 = ref2.child(unique).remove();
+
+
+            });
+          })
+
 
         }
 
         //delete in the TripsArray
-        let userRef = firebase.auth().currentUser.uid;
-        let ref2 = firebase.database().ref(`/users/${userRef}/TripsArray`);
-        var desertRef2 = ref2.child(unique).remove();
-        console.log(this.state.info.waitnum);
+
 
 
     }
