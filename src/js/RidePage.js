@@ -256,7 +256,7 @@ class RidePage extends Component {
       <Button
       className="fixedbutton"
       bsStyle="btn btn-danger"
-      bsSize="large"
+    
       onClick={this.handleShow}
       >
       Create Ride

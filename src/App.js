@@ -12,7 +12,7 @@ import Main from './js/Main';
 import './index.css';
 import './css/bootstrap/bootstrap.min.css'
 
-import 'font-awesome/css/font-awesome.min.css';
+
 //import 'bootstrap-css-only/css/bootstrap.min.css';
 
 //import 'node_modules/react-star-rating/dist/css/react-star-rating.min.css'
