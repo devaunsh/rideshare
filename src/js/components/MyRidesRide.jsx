@@ -210,6 +210,7 @@ class CancelModal extends Component {
         paymentMethods: this.props.ride.paymentMethods,
         picture: this.props.ride.picture,
         seats: this.props.ride.seats,
+        seatsDelta: this.props.user.seatsDelta,
         start: this.props.ride.start,
         time: this.props.ride.time,
         Timestamp: this.props.ride.Timestamp,
@@ -253,6 +254,7 @@ class CancelModal extends Component {
         {this.state.chargeType === "2" && " in total"}
         {this.state.chargeType === 1 && " per person"}
         </Breadcrumb.Item>
+        <Breadcrumb.Item active>{this.state.seats}</Breadcrumb.Item>
         <Breadcrumb.Item active>{this.state.paymentMethods}</Breadcrumb.Item>
         </Breadcrumb>
         </CardTitle>
