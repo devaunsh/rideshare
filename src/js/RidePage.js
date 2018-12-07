@@ -255,7 +255,7 @@ class RidePage extends Component {
       <div>
       <Button
       className="fixedbutton"
-      bsStyle="primary"
+      bsStyle="btn btn-danger"
       bsSize="large"
       onClick={this.handleShow}
       >

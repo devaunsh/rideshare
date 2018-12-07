@@ -209,7 +209,7 @@ class Ride extends Component {
       <Breadcrumb>
         <Breadcrumb.Item active>
         {this.state.start}
-        <CardImg className = "car-icon" src={car_icon} alt="No image" />
+          <CardImg className = "car-icon" src={car_icon} alt="No image" />
         {this.state.dest}</Breadcrumb.Item>
         <Breadcrumb.Item active>{this.state.date}</Breadcrumb.Item>
         <Breadcrumb.Item active>{this.state.time}</Breadcrumb.Item>
@@ -227,7 +227,7 @@ class Ride extends Component {
       <td className = "ride-description">{this.state.description}</td>
       <td className = "ride-seat">{this.state.seats} seats available</td>
       <td className = "ride-book">
-      <Button onClick={this.handleShow} bsStyle="primary" disabled = {this.getAvailableSeats()}>Book now!</Button>
+      <Button onClick={this.handleShow} bsStyle="btn btn-danger" disabled = {this.getAvailableSeats()}>Book now!</Button>
 
       <Modal show={this.state.show} onHide={this.handleClose}>
       <Modal.Header closeButton>
@@ -325,7 +325,7 @@ class Ride extends Component {
       </Modal>
       </td>
       <td className = "ride-waitlist">
-      <Button onClick={() => this.setState({ smShow: true })} bsStyle="primary" disabled = {this.ifBooked()}>Waitlist</Button>
+      <Button onClick={() => this.setState({ smShow: true })} bsStyle="btn btn-warning" disabled = {this.ifBooked()}>Waitlist</Button>
       <WaitModal waitnum={this.state.waitnum} driver={this.state.driver} timestamp={this.state.Timestamp} info={this.state} email={this.state.email} show={this.state.smShow} onHide={smClose} />
       </td>
       </tr>

@@ -21,13 +21,16 @@
 }
 
 .card-outline {
+  border-radius: 30px;
   margin-top: 30px;
+  padding: 10px;
   position: relative;
   left: 30px;
-  width: 1000px;
-  height: 400px;
-  outline: 1px dashed rgb(231,231,231);
+  width: 1050px;
+  height: 420px;
+  border: 1px dashed rgb(231,231,231);
   background-color: rgb(240,240,240);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .car-icon {
@@ -36,17 +39,20 @@
    height: 40px;
 }
 .ride-picture {
-   margin-right: 30px;
-   margin-left: 30px;
-   height: 300px;
+   margin-top: 20px;
+   margin-left: 50px;
+   max-width: 100%;
+   max-height: 100%;
+   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
 }
 
 .ride-description {
    position: absolute;
-   top: 150px;
-   right: 200px;
+   top: 120px;
+   right: 240px;
    width: 400px;
    height: 200px;
+   overflow: scroll;
 }
 
 .ride-book {
@@ -58,7 +64,7 @@
 }
 .ride-waitlist {
   position: absolute;
-  top: 10px;
+  top: 30px;
   right: 80px;
   width: 40px;
   height: 40px;
@@ -71,4 +77,12 @@
   width: 150px;
   height: 40px;
   font-size: 18px;
+}
+
+.page-header {
+  margin-top: 0px;
+  position: relative;
+  left: 30px;
+  width: 1050px;
+  height: 50px;
 }
