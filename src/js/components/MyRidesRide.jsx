@@ -28,202 +28,224 @@ class CancelModal extends Component {
   }
 
   handleCancel() {
-      let date = new Date();
-      let waitstamp = date.toGMTString();
+    let date = new Date();
+    let waitstamp = date.toGMTString();
 
-      let timestamp = this.state.Timestamp;
-      let unique = this.props.driver + timestamp;
-      var message = this.state.email + "\n" +
-      "Cancel Ride Info" + "\n" +
-      this.state.info.date + "\n" +
-      this.state.info.time + "\n" +
-       this.state.info.start + "\n" +
-       this.state.info.dest + "\n" +
-       this.state.info.paymentMethods + "\n" +
-        this.state.info.cost + "\n" +
-        this.state.info.description;
-      var request = new XMLHttpRequest();
+    let timestamp = this.state.Timestamp;
+    let unique = this.props.driver + timestamp;
+    console.log(this.state.email);
+    var message = this.state.email + "\n" +
+    "Cancel Ride Info" + "\n" +
+    this.state.info.date + "\n" +
+    this.state.info.time + "\n" +
+    this.state.info.start + "\n" +
+    this.state.info.dest + "\n" +
+    this.state.info.paymentMethods + "\n" +
+    this.state.info.cost + "\n" +
+    this.state.info.description;
+    var request = new XMLHttpRequest();
 
-      request.open("POST", "https://rideshare-server1.herokuapp.com", true);
-      request.setRequestHeader('Content-Type', 'text/plain');
+    request.open("POST", "https://rideshare-server1.herokuapp.com", true);
+    request.setRequestHeader('Content-Type', 'text/plain');
 
-      request.onreadystatechange = function() {
-        if (request.readyState === 4) {
+    // request.onreadystatechange = function() {
+    //   if (request.readyState === 4) {
+    //
+    //     window.location.reload();
+    //
+    //   }
+    // }
+    request.send(message);
 
-          //window.location.reload();
+    //cancel passenger case
+    let ref = firebase.database().ref(`/trips/${unique}/UsersArray`);
+    var desertRef = ref.child(firebase.auth().currentUser.uid).remove();
+    var desert_trip = firebase.database().ref("/trips/" + this.state.driver
+    + this.state.Timestamp);
+    let dequeue_user_ref = firebase.database().ref("/users/" + firebase.auth().currentUser.uid + "/TripsArray");
+    dequeue_user_ref.once('value').then(snapshot => {
+      let a = snapshot.val();
+      a = a[this.state.driver
+        + this.state.Timestamp];
+        desert_trip.once('value').then(snapshot => {
+          //  this.state.seats += a;
+          let b = this.state.seats;
 
-        }
-      }
-      request.send(message);
-      if (this.props.driver == firebase.auth().currentUser.uid) {
-        //cancel driver case
-        console.log("here");
-        let ref = firebase.database().ref("/trips");
+          desert_trip.update({seats: a + b});
+          let userRef = firebase.auth().currentUser.uid;
+          let ref2 = firebase.database().ref(`/users/${userRef}/TripsArray`);
+          var desertRef2 = ref2.child(unique).remove();
+          if ((this.props.seats == 0) && (this.props.waitnum != 0)) {
 
-        let ref2 = firebase.database().ref(`/trips/${unique}/UsersArray`);
-        ref2.once('value').then(snapshot => {
-        let temp = snapshot.val();
-        Object.entries(temp).forEach(entry => {
-          let key = entry[0];
-          console.log(key);
-          let userRef = key;
-          let ref3 = firebase.database().ref(`/users/${userRef}/TripsArray`);
-           ref3.once('value').then(snapshot1 => {
-            // console.log(snapshot1.val());
-             var desertRef = ref3.child(unique).remove();
-           })
-          //var desertRef = ref3.child(unique).remove();
-        })
-          if (temp === null) {
-            console.log("Error: UsersArray Empty")
-            return;
-          }
-        })
-        var desertRef = ref.child(unique);
-        desertRef.remove();
-      //  window.location.reload();
-      } else {
-        //cancel passenger case
-        let ref = firebase.database().ref(`/trips/${unique}/UsersArray`);
-        var desertRef = ref.child(firebase.auth().currentUser.uid).remove();
+            var ref_trip = firebase.database().ref("/trips/" + this.state.driver
+            + this.state.Timestamp);
+            ref_trip.once('value').then(snapshot => {
+              this.state.waitnum--;
+              ref_trip.update({waitnum: this.state.waitnum});
 
-        //case: when no seats availble and waitnum not 0, rider cancels the trip
-        if ((this.props.seats == 0) && (this.props.waitnum != 0)) {
-          var ref_trip = firebase.database().ref("/trips/" + this.state.driver
-          + this.state.Timestamp);
-          ref_trip.once('value').then(snapshot => {
-            this.state.waitnum--;
-            ref_trip.update({waitnum: this.state.waitnum});
+              var waitRef = firebase.database().ref(`/trips/${unique}/Waitlist`);
+              waitRef.once('value').then(snapshot => {
+                let queue = snapshot.val();
+                let dequeue_user = queue.shift();
+                waitRef.set(queue);
+                //add this user to UsersArray
+                ref_trip.child(`UsersArray/${dequeue_user}`).set(0);
+                let dequeue_user_ref = firebase.database().ref(`/users/${dequeue_user}/TripsArray`);
+                dequeue_user_ref.once('value').then(snapshot => {
 
-            var waitRef = firebase.database().ref(`/trips/${unique}/Waitlist`);
-            waitRef.once('value').then(snapshot => {
-              let queue = snapshot.val();
-              let dequeue_user = queue.shift();
-              waitRef.set(queue);
-              //add this user to UsersArray
-              ref_trip.child(`UsersArray/${dequeue_user}`).set(0);
-              let dequeue_user_ref = firebase.database().ref(`/users/${dequeue_user}/TripsArray`);
-              dequeue_user_ref.once('value').then(snapshot => {
-                dequeue_user_ref.child(unique).set(0);
+                  if (snapshot.val() && snapshot.child(unique).exists()) {
+                    console.log("if");
+                    dequeue_user_ref.child(unique).set(snapshot.child(unique).val() + 1);
+                  }
+                  else {
+                    console.log("else");
+                    var t = {};
+                    if (!snapshot.val())
+                    t[unique] = 1;
+                    else {
+                      t = snapshot.val();
+                      t[unique] = 1;
+                    }
+                    console.log(t);
+                    dequeue_user_ref.set(t);
+                  }
+                  var e = firebase.database().ref("/trips/" + this.state.driver
+                  + this.state.Timestamp);
+                  e.once("value").then(snapshot => {
+                    let h = snapshot.child("seats").val();
+                    e.child("seats").set(h - 1);
+                  })
+                  let email_ref = firebase.database().ref(`/users/${dequeue_user}/email`);
+                  email_ref.once('value').then(snapshot => {
+                    console.log(snapshot.val())
+                    var message1 = snapshot.val() + "\n" +
+                    "Congratulations! Your have been selected from waitlist!" + "\n" +
+                    this.state.info.date + "\n" +
+                    this.state.info.time + "\n" +
+                    this.state.info.start + "\n" +
+                    this.state.info.dest + "\n" +
+                    this.state.info.paymentMethods + "\n" +
+                    this.state.info.cost + "\n" +
+                    this.state.info.description;
+
+                    var request1 = new XMLHttpRequest();
+
+                    request1.open("POST", "https://rideshare-server1.herokuapp.com", true);
+                    request1.setRequestHeader('Content-Type', 'text/plain');
+
+
+                    request1.send(message1);
+
+
+                  })
+                })
+
               })
-            })
-
-          });
-        } else {
-          var desert_trip = firebase.database().ref("/trips/" + this.state.driver
-          + this.state.Timestamp);
-          let dequeue_user_ref = firebase.database().ref("/users/" + firebase.auth().currentUser.uid + "/TripsArray");
-          dequeue_user_ref.once('value').then(snapshot => {
-            let a = snapshot.val();
-            a = a[this.state.driver
-            + this.state.Timestamp];
-            desert_trip.once('value').then(snapshot => {
-            //  this.state.seats += a;
-              let b = this.state.seats;
-              console.log(a);
-              console.log(b);
-
-                  desert_trip.update({seats: a + b});
-                  let userRef = firebase.auth().currentUser.uid;
-                  let ref2 = firebase.database().ref(`/users/${userRef}/TripsArray`);
-                  var desertRef2 = ref2.child(unique).remove();
-
 
             });
-          })
+          }
+          function delay(ms) {
+            ms += new Date().getTime();
+            while (new Date() < ms){}
+          }
+          delay(5000);
+          window.location.reload();
+
+        });
+      })
+      //case: when no seats availble and waitnum not 0, rider cancels the trip
 
 
-        }
 
-        //delete in the TripsArray
+      //delete in the TripsArray
+
+
+
+
+
 
 
 
     }
 
-
-
-
+    render() {
+      return (
+        <Modal
+        {...this.props}
+        bsSize="small"
+        aria-labelledby="contained-modal-title-sm"
+        >
+        <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-sm">Comfirm</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+        <p>
+        Are you sure you want to cancel this trip?
+        </p>
+        </Modal.Body>
+        <Modal.Footer>
+        <Button onClick={this.props.onHide}>Close</Button>
+        <Button bsStyle="primary" onClick={this.handleCancel }>Yes</Button>
+        </Modal.Footer>
+        </Modal>
+      );
+    }
   }
 
-  render() {
-    return (
-      <Modal
-      {...this.props}
-      bsSize="small"
-      aria-labelledby="contained-modal-title-sm"
-      >
-      <Modal.Header closeButton>
-      <Modal.Title id="contained-modal-title-sm">Comfirm</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-      <p>
-      Are you sure you want to cancel this trip?
-      </p>
-      </Modal.Body>
-      <Modal.Footer>
-      <Button onClick={this.props.onHide}>Close</Button>
-      <Button bsStyle="primary" onClick={this.handleCancel }>Yes</Button>
-      </Modal.Footer>
-      </Modal>
-    );
-  }
-}
+  class MyRidesRide extends Component {
 
-class MyRidesRide extends Component {
+    constructor(props, context) {
+      super(props, context);
 
-  constructor(props, context) {
-    super(props, context);
+      this.handleShow = this.handleShow.bind(this);
+      this.handleClose = this.handleClose.bind(this);
+      this.state = {
+        show: false,
+        smShow: false,
+        chargeType: this.props.ride.chargeType,
+        cost: this.props.ride.cost,
+        date: this.props.ride.date,
+        description: this.props.ride.description,
+        dest: this.props.ride.dest,
+        paymentMethods: this.props.ride.paymentMethods,
+        picture: this.props.ride.picture,
+        seats: this.props.ride.seats,
+        start: this.props.ride.start,
+        time: this.props.ride.time,
+        Timestamp: this.props.ride.Timestamp,
+        email: this.props.user.email,
+        driver: this.props.ride.id, //driver
+        waitnum: this.props.ride.waitnum
+      };
+    }
 
-    this.handleShow = this.handleShow.bind(this);
-    this.handleClose = this.handleClose.bind(this);
-    this.state = {
-      show: false,
-      smShow: false,
-      chargeType: this.props.ride.chargeType,
-      cost: this.props.ride.cost,
-      date: this.props.ride.date,
-      description: this.props.ride.description,
-      dest: this.props.ride.dest,
-      paymentMethods: this.props.ride.paymentMethods,
-      picture: this.props.ride.picture,
-      seats: this.props.ride.seats,
-      start: this.props.ride.start,
-      time: this.props.ride.time,
-      Timestamp: this.props.ride.Timestamp,
-      email: this.props.user.email,
-      driver: this.props.ride.id, //driver
-      waitnum: this.props.ride.waitnum
-    };
-  }
+    handleClose() {
+      this.setState({ show: false });
+    }
 
-  handleClose() {
-    this.setState({ show: false });
-  }
+    handleShow() {
+      this.setState({ show: true });
+    }
 
-  handleShow() {
-    this.setState({ show: true });
-  }
-
-  getAvailableSeats(){
-    if(this.state.seats === 0 )
-    return true;
-    else
-    return false;
-  }
+    getAvailableSeats(){
+      if(this.state.seats === 0 )
+      return true;
+      else
+      return false;
+    }
 
 
 
-  render() {
+    render() {
 
-    let smClose = () => this.setState({ smShow: false });
-    return (
-      <Card className = "rider-card-outline">
-      <CardTitle>
-      <Breadcrumb>
+      let smClose = () => this.setState({ smShow: false });
+      return (
+        <Card className = "rider-card-outline">
+        <CardTitle>
+        <Breadcrumb>
         <Breadcrumb.Item active>
         {this.state.start}
-          <CardImg className = "car-icon" src={car_icon} alt="No image" />
+        <CardImg className = "car-icon" src={car_icon} alt="No image" />
         {this.state.dest}</Breadcrumb.Item>
         <Breadcrumb.Item active>{this.state.date}</Breadcrumb.Item>
         <Breadcrumb.Item active>{this.state.time}</Breadcrumb.Item>
@@ -232,32 +254,32 @@ class MyRidesRide extends Component {
         {this.state.chargeType === 1 && " per person"}
         </Breadcrumb.Item>
         <Breadcrumb.Item active>{this.state.paymentMethods}</Breadcrumb.Item>
-      </Breadcrumb>
-      </CardTitle>
-      <td className = "ride-cancel">
-      <Button bsStyle="btn btn-warning" onClick={() => this.setState({ smShow: true })} >Cancel this trip!</Button>
-      <CancelModal waitnum={this.state.waitnum} seats={this.state.seats}
-      driver={this.state.driver} timestamp={this.state.Timestamp}
-      info={this.state} email={this.state.email} show={this.state.smShow}
-      onHide={smClose} />
-      </td>
-      </Card>
+        </Breadcrumb>
+        </CardTitle>
+        <td className = "ride-cancel">
+        <Button bsStyle="btn btn-warning" onClick={() => this.setState({ smShow: true })} >Cancel this trip!</Button>
+        <CancelModal waitnum={this.state.waitnum} seats={this.state.seats}
+        driver={this.state.driver} timestamp={this.state.Timestamp}
+        info={this.state} email={this.props.user.email} show={this.state.smShow}
+        onHide={smClose} />
+        </td>
+        </Card>
 
-    );
+      );
+    }
   }
-}
 
-const mapStateToProps = state => {
-  return {
-    user: state.user,
+  const mapStateToProps = state => {
+    return {
+      user: state.user,
 
+    };
   };
-};
 
 
-export default withRouter(
-  connect(
-    mapStateToProps,
-    null
-  )(MyRidesRide)
-);
+  export default withRouter(
+    connect(
+      mapStateToProps,
+      null
+    )(MyRidesRide)
+  );

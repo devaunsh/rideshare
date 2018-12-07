@@ -64,12 +64,9 @@ class WaitModal extends Component {
 
         request.open("POST", "https://rideshare-server1.herokuapp.com", true);
         request.setRequestHeader('Content-Type', 'text/plain');
-        request.onreadystatechange = function() {
-          if (request.readyState === 4) {
-            //window.location.reload();
-          }
-        }
-        var message = this.props.user.email + "\n" +
+
+        console.log(this.state.email);
+        var message = this.state.email + "\n" +
         "Congratulations! You are in a waitlist of a ride. We will notify you if you are selected." + "\n" +
         this.state.info.date + "\n" +
         this.state.info.time + "\n" +
@@ -79,6 +76,12 @@ class WaitModal extends Component {
           this.state.info.cost + "\n" +
           this.state.info.description;
         request.send(message);
+        function delay(ms) {
+          ms += new Date().getTime();
+          while (new Date() < ms){}
+        }
+        delay(5000);
+        window.location.reload()
       });
 
 
@@ -180,11 +183,7 @@ class Ride extends Component {
 
           request.open("POST", "https://rideshare-server1.herokuapp.com", true);
           request.setRequestHeader('Content-Type', 'text/plain');
-          request.onreadystatechange = function() {
-            if (request.readyState === 4) {
-              //window.location.reload();
-            }
-          }
+
           var message = this.props.user.email + "\n" +
           "Congratulations! You successfully book a ride" + "\n" +
           this.state.date + "\n" +
@@ -195,6 +194,12 @@ class Ride extends Component {
             this.state.cost + "\n" +
             this.state.description;
           request.send(message);
+          function delay(ms) {
+            ms += new Date().getTime();
+            while (new Date() < ms){}
+          }
+          delay(5000);
+          window.location.reload()
 
         });
       });
@@ -370,7 +375,7 @@ class Ride extends Component {
       </td>
       <td className = "ride-waitlist">
       <Button onClick={() => this.setState({ smShow: true })} bsStyle="btn btn-warning" disabled = {this.ifBooked()}>Waitlist</Button>
-      <WaitModal waitnum={this.state.waitnum} driver={this.state.driver} timestamp={this.state.Timestamp} info={this.state} email={this.state.email} show={this.state.smShow} onHide={smClose} />
+      <WaitModal waitnum={this.state.waitnum} driver={this.state.driver} timestamp={this.state.Timestamp} info={this.state} email={this.props.user.email} show={this.state.smShow} onHide={smClose} />
       </td>
       </tr>
       </CardText>

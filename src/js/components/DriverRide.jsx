@@ -71,6 +71,12 @@ class CancelModal extends Component {
           request.send(message);
 
           var desertRef = ref3.child(`${userRef}/TripsArray/${unique}`).remove();
+          function delay(ms) {
+            ms += new Date().getTime();
+            while (new Date() < ms){}
+          }
+          delay(5000);
+          window.location.reload();
 
         })
         //var desertRef = ref3.child(unique).remove();
@@ -270,6 +276,7 @@ class DriverRide extends Component {
             Cash: this.state.Cash,
           },
           () => {
+
             if (this.state.localImage !== null) {
               let ref_storage = firebase.storage().ref("/" + unique + "/Image");
               var xhr = new XMLHttpRequest();
