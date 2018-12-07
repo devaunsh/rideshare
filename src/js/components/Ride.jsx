@@ -255,7 +255,7 @@ class Ride extends Component {
       <td className = "ride-description">{this.state.description}</td>
       <td className = "ride-seat">{this.state.seats} seats available</td>
       <td className = "ride-book">
-      <Button onClick={this.handleShow} bsStyle="btn btn-danger" disabled = {this.getAvailableSeats()}>Book now!</Button>
+      <Button onClick={this.handleShow} bsStyle="btn btn-info" disabled = {this.getAvailableSeats()}>Book now!</Button>
 
       <Modal show={this.state.show} onHide={this.handleClose}>
       <Modal.Header closeButton>

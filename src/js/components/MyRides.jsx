@@ -89,7 +89,7 @@ class MyRides extends Component {
       .concat(this.state.rides)
       .sort((a, b) => new Date(a.dateandtime) - new Date(b.dateandtime));
     return (
-      <div className="container-fluid">
+      <div className = "page-header">
         <h2>Riding</h2>
 
             {sorted.map(ride => (

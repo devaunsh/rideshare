@@ -234,7 +234,13 @@ class MyRidesRide extends Component {
         <Breadcrumb.Item active>{this.state.paymentMethods}</Breadcrumb.Item>
       </Breadcrumb>
       </CardTitle>
-
+      <td className = "ride-cancel">
+      <Button bsStyle="btn btn-warning" onClick={() => this.setState({ smShow: true })} >Cancel this trip!</Button>
+      <CancelModal waitnum={this.state.waitnum} seats={this.state.seats}
+      driver={this.state.driver} timestamp={this.state.Timestamp}
+      info={this.state} email={this.state.email} show={this.state.smShow}
+      onHide={smClose} />
+      </td>
       </Card>
 
     );
