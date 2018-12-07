@@ -137,7 +137,7 @@ class Feedback extends Component {
               success="right"
               value={this.state.rating}
               onChange={event => this.handleRatingChange(event)}
-              label="Enter your rating here"
+              label="Enter your rating here (1-5)"
 
             />
 
