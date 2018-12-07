@@ -9,26 +9,11 @@ class Rides extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      rides: []
+      rides: [],
+      result: []
     };
   }
 
-  //componentDidMount() {
-  //  let tripsRef = firebase.database().ref("/trips/");
-  //  tripsRef.on("value", function(snapshot) {
-  //    console.log(snapshot.val());
-  //    let trips = [];
-  //    snapshot.forEach(function(childSnapshot) {
-  //      trips.push(childSnapshot.val());
-  //      console.log(childSnapshot.val());
-  //     let trip = childSnapshot.val();
-  //     trip["trip_id"] = childSnapshot.key;
-  //     console.log(trip);
-  //   });
-  // });
-  //  console.log(trips);
-  //  this.setState({ rides: trips });
-  // }
   componentDidMount() {
     const tripsRef = firebase.database().ref("/trips/");
     tripsRef.on("value", snapshot => {
@@ -48,10 +33,7 @@ class Rides extends Component {
           payMethods.push("Venmo");
         }
 
-        let format_date = trips[trip].date;
-
-        let res = format_date + "T" + trips[trip].time + ":00";
-
+        let format_date = trips[trip].date + "T" + trips[trip].time + ":00";
 
         newState.push({
           id: trips[trip].driver,
@@ -67,28 +49,43 @@ class Rides extends Component {
           start: trips[trip].start,
           time: trips[trip].time,
           Timestamp: trips[trip].Timestamp,
-          dateandtime: res
+          dateandtime: format_date
         });
       }
 
       this.setState({
         rides: newState
       });
+
     });
   }
+
   render() {
-    const sorted = []
-      .concat(this.state.rides)
-      .sort((a, b) => new Date(a.dateandtime) - new Date(b.dateandtime));
+    // const sorted = []
+    //   .concat(this.state.rides)
+    //   .sort((a, b) => new Date(a.dateandtime) - new Date(b.dateandtime));
+
+    // //Filtering of rides
+    // let filter_start = document.getElementById("start_loc").value;
+    // let filter_dest = document.getElementById("end_loc").value;
+    // let filter_date = document.getElementById("trip_date").value;
+    // let result = sorted;
+    // if (filter_start) {
+    //   result = sorted.filter(entry => entry.start === filter_start);
+    // }
+    // if (filter_dest) {
+    //   result = sorted.filter(entry => entry.dest === filter_dest);
+    // }
+    // if (filter_date) {
+    //   result = sorted.filter(entry => entry.date === filter_date);
+    // }
+
     return (
       <div>
-      <h2 className = "page-header">Available Rides</h2>
-
-        {sorted.map(ride => (
+        <h2>Available Rides</h2>
+        {this.state.rides.map(ride => (
           <Ride ride={ride} />
         ))}
-
-
       </div>
     );
   }
