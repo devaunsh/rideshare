@@ -24,6 +24,7 @@ import ReactDOM from "react-dom";
 import { userLogin } from "./redux/actions";
 import logo from "../img/logo.svg";
 import Rides from "./components/Rides";
+import FindRides from"./components/FindRide";
 import "../css/fixedbutton.css";
 
 class RidePage extends Component {
@@ -139,12 +140,42 @@ class RidePage extends Component {
     return 'error';
   }
   getValidationStateDate(){
-    if(this.state.date === "" )
+    if(this.state.date === "")
     return 'error';
   }
   getValidationStateTime(){
     if(this.state.time === "" )
     return 'error';
+  }
+  getTodaysDate(){
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+    if(dd<10){
+        dd='0'+dd
+    }
+    if(mm<10){
+        mm='0'+mm
+    }
+
+    today = yyyy+'-'+mm+'-'+dd;
+    return today;
+  }
+  getMaxDate(){
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear() + 2;
+    if(dd<10){
+        dd='0'+dd
+    }
+    if(mm<10){
+        mm='0'+mm
+    }
+
+    today = yyyy+'-'+mm+'-'+dd;
+    return today;
   }
   getValidationStateCost(){
     if(this.state.costs === "" )
@@ -251,7 +282,14 @@ class RidePage extends Component {
 
     return (
       <div id="ride-page">
-      <Rides />
+      <Tabs defaultActiveKey={1} id="uncontrolled-tab-example">
+        <Tab eventKey={1} title="Available Rides">
+          <Rides />
+        </Tab>
+          <Tab eventKey={2} title="Find Rides">
+            <FindRides />
+          </Tab>
+      </Tabs>;
 
       <div>
       <Button
@@ -318,6 +356,9 @@ class RidePage extends Component {
       <Col sm={9}>
       <FormControl
       type="date"
+      onkeydown="return false"
+      min={this.getTodaysDate()}
+      max={this.getMaxDate()}
       placeholder="mm/dd/yyyy"
       value={this.state.value}
       onChange={event => this.handleDateChange(event)}

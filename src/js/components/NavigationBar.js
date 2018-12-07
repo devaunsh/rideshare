@@ -31,6 +31,9 @@ export class NavBar extends Component {
             <NavItem eventKey={3} href="/feedback" >
               Feedback
             </NavItem>
+            <NavItem eventKey={4} href="/findride" >
+              Feedback
+            </NavItem>
           </Nav>
           <Nav pullRight>
             <NavItem eventKey={1} href="#">
